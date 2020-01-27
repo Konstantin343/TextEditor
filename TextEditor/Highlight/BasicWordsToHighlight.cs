@@ -1,0 +1,60 @@
+﻿using System.Collections.Generic;
+
+namespace TextEditor.Highlight
+{
+    internal static class BasicWordsToHighlight
+    {
+        public static readonly ISet<string> JavaWords = new HashSet<string>(
+            new[]
+            {
+                "int",
+                "long",
+                "char",
+                "float",
+                "double",
+                "boolean",
+                "if",
+                "else",
+                "switch",
+                "case",
+                "default",
+                "while",
+                "do",
+                "break",
+                "continue",
+                "for",
+                "try",
+                "catch",
+                "finally",
+                "throw",
+                "throws",
+                "private",
+                "protected",
+                "public",
+                "import",
+                "package",
+                "class",
+                "interface",
+                "extends",
+                "implements",
+                "static",
+                "final",
+                "void",
+                "abstract",
+                "native",
+                "new",
+                "return",
+                "this",
+                "super",
+                "synchronized",
+                "volatile",
+                "const",
+                "goto",
+                "instanceof",
+                "enum",
+                "assert",
+                "transient",
+                "strictfp",
+            });
+    }
+}
