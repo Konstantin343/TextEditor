@@ -1,7 +1,16 @@
-﻿namespace TestTextEditor.Framework.Utils
+﻿using System.IO;
+
+namespace TestTextEditor.Framework.Utils
 {
-    public class FileHelper
+    public static class FileHelper
     {
-        
+        public static string ReadAndDelete(string path)
+        {
+            var sr = new StreamReader(path);
+            var result = sr.ReadToEnd();
+            sr.Close();
+            File.Delete(path);
+            return result;
+        }
     }
 }

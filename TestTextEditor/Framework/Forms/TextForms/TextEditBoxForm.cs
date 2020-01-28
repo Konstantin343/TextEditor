@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using System.Text.RegularExpressions;
 using TestStack.White.InputDevices;
 using TestStack.White.UIItems;
-using TestStack.White.UIItems.Finders;
-using TestStack.White.UIItems.MenuItems;
-using TestStack.White.UIItems.WPFUIItems;
 using TestStack.White.WindowsAPI;
 using TestTextEditor.Framework.Utils;
 using TestTextEditor.Framework.Utils.Logger;
 
-namespace TestTextEditor.Framework.Forms
+namespace TestTextEditor.Framework.Forms.TextForms
 {
     public class TextEditBoxForm : BaseForm
     {
@@ -20,7 +17,7 @@ namespace TestTextEditor.Framework.Forms
 
         public void ClickAt(int str, int chr)
         {
-            var relativePoint = PointHelper.GetPointToClickOn(str, chr, Text.Split('\n').ToList());
+            var relativePoint = PointHelper.GetPointToClickOn(str, chr, Regex.Split(Text, "\r\n").ToList());
             var absolutePoint = GetAbsolutePoint(relativePoint);
             TestLogger.Instance.Info($"Clicking at {absolutePoint} (relative: {relativePoint}) in {_name}");
             Mouse.Instance.Click(absolutePoint);
@@ -28,7 +25,7 @@ namespace TestTextEditor.Framework.Forms
 
         public void Select(int strFrom, int chrFrom, int strTo, int chrTo)
         {
-            var textByLines = Text.Split('\n').ToList();
+            var textByLines = Regex.Split(Text, "\r\n").ToList();
             TestLogger.Instance.Info($"Select from at {strFrom}, {chrFrom} to {strTo}, {chrTo} in {_name}");
             Mouse.Instance.Location =
                 GetAbsolutePoint(PointHelper.GetPointToClickOn(strFrom, chrFrom, textByLines));

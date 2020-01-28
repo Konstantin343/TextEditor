@@ -2,17 +2,22 @@
 using NUnit.Framework;
 using TestTextEditor.Framework;
 using TestTextEditor.Framework.Forms;
+using TestTextEditor.Framework.Forms.TextForms;
 using TestTextEditor.Framework.Windows;
 
 namespace TestTextEditor.Tests
 {
     public abstract class BaseTests
     {
-        protected readonly MainTextEditorWindow MainWindow = new MainTextEditorWindow();
+        protected MainTextEditorWindow MainWindow;
 
         [SetUp]
-        public void StartApp() => TextEditorAppLoader.StartApp();
-        
+        public void StartApp()
+        {
+            TextEditorAppLoader.StartApp();
+            MainWindow = new MainTextEditorWindow(TextEditorAppLoader.Window);
+        }
+
         [TearDown]
         public void CloseApp() => TextEditorAppLoader.CloseApp();
         

@@ -1,11 +1,6 @@
-﻿using System.Windows;
-using TestStack.White.UIItems;
-using TestStack.White.UIItems.Finders;
-using TestStack.White.UIItems.MenuItems;
-using TestStack.White.UIItems.WPFUIItems;
-using TestTextEditor.Framework.Utils.Logger;
+﻿using TestStack.White.UIItems;
 
-namespace TestTextEditor.Framework.Forms
+namespace TestTextEditor.Framework.Forms.MenuForms
 {
     public class ContextMenuForm : BaseMenuForm
     {

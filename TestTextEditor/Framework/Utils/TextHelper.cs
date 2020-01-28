@@ -42,11 +42,11 @@ namespace TestTextEditor.Framework.Utils
             var endLines = textToInsert.Where((s, i) => i > strTo).ToList();
             var middleLine = textToInsert[strFrom].Substring(0, chrFrom) + joinMiddleLineBy +
                              textToInsert[strTo].Substring(chrTo);
-            return string.Join("\n", beginLines) +
-                   (beginLines.Any() ? "\n" : "") +
+            return string.Join("\r\n", beginLines) +
+                   (beginLines.Any() ? "\r\n" : "") +
                    middleLine +
-                   (endLines.Any() ? "\n" : "") +
-                   string.Join("\n", endLines);
+                   (endLines.Any() ? "\r\n" : "") +
+                   string.Join("\r\n", endLines);
         }
 
         public static string GetTextInBounds(
@@ -62,13 +62,47 @@ namespace TestTextEditor.Framework.Utils
             else
             {
                 var middleLines = textToInsert.Where((s, i) => i > strFrom && i < strTo).ToList();
-                expectedText = textToInsert[strFrom].Substring(chrFrom) + "\n" +
-                               string.Join("\n", middleLines) +
-                               (middleLines.Any() ? "\n" : "") +
+                expectedText = textToInsert[strFrom].Substring(chrFrom) + "\r\n" +
+                               string.Join("\r\n", middleLines) +
+                               (middleLines.Any() ? "\r\n" : "") +
                                textToInsert[strTo].Substring(0, chrTo);
             }
 
             return expectedText;
+        }
+
+        public static string InsertLinesInText(
+            IList<string> text,
+            IList<string> lines,
+            int str, int chr)
+        {
+            var expectedTest = new StringBuilder();
+            for (var i = 0; i < text.Count; i++)
+            {
+                if (i == str)
+                {
+                    expectedTest.Append(text[i].Substring(0, chr));
+                    for (var j = 0; j < lines.Count; j++)
+                    {
+                        expectedTest.Append(lines[j]);
+                        if (j != lines.Count - 1)
+                        {
+                            expectedTest.Append("\r\n");
+                        }
+                    }
+                    expectedTest.Append(text[i].Substring(chr));
+                }
+                else
+                {
+                    expectedTest.Append(text[i]);
+                }
+                if (i != text.Count - 1)
+                {
+                    expectedTest.Append("\r\n");
+                }
+            }
+
+            return expectedTest.ToString();
         }
     }
 }

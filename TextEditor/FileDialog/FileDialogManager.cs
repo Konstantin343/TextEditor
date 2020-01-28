@@ -21,11 +21,11 @@ namespace TextEditor.FileDialog
 
         public void SaveTextInNewFile(IEnumerable<string> text)
         {
-            var saveFileDialog = new SaveFileDialog {Filter = Filter};
+            var saveFileDialog = new SaveFileDialog {Filter = Filter, Title = "Save File As"};
             if (saveFileDialog.ShowDialog() != true) return;
             if (string.IsNullOrEmpty(saveFileDialog.FileName)) return;
             var fileName = saveFileDialog.FileName;
-            File.WriteAllLines(fileName, text, Encoding);
+            File.WriteAllText(fileName, string.Join("\r\n", text), Encoding);
             if (string.IsNullOrEmpty(CurrentOpenedFile))
             {
                 CurrentOpenedFile = fileName;
@@ -46,7 +46,7 @@ namespace TextEditor.FileDialog
 
         public IList<string> ReadTextFromFile()
         {
-            var openFileDialog = new OpenFileDialog {Filter = Filter};
+            var openFileDialog = new OpenFileDialog {Filter = Filter, Title = "Open File"};
             if (openFileDialog.ShowDialog() != true || string.IsNullOrEmpty(openFileDialog.FileName))
                 return null;
             CurrentOpenedFile = openFileDialog.FileName;

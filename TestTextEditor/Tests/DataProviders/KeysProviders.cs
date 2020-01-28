@@ -37,7 +37,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) => i == str ? s.Remove(chr - 1, 1) : s));
 
                     yield return new TestCaseData(textToInsert, str, chr, expectedText)
@@ -67,7 +67,7 @@ namespace TestTextEditor.Tests.DataProviders
                     {
                         if (i != j && i != 0)
                         {
-                            expectedText.Append("\n");
+                            expectedText.Append("\r\n");
                         }
 
                         expectedText.Append(textToInsert[i]);
@@ -104,7 +104,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) => i == str ? s.Remove(chr, 1) : s));
 
                     yield return new TestCaseData(textToInsert, str, chr, expectedText)
@@ -136,7 +136,7 @@ namespace TestTextEditor.Tests.DataProviders
 
                         if (i != j && i != textToInsert.Count - 1)
                         {
-                            expectedText.Append("\n");
+                            expectedText.Append("\r\n");
                         }
                     }
 
@@ -200,8 +200,8 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n",
-                        textToInsert.Select((s, i) => i == str ? s.Insert(chr, "\n") : s));
+                    var expectedText = string.Join("\r\n",
+                        textToInsert.Select((s, i) => i == str ? s.Insert(chr, "\r\n") : s));
 
                     yield return new TestCaseData(textToInsert, str, chr, expectedText)
                         .SetName($"InLine{j + 1}" + "_{m}");
@@ -225,7 +225,7 @@ namespace TestTextEditor.Tests.DataProviders
                                 textToInsert,
                                 strFrom, chrFrom,
                                 strTo, chrTo,
-                                "\n"))
+                                "\r\n"))
                         .SetName($"TestCase{j + 1}" + "_{m}");
                 }
             }
@@ -251,7 +251,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) => i == str ? s.Insert(chr, "\t") : s));
 
                     yield return new TestCaseData(textToInsert, str, chr, expectedText)
@@ -305,7 +305,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) => i == Math.Max(str - 1, 0)
                             ? s.Insert(Math.Min(chr, s.Length), BaseTestObjects.Marker)
                             : s));
@@ -340,7 +340,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) => i == Math.Min(str + 1, textToInsert.Count - 1)
                             ? s.Insert(Math.Min(chr, s.Length), BaseTestObjects.Marker)
                             : s));
@@ -372,7 +372,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) =>
                         {
                             if (chr == 0 && str == 0 && i == 0)
@@ -411,7 +411,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) =>
                         {
                             if (chr == s.Length && str == textToInsert.Count - 1 && i == textToInsert.Count - 1)
@@ -450,7 +450,7 @@ namespace TestTextEditor.Tests.DataProviders
                 for (var j = 0; j < testData.Length; j++)
                 {
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n", textToInsert.Select(
+                    var expectedText = string.Join("\r\n", textToInsert.Select(
                         (s, i) =>
                         {
                             if (i != str) return s;

@@ -14,5 +14,13 @@ namespace TestTextEditor.Framework.Utils
             thread.Join();
             return result;
         }
+        
+        public static void SetText(string text)
+        {
+            var thread = new Thread(() => Clipboard.SetText(text));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+        }
     }
 }

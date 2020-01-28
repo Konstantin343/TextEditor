@@ -10,8 +10,7 @@ namespace TestTextEditor.Framework.Utils
         public static Point GetPointToClickOn(int str, int chr, IList<string> text)
         {
             var y = str * (Settings.LineInterval + Settings.FontSize);
-            var x = Settings.PaddingLeft +
-                    FormattedTextHelper.GetWidth(
+            var x = FormattedTextHelper.GetWidth(
                         text[str].Substring(0, chr),
                         Settings.FontStyle, Settings.FontSize);
             return new Point(x * EnvironmentHelper.PixelCoefficient, y * EnvironmentHelper.PixelCoefficient);

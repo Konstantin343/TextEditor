@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
@@ -531,7 +532,7 @@ namespace TextEditor.TextEditComponent
         private void PasteSelected(object sender, RoutedEventArgs e)
         {
             if (!SelectedText.IsEmpty) DeleteSelected();
-            var textLinesToPaste = Clipboard.GetText().Split('\n');
+            var textLinesToPaste = Regex.Split(Clipboard.GetText(), "\r\n");
             for (var i = 0; i < textLinesToPaste.Length; i++)
             {
                 AddText(textLinesToPaste[i]);

@@ -39,24 +39,11 @@ namespace TestTextEditor.Tests.DataProviders
         {
             get
             {
-                var testData = new[]
-                {
-                    (new List<string>(new[] {"texttexttexttext", "texttexttextetext", "texttextext"}), "LatinText"),
-                    (new List<string>(new[] {"", "", "", ""}), "EmptyLines"),
-                    (TextHelper.GetText(100, 3), "Text100Lines"),
-                    (TextHelper.GetText(5, 200), "TextLongLines"),
-                    (new List<string>(new[] {"aaaaaaaa", "bbbbb", "", "dddddd", "", "ffffffff"}), "TextWithEmptyLines"),
-                    (new List<string>(new[] {"aaaaaaaa", "bbbbb", ""}), "LastLineIsEmpty"),
-                    (new List<string>(new[] {"", "bbbbb", "cccccccccc"}), "FirstLineIsEmpty"),
-                    (new List<string>(new[] {"         ", "   ", "            ", "    "}), "AllLinesOnlySpaces"),
-                    (new List<string>(new[] {"aaaaa", "   ", "   ", "dddd"}), "MiddleLinesOnlySpaces"),
-                    (new List<string>(new[] {"         ", "   ", "aaaa", "scascsaca"}), "FirstLinesOnlySpaces"),
-                    (new List<string>(new[] {"dasdadas", "esesese", "          ", "    "}), "LastLinesOnlySpaces"),
-                };
+                var testData = BaseTestObjects.BaseMultilineTexts;
 
                 foreach (var (textToInsert, name) in testData)
                 {
-                    var expectedText = string.Join("\n", textToInsert);
+                    var expectedText = string.Join("\r\n", textToInsert);
 
                     yield return new TestCaseData(textToInsert, expectedText)
                         .SetName(name + "_{m}");
@@ -98,7 +85,7 @@ namespace TestTextEditor.Tests.DataProviders
                 {
                     var textToChange = TextHelper.GenerateRandom(5);
                     var (str, chr) = testData[j];
-                    var expectedText = string.Join("\n",
+                    var expectedText = string.Join("\r\n",
                         textToInsert.Select((s, i) => i == str ? s.Insert(chr, textToChange) : s));
 
                     yield return new TestCaseData(textToInsert, textToChange, str, chr, expectedText)

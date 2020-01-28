@@ -29,7 +29,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(TextProviders), nameof(TextProviders.InsertTextProviders))]
         public void InsertTextTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             string textToChange,
             int str, int chr,
             string expectedText)
@@ -43,7 +43,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(TextProviders), nameof(TextProviders.SelectTextProviders))]
         public void SelectTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int startStr, int startChr,
             int endStr, int endChr,
             string expectedText)
@@ -60,7 +60,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(TextProviders), nameof(TextProviders.ChangeSelectedTextProviders))]
         public void ChangeSelectedTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             string textToChange,
             int startStr, int startChr,
             int endStr, int endChr,

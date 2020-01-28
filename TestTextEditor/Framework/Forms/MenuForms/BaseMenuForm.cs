@@ -3,7 +3,7 @@ using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WPFUIItems;
 using TestTextEditor.Framework.Utils.Logger;
 
-namespace TestTextEditor.Framework.Forms
+namespace TestTextEditor.Framework.Forms.MenuForms
 {
     public abstract class BaseMenuForm : BaseForm
     {

@@ -11,7 +11,7 @@ namespace TestTextEditor.Tests
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.BackspaceInLineProviders))]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.BackspaceInBeginProviders))]
         public void BackspaceTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int strToClick,
             int chrToClick,
             string expectedText)
@@ -26,7 +26,7 @@ namespace TestTextEditor.Tests
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.DeleteInLineProviders))]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.DeleteInEndProviders))]
         public void DeleteTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int strToClick,
             int chrToClick,
             string expectedText)
@@ -40,7 +40,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.EnterProviders))]
         public void EnterTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int strToClick,
             int chrToClick,
             string expectedText)
@@ -54,7 +54,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.DeleteBackspaceSelectedTextProviders))]
         public void BackspaceSelectedTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int startStr, int startChr,
             int endStr, int endChr,
             string expectedText)
@@ -68,7 +68,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.DeleteBackspaceSelectedTextProviders))]
         public void DeleteSelectedTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int startStr, int startChr,
             int endStr, int endChr,
             string expectedText)
@@ -82,7 +82,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.EnterSelectedTextProviders))]
         public void EnterSelectedTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int startStr, int startChr,
             int endStr, int endChr,
             string expectedText)
@@ -96,7 +96,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.TabProviders))]
         public void TabTest(
-            List<string> textToInsert,
+           IList<string> textToInsert,
             int strToClick,
             int chrToClick,
             string expectedText)
@@ -110,7 +110,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.TabSelectedTextProviders))]
         public void TabSelectedTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             int startStr, int startChr,
             int endStr, int endChr,
             string expectedText)
@@ -124,7 +124,7 @@ namespace TestTextEditor.Tests
         [Test]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.InsertProviders))]
         public void InsertTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             string marker,
             int strToClick, int chrToClick,
             string expectedText)
@@ -142,7 +142,7 @@ namespace TestTextEditor.Tests
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.LeftArrowProviders))]
         [TestCaseSource(typeof(KeysProviders), nameof(KeysProviders.RightArrowProviders))]
         public void ArrowsTest(
-            List<string> textToInsert,
+            IList<string> textToInsert,
             string marker,
             int strToClick, int chrToClick,
             string expectedText,

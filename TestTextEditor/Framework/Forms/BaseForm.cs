@@ -4,10 +4,10 @@ using TestTextEditor.Framework.Utils.Logger;
 
 namespace TestTextEditor.Framework.Forms
 {
-    public class BaseForm
+    public abstract class BaseForm
     {
-        protected readonly IUIItem _source;
-        protected readonly string _name;
+        protected IUIItem _source;
+        protected string _name;
 
         public BaseForm(IUIItem uiItem, string name)
         {

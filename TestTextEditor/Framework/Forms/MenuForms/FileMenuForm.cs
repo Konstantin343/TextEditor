@@ -1,6 +1,6 @@
 ﻿using TestStack.White.UIItems;
 
-namespace TestTextEditor.Framework.Forms
+namespace TestTextEditor.Framework.Forms.MenuForms
 {
     public class FileMenuForm : BaseMenuForm
     {

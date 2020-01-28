@@ -200,8 +200,8 @@ namespace TextEditor.TextEditComponent.Text
                 var firstLine = _textLines[startStr].Substring(startNum);
                 var lastLine = _textLines[endStr].Substring(0, endNum);
                 selectedText = endStr - startStr > 1
-                    ? $"{firstLine}\n{string.Join("\n", _textLines.Where((s, i) => startStr < i && i < endStr))}\n{lastLine}"
-                    : $"{firstLine}\n{lastLine}";
+                    ? $"{firstLine}\r\n{string.Join("\r\n", _textLines.Where((s, i) => startStr < i && i < endStr))}\r\n{lastLine}"
+                    : $"{firstLine}\r\n{lastLine}";
             }
 
             return selectedText;
@@ -252,6 +252,6 @@ namespace TextEditor.TextEditComponent.Text
         private void UpdateLine(int index) =>
             _textLines[index].UpdateFormatted(FontStyle, FontSize, TextBrush, HighlightTextManager);
 
-        public override string ToString() => string.Join("\n", _textLines.Select(tl => tl.RawValue));
+        public override string ToString() => string.Join("\r\n", _textLines.Select(tl => tl.RawValue));
     }
 }

@@ -1,10 +1,7 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using NUnit.Framework;
-using TestStack.White.InputDevices;
-using TestStack.White.UIItems;
-using TestStack.White.UIItems.Finders;
-using TestStack.White.UIItems.WPFUIItems;
-using TestTextEditor.Framework;
+using TestTextEditor.Framework.Utils;
 using TestTextEditor.Tests.DataProviders;
 
 namespace TestTextEditor.Tests
@@ -20,21 +17,77 @@ namespace TestTextEditor.Tests
             Assert.AreEqual(textEditBox.GetAbsolutePoint(point), MainWindow.ContextMenuForm.Location);
         }
 
-//        [Test]
-//        [TestCaseSource(typeof(TextProviders), nameof(TextProviders.SelectTextProviders))]
-//        public void SelectTest(
-//            List<string> textToInsert,
-//            int startStr, int startChr,
-//            int endStr, int endChr,
-//            string expectedText)
-//        {
-//            var textEditBox = MainWindow.TextEditBoxForm;
-//            EnterAndSelect(textEditBox, textToInsert, startStr, startChr, endStr, endChr);
-//            textEditBox.RightClick();
-//
-//            var contextMenu = MainWindow.ContextMenuForm;
-//            contextMenu.Copy();
-//            Assert.AreEqual(expectedText, ClipboardHelper.GetText());
-//        }
+        [Test]
+        [TestCaseSource(typeof(ContextMenuProviders), nameof(ContextMenuProviders.SelectAllProviders))]
+        public void SelectAllTest(IList<string> textToInsert)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+            textEditBox.EnterMultiLineText(textToInsert);
+
+            textEditBox.RightClick();
+            MainWindow.ContextMenuForm.SelectAll();
+
+            textEditBox.RightClick();
+            MainWindow.ContextMenuForm.Copy();
+
+            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText());
+        }
+
+        [Test]
+        [TestCaseSource(typeof(ContextMenuProviders), nameof(ContextMenuProviders.CopyProviders))]
+        public void CopyTest(
+            IList<string> textToInsert,
+            int startStr, int startChr,
+            int endStr, int endChr,
+            string expectedText)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+            EnterAndSelect(textEditBox, textToInsert, startStr, startChr, endStr, endChr);
+            textEditBox.RightClick();
+
+            var contextMenu = MainWindow.ContextMenuForm;
+            contextMenu.Copy();
+            Assert.AreEqual(expectedText, ClipboardHelper.GetText());
+        }
+
+        [Test]
+        [TestCaseSource(typeof(ContextMenuProviders), nameof(ContextMenuProviders.CutProviders))]
+        public void CutTest(
+            IList<string> textToInsert,
+            int startStr, int startChr,
+            int endStr, int endChr,
+            string expectedCopiedText,
+            string expectedText)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+            EnterAndSelect(textEditBox, textToInsert, startStr, startChr, endStr, endChr);
+            textEditBox.RightClick();
+
+            var contextMenu = MainWindow.ContextMenuForm;
+            contextMenu.Cut();
+            Assert.AreEqual(expectedCopiedText, ClipboardHelper.GetText());
+            Assert.AreEqual(expectedText, textEditBox.Text);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(ContextMenuProviders), nameof(ContextMenuProviders.PasteProviders))]
+        public void PasteTest(
+            IList<string> textToInsert,
+            string textToPaste,
+            int str, int chr,
+            string expectedText)
+        {
+            ClipboardHelper.SetText(textToPaste);
+            
+            var textEditBox = MainWindow.TextEditBoxForm;
+            textEditBox.EnterMultiLineText(textToInsert);
+            textEditBox.ClickAt(str, chr);
+
+            textEditBox.RightClick();
+            var contextMenu = MainWindow.ContextMenuForm;
+            contextMenu.Paste();
+            
+            Assert.AreEqual(expectedText, textEditBox.Text);
+        }
     }
 }

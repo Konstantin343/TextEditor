@@ -1,16 +1,20 @@
 ﻿using TestStack.White.UIItems.Finders;
+using TestStack.White.UIItems.WindowItems;
 using TestStack.White.UIItems.WPFUIItems;
 using TestTextEditor.Framework.Forms;
+using TestTextEditor.Framework.Forms.MenuForms;
+using TestTextEditor.Framework.Forms.ModalForns;
+using TestTextEditor.Framework.Forms.TextForms;
 
 namespace TestTextEditor.Framework.Windows
 {
     public class MainTextEditorWindow
     {
-        private static readonly SearchCriteria MenuFileSearchCriteria =
+        private static readonly SearchCriteria FileMenuSearchCriteria =
             SearchCriteria.ByAutomationId("File");
 
-        private static readonly SearchCriteria MenuThemesSearchCriteria =
-            SearchCriteria.ByAutomationId("Themes");
+        private static readonly SearchCriteria ContextMenuSearchCriteria =
+            SearchCriteria.ByAutomationId("ContextMenu");
 
         private static readonly SearchCriteria CurrentOpenedFileSearchCriteria =
             SearchCriteria.ByAutomationId("OpenedFile");
@@ -18,21 +22,35 @@ namespace TestTextEditor.Framework.Windows
         private static readonly SearchCriteria TextEditBoxSearchCriteria =
             SearchCriteria.ByAutomationId("TextEditBox");
 
-        private static readonly SearchCriteria MenuFileOpenSearchCriteria =
-            SearchCriteria.ByAutomationId("File");
+        private static readonly string SaveFileAsModalWindowTitle = "Save File As";
 
-        private static readonly SearchCriteria MenuFileSaveSearchCriteria =
-            SearchCriteria.ByAutomationId("Save");
+        private Window _source;
+        
+        public MainTextEditorWindow(Window source)
+        {
+            _source = source;
+        }
 
-        private static readonly SearchCriteria MenuFileSaveAsSearchCriteria =
-            SearchCriteria.ByAutomationId("SaveAs");
+        public Window Source => _source;
+        
+        public string Title => _source.Title;
 
         public TextEditBoxForm TextEditBoxForm =>
-            new TextEditBoxForm(TextEditorAppLoader.Window.Get(TextEditBoxSearchCriteria), "Text edit box");
-        
-        public ContextMenuForm ContextMenuForm => 
-            new ContextMenuForm(TextEditorAppLoader.Window.Popup.Get(SearchCriteria.ByAutomationId("ContextMenu")), "Context menu");
+            new TextEditBoxForm(_source.Get(TextEditBoxSearchCriteria), 
+                "Text edit box");
 
-        public string CurrentOpenedFile => TextEditorAppLoader.Window.Get(CurrentOpenedFileSearchCriteria).Name;
+        public ContextMenuForm ContextMenuForm =>
+            new ContextMenuForm(_source.Popup.Get(ContextMenuSearchCriteria), 
+                "Context menu");
+
+        public FileMenuForm FileMenuForm =>
+            new FileMenuForm(_source.Get(FileMenuSearchCriteria), 
+                "File menu");
+
+        public ModalForm SaveFileAsModalForm =>
+            new ModalForm(_source.ModalWindow(SaveFileAsModalWindowTitle),
+                "Save file as modal window");
+
+        public string CurrentOpenedFile => _source.Get(CurrentOpenedFileSearchCriteria).Name;
     }
 }
