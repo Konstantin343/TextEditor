@@ -71,6 +71,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Tests\BaseTests.cs" />
         <Compile Include="Tests\ContextMenuTests.cs" />
+        <Compile Include="Tests\DataProviders\ContextMenuProviders.cs" />
         <Compile Include="Tests\DataProviders\FocusPositionProviders.cs" />
         <Compile Include="Tests\DataProviders\KeysProviders.cs" />
         <Compile Include="Tests\DataProviders\TextProviders.cs" />

@@ -34,5 +34,13 @@ namespace TestTextEditor.Framework.Forms
             TestLogger.Instance.Info($"Right clicking on {_name}");
             _source.RightClick();
         }
+        
+        public void RightClickAt(Point relativePoint)
+        {
+            TestLogger.Instance.Info($"Right clicking on {_name}");
+            _source.RightClickAt(GetAbsolutePoint(relativePoint));
+        }
+
+        public Point GetAbsolutePoint(Point relativePoint) => Location - new Point() + relativePoint;
     }
 }

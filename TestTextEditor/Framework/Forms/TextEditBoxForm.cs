@@ -3,6 +3,9 @@ using System.Linq;
 using System.Windows;
 using TestStack.White.InputDevices;
 using TestStack.White.UIItems;
+using TestStack.White.UIItems.Finders;
+using TestStack.White.UIItems.MenuItems;
+using TestStack.White.UIItems.WPFUIItems;
 using TestStack.White.WindowsAPI;
 using TestTextEditor.Framework.Utils;
 using TestTextEditor.Framework.Utils.Logger;
@@ -18,7 +21,7 @@ namespace TestTextEditor.Framework.Forms
         public void ClickAt(int str, int chr)
         {
             var relativePoint = PointHelper.GetPointToClickOn(str, chr, Text.Split('\n').ToList());
-            var absolutePoint = _source.Location - new Point() + relativePoint;
+            var absolutePoint = GetAbsolutePoint(relativePoint);
             var b = _source.AutomationElement.Current.BoundingRectangle;
             TestLogger.Instance.Info($"Clicking at {absolutePoint} (relative: {relativePoint}) in {_name}");
             Mouse.Instance.Click(absolutePoint);
@@ -29,10 +32,10 @@ namespace TestTextEditor.Framework.Forms
             var textByLines = Text.Split('\n').ToList();
             TestLogger.Instance.Info($"Select from at {strFrom}, {chrFrom} to {strTo}, {chrTo} in {_name}");
             Mouse.Instance.Location =
-                PointHelper.GetPointToClickOn(strFrom, chrFrom, textByLines) - new Point() + Location;
+                GetAbsolutePoint(PointHelper.GetPointToClickOn(strFrom, chrFrom, textByLines));
             Mouse.LeftDown();
             Mouse.Instance.Location =
-                PointHelper.GetPointToClickOn(strTo, chrTo, textByLines) - new Point() + Location;
+                GetAbsolutePoint(PointHelper.GetPointToClickOn(strTo, chrTo, textByLines));
             Mouse.LeftUp();
         }
 

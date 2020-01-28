@@ -1,17 +1,23 @@
-﻿using TestStack.White.UIItems.Finders;
+﻿using System.Windows;
+using TestStack.White.UIItems;
+using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.MenuItems;
 using TestStack.White.UIItems.WPFUIItems;
+using TestTextEditor.Framework.Utils.Logger;
 
 namespace TestTextEditor.Framework.Forms
 {
     public class ContextMenuForm : BaseForm
     {
-        public ContextMenuForm(PopUpMenu uiItem, string name) : base(uiItem, name)
+        public ContextMenuForm(IUIItem uiItem, string name) : base(uiItem, name)
         {
         }
 
-        private void SelectItem(ContextMenuItem item) =>
+        private void SelectItem(ContextMenuItem item)
+        {
+            TestLogger.Instance.Info($"Click on {item} in {_name}");
             _source.Get(SearchCriteria.ByAutomationId(item.ToString())).Click();
+        }
 
         public void SelectAll() => SelectItem(ContextMenuItem.SelectAll);
 

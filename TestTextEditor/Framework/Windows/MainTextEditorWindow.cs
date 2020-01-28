@@ -1,4 +1,5 @@
 ﻿using TestStack.White.UIItems.Finders;
+using TestStack.White.UIItems.WPFUIItems;
 using TestTextEditor.Framework.Forms;
 
 namespace TestTextEditor.Framework.Windows
@@ -30,8 +31,8 @@ namespace TestTextEditor.Framework.Windows
             new TextEditBoxForm(TextEditorAppLoader.Window.Get(TextEditBoxSearchCriteria), "Text edit box");
         
         public ContextMenuForm ContextMenuForm => 
-            new ContextMenuForm(TextEditorAppLoader.Window.Popup, "Context menu");
+            new ContextMenuForm(TextEditorAppLoader.Window.Popup.Get(SearchCriteria.ByAutomationId("ContextMenu")), "Context menu");
 
-        public string GetCurrentOpenedFile => TextEditorAppLoader.Window.Get(CurrentOpenedFileSearchCriteria).Name;
+        public string CurrentOpenedFile => TextEditorAppLoader.Window.Get(CurrentOpenedFileSearchCriteria).Name;
     }
 }
