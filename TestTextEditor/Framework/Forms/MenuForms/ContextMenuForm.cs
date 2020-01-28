@@ -7,18 +7,14 @@ using TestTextEditor.Framework.Utils.Logger;
 
 namespace TestTextEditor.Framework.Forms
 {
-    public class ContextMenuForm : BaseForm
+    public class ContextMenuForm : BaseMenuForm
     {
         public ContextMenuForm(IUIItem uiItem, string name) : base(uiItem, name)
         {
         }
 
-        private void SelectItem(ContextMenuItem item)
-        {
-            TestLogger.Instance.Info($"Click on {item} in {_name}");
-            _source.Get(SearchCriteria.ByAutomationId(item.ToString())).Click();
-        }
-
+        public void SelectItem(ContextMenuItem item) => SelectItem(item.ToString());
+        
         public void SelectAll() => SelectItem(ContextMenuItem.SelectAll);
 
         public void Copy() => SelectItem(ContextMenuItem.Copy);

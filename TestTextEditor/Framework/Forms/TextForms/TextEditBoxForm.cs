@@ -22,7 +22,6 @@ namespace TestTextEditor.Framework.Forms
         {
             var relativePoint = PointHelper.GetPointToClickOn(str, chr, Text.Split('\n').ToList());
             var absolutePoint = GetAbsolutePoint(relativePoint);
-            var b = _source.AutomationElement.Current.BoundingRectangle;
             TestLogger.Instance.Info($"Clicking at {absolutePoint} (relative: {relativePoint}) in {_name}");
             Mouse.Instance.Click(absolutePoint);
         }
