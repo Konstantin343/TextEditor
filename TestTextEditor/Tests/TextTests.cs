@@ -71,5 +71,19 @@ namespace TestTextEditor.Tests
             textEditBox.EnterOneLineText(textToChange);
             Assert.AreEqual(expectedText, textEditBox.Text);
         }
+
+        [Test]
+        public void HorizontalScrollTest()
+        {
+            MainWindow.TextEditBoxForm.EnterOneLineText(TextHelper.GenerateRandom(100));
+            Assert.IsTrue(MainWindow.ScrollBarForm.IsHorizontalDisplayed);
+        }
+        
+        [Test]
+        public void VerticalScrollTest()
+        {
+            MainWindow.TextEditBoxForm.EnterMultiLineText(TextHelper.GetText(50, 1));
+            Assert.IsTrue(MainWindow.ScrollBarForm.IsVerticalDisplayed);
+        }
     }
 }

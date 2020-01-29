@@ -13,8 +13,8 @@ namespace TestTextEditor.Framework.Forms.MenuForms
         
         protected void SelectItem(string item)
         {
-            TestLogger.Instance.Info($"Click on {item} in {_name}");
-            _source.Get(SearchCriteria.ByAutomationId(item.ToString())).Click();
+            TestLogger.Instance.Info($"Click on {item} in '{_name}'");
+            _source.Get(SearchCriteria.ByAutomationId(item)).Click();
         }
     }
 }

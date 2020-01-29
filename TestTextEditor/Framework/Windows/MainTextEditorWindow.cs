@@ -12,6 +12,12 @@ namespace TestTextEditor.Framework.Windows
     {
         private static readonly SearchCriteria FileMenuSearchCriteria =
             SearchCriteria.ByAutomationId("File");
+        
+        private static readonly SearchCriteria ThemesMenuSearchCriteria =
+            SearchCriteria.ByAutomationId("Themes");
+        
+        private static readonly SearchCriteria ScrollSearchCriteria =
+            SearchCriteria.ByAutomationId("Scroll");
 
         private static readonly SearchCriteria ContextMenuSearchCriteria =
             SearchCriteria.ByAutomationId("ContextMenu");
@@ -48,6 +54,10 @@ namespace TestTextEditor.Framework.Windows
         public FileMenuForm FileMenuForm =>
             new FileMenuForm(_source.Get(FileMenuSearchCriteria), 
                 "File menu");
+        
+        public ThemesMenuForm ThemesMenuForm =>
+            new ThemesMenuForm(_source.Get(ThemesMenuSearchCriteria), 
+                "Themes menu");
 
         public ModalForm SaveFileAsModalForm =>
             new ModalForm(_source.ModalWindow(SaveFileAsModalWindowTitle),
@@ -56,6 +66,10 @@ namespace TestTextEditor.Framework.Windows
         public ModalForm OpenFileModalForm =>
             new ModalForm(_source.ModalWindow(OpenFileModalWindowTitle),
                 "Open file as modal window");
+        
+        public ScrollBarForm ScrollBarForm =>
+            new ScrollBarForm(_source.Get(ScrollSearchCriteria), 
+                "Scroll bar");
 
         public string CurrentOpenedFile => _source.Get(CurrentOpenedFileSearchCriteria).Name;
     }

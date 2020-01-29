@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TestTextEditor.Framework.Utils
 {
@@ -33,15 +34,15 @@ namespace TestTextEditor.Framework.Utils
         }
 
         public static string GetTextNotInBounds(
-            IList<string> textToInsert,
+            IList<string> text,
             int strFrom, int chrFrom,
             int strTo, int chrTo,
             string joinMiddleLineBy = "")
         {
-            var beginLines = textToInsert.Where((s, i) => i < strFrom).ToList();
-            var endLines = textToInsert.Where((s, i) => i > strTo).ToList();
-            var middleLine = textToInsert[strFrom].Substring(0, chrFrom) + joinMiddleLineBy +
-                             textToInsert[strTo].Substring(chrTo);
+            var beginLines = text.Where((s, i) => i < strFrom).ToList();
+            var endLines = text.Where((s, i) => i > strTo).ToList();
+            var middleLine = text[strFrom].Substring(0, chrFrom) + joinMiddleLineBy +
+                             text[strTo].Substring(chrTo);
             return string.Join("\r\n", beginLines) +
                    (beginLines.Any() ? "\r\n" : "") +
                    middleLine +
@@ -50,22 +51,22 @@ namespace TestTextEditor.Framework.Utils
         }
 
         public static string GetTextInBounds(
-            IList<string> textToInsert,
+            IList<string> text,
             int strFrom, int chrFrom,
             int strTo, int chrTo)
         {
             string expectedText;
             if (strFrom == strTo)
             {
-                expectedText = textToInsert[strFrom].Substring(chrFrom, chrTo - chrFrom);
+                expectedText = text[strFrom].Substring(chrFrom, chrTo - chrFrom);
             }
             else
             {
-                var middleLines = textToInsert.Where((s, i) => i > strFrom && i < strTo).ToList();
-                expectedText = textToInsert[strFrom].Substring(chrFrom) + "\r\n" +
+                var middleLines = text.Where((s, i) => i > strFrom && i < strTo).ToList();
+                expectedText = text[strFrom].Substring(chrFrom) + "\r\n" +
                                string.Join("\r\n", middleLines) +
                                (middleLines.Any() ? "\r\n" : "") +
-                               textToInsert[strTo].Substring(0, chrTo);
+                               text[strTo].Substring(0, chrTo);
             }
 
             return expectedText;
@@ -90,12 +91,14 @@ namespace TestTextEditor.Framework.Utils
                             expectedTest.Append("\r\n");
                         }
                     }
+
                     expectedTest.Append(text[i].Substring(chr));
                 }
                 else
                 {
                     expectedTest.Append(text[i]);
                 }
+
                 if (i != text.Count - 1)
                 {
                     expectedTest.Append("\r\n");

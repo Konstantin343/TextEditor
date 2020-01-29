@@ -11,10 +11,7 @@ namespace TestTextEditor.Tests
         [Test]
         public void SaveAfterOpenAppTest()
         {
-            var fileMenu = MainWindow.FileMenuForm;
-            fileMenu.Click();
-            fileMenu.SaveFile();
-
+            SaveFile();
             Assert.DoesNotThrow(() =>
             {
                 var _ = MainWindow.SaveFileAsModalForm;
@@ -22,19 +19,19 @@ namespace TestTextEditor.Tests
         }
 
         [Test]
+        public void OpenFileScrollBarsTest()
+        {
+            OpenFile(EnvironmentHelper.GetResourcePath("large.txt"));
+            Assert.IsTrue(MainWindow.ScrollBarForm.AreBothDisplayed);
+        }
+
+        [Test]
         [TestCaseSource(typeof(FileMenuProviders), nameof(FileMenuProviders.SaveAsCurrentOpenedFileProviders))]
         public void SaveAsCurrentOpenedFileTest(
             string filePath)
         {
-            var fileMenu = MainWindow.FileMenuForm;
-            fileMenu.Click();
-            fileMenu.SaveAsFile();
-
-            var modalForm = MainWindow.SaveFileAsModalForm;
-            modalForm.EnterText(filePath);
-            modalForm.Submit();
+            SaveFileAs(filePath);
             File.Delete(filePath);
-
             Assert.AreEqual(filePath, MainWindow.CurrentOpenedFile);
         }
 
@@ -46,16 +43,8 @@ namespace TestTextEditor.Tests
         {
             var textEditBox = MainWindow.TextEditBoxForm;
             textEditBox.EnterMultiLineText(textToInsert);
-
-            var fileMenu = MainWindow.FileMenuForm;
-            fileMenu.Click();
-            fileMenu.SaveAsFile();
-
-            var modalForm = MainWindow.SaveFileAsModalForm;
-            modalForm.EnterText(filePath);
-            modalForm.Submit();
-
-            Assert.AreEqual(textEditBox.Text, FileHelper.ReadAndDelete(filePath));
+            SaveFileAs(filePath);
+            Assert.AreEqual(textEditBox.Text, File.ReadAllText(filePath));
         }
 
         [Test]
@@ -63,14 +52,7 @@ namespace TestTextEditor.Tests
         public void OpenCurrentOpenedFileTest(
             string filePath)
         {
-            var fileMenu = MainWindow.FileMenuForm;
-            fileMenu.Click();
-            fileMenu.OpenFile();
-
-            var modalForm = MainWindow.OpenFileModalForm;
-            modalForm.EnterText(filePath);
-            modalForm.Submit();
-
+            OpenFile(filePath);
             Assert.AreEqual(filePath, MainWindow.CurrentOpenedFile);
         }
 
@@ -79,17 +61,8 @@ namespace TestTextEditor.Tests
         public void OpenTest(
             string filePath)
         {
-            var textEditBox = MainWindow.TextEditBoxForm;
-
-            var fileMenu = MainWindow.FileMenuForm;
-            fileMenu.Click();
-            fileMenu.OpenFile();
-
-            var modalForm = MainWindow.OpenFileModalForm;
-            modalForm.EnterText(filePath);
-            modalForm.Submit();
-
-            Assert.AreEqual(FileHelper.Read(filePath), textEditBox.Text);
+            OpenFile(filePath);
+            Assert.AreEqual(File.ReadAllText(filePath), MainWindow.TextEditBoxForm.Text);
         }
 
         [Test]
@@ -102,25 +75,90 @@ namespace TestTextEditor.Tests
             var textEditBox = MainWindow.TextEditBoxForm;
             textEditBox.EnterMultiLineText(textToInsert);
 
-            var fileMenu = MainWindow.FileMenuForm;
-            fileMenu.Click();
-            fileMenu.SaveAsFile();
-
-            var saveFileAsModalForm = MainWindow.SaveFileAsModalForm;
-            saveFileAsModalForm.EnterText(filePath);
-            saveFileAsModalForm.Submit();
+            SaveFileAs(filePath);
 
             var textBeforeChanges = textEditBox.Text;
             textEditBox.EnterMultiLineText(textToChange);
-            var fileAfterChanges = FileHelper.Read(filePath);
+            var fileAfterChanges = File.ReadAllText(filePath);
 
-            fileMenu.Click();
-            fileMenu.SaveFile();
+            SaveFile();
 
-            Assert.AreEqual(FileHelper.ReadAndDelete(filePath), textEditBox.Text,
+            Assert.AreEqual(File.ReadAllText(filePath), textEditBox.Text,
                 "Text after save is not equal to expected");
             Assert.AreEqual(fileAfterChanges, textBeforeChanges,
                 "Text before save is not equal to expected");
+        }
+
+        [Test]
+        [TestCaseSource(typeof(FileMenuProviders), nameof(FileMenuProviders.SaveAfterOpenProviders))]
+        public void SaveAfterOpenFileTest(
+            string filePath,
+            IList<string> textToChange)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+
+            OpenFile(filePath);
+
+            var textBeforeChanges = textEditBox.Text;
+            textEditBox.EnterMultiLineText(textToChange);
+            var fileAfterChanges = File.ReadAllText(filePath);
+
+            SaveFile();
+
+            Assert.AreEqual(File.ReadAllText(filePath), textEditBox.Text,
+                "Text after save is not equal to expected");
+            Assert.AreEqual(fileAfterChanges, textBeforeChanges,
+                "Text before save is not equal to expected");
+        }
+
+        [Test]
+        [TestCaseSource(typeof(FileMenuProviders), nameof(FileMenuProviders.SaveAsAfterSaveAsProviders))]
+        public void SaveAsAfterSaveAsFileTest(
+            string filePath1,
+            string filePath2,
+            IList<string> textToInsert,
+            IList<string> textToChange)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+            textEditBox.EnterMultiLineText(textToInsert);
+
+            SaveFileAs(filePath1);
+
+            var textBeforeChanges = textEditBox.Text;
+            textEditBox.EnterMultiLineText(textToChange);
+
+            SaveFileAs(filePath2);
+
+            var file1 = File.ReadAllText(filePath1);
+            var file2 = File.ReadAllText(filePath2);
+
+            Assert.AreEqual(file1, textBeforeChanges,
+                "Text in first file is not equal to expected");
+            Assert.AreEqual(file2, textEditBox.Text,
+                "Text in second file is not equal to expected");
+        }
+
+        [Test]
+        [TestCaseSource(typeof(FileMenuProviders), nameof(FileMenuProviders.OpenAfterOpenProviders))]
+        public void OpenAfterOpenFileTest(
+            string filePath1,
+            string filePath2)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+            OpenFile(filePath1);
+            var text = textEditBox.Text;
+            var currentOpenedFile = MainWindow.CurrentOpenedFile;
+
+            OpenFile(filePath2);
+
+            Assert.AreEqual(File.ReadAllText(filePath1), text,
+                "Text after first open is not equal to expected");
+            Assert.AreEqual(filePath1, currentOpenedFile,
+                "Current opened file after first open is not equal to expected");
+            Assert.AreEqual(File.ReadAllText(filePath2), textEditBox.Text,
+                "Text after second open save is not equal to expected");
+            Assert.AreEqual(filePath2, MainWindow.CurrentOpenedFile,
+                "Current opened file after second open is not equal to expected");
         }
     }
 }

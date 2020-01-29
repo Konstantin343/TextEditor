@@ -28,7 +28,8 @@
         </DockPanel>
         <ScrollViewer DockPanel.Dock="Bottom" CanContentScroll="True" HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto"
-                      Focusable="False">
+                      Focusable="False"
+                      Uid="Scroll">
             <textEditComponent:TextEditBox x:Name="TextEditBox" Uid="TextEditBox" />
         </ScrollViewer>
     </DockPanel>

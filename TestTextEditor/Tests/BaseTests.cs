@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using TestTextEditor.Framework;
 using TestTextEditor.Framework.Forms;
@@ -10,6 +11,7 @@ namespace TestTextEditor.Tests
     public abstract class BaseTests
     {
         protected MainTextEditorWindow MainWindow;
+        private IList<string> _createdFiles = new List<string>();
 
         [SetUp]
         public void StartApp()
@@ -19,8 +21,15 @@ namespace TestTextEditor.Tests
         }
 
         [TearDown]
-        public void CloseApp() => TextEditorAppLoader.CloseApp();
-        
+        public void CloseApp()
+        {
+            TextEditorAppLoader.CloseApp();
+            foreach (var file in _createdFiles)
+            {
+                File.Delete(file);
+            }
+        }
+
         protected static void EnterAndClick(
             TextEditBoxForm textEditBox,
             IList<string> textToInsert,
@@ -39,6 +48,34 @@ namespace TestTextEditor.Tests
         {
             textEditBox.EnterMultiLineText(textToInsert);
             textEditBox.Select(startStr, startChr, endStr, endChr);
+        }
+
+        protected void OpenFile(string filePath)
+        {
+            var fileMenu = MainWindow.FileMenuForm;
+            fileMenu.Click();
+            fileMenu.OpenFile();
+            var openFileModalForm = MainWindow.OpenFileModalForm;
+            openFileModalForm.EnterText(filePath);
+            openFileModalForm.Submit();
+        }
+
+        protected void SaveFileAs(string filePath)
+        {
+            var fileMenu = MainWindow.FileMenuForm;
+            fileMenu.Click();
+            fileMenu.SaveAsFile();
+            var saveFileAsModalForm = MainWindow.SaveFileAsModalForm;
+            saveFileAsModalForm.EnterText(filePath);
+            saveFileAsModalForm.Submit();
+            _createdFiles.Add(filePath);
+        }
+
+        protected void SaveFile()
+        {
+            var fileMenu = MainWindow.FileMenuForm;
+            fileMenu.Click();
+            fileMenu.SaveFile();
         }
     }
 }

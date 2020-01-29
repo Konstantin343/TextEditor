@@ -23,9 +23,10 @@ namespace TextEditor.Themes
         public IEnumerable<MenuItem> GetThemesAsMenuItems(RoutedEventHandler themeOnClick) =>
             Themes.Select(theme =>
                 {
+                    var name = (CurrentTheme == theme ? "• " : "") + theme.Name;
                     var item = new MenuItem
                     {
-                        Header = (CurrentTheme == theme ? "• " : "") + theme.Name,
+                        Header = name,
                         Uid = theme.Name + "Theme"
                     };
                     item.Click += themeOnClick;
@@ -36,10 +37,7 @@ namespace TextEditor.Themes
         public void SelectTheme(string themeName)
         {
             var newTheme = Themes.FirstOrDefault(theme => theme.Name == themeName);
-            if (newTheme == null)
-            {
-                return;
-            }
+            if (newTheme == null) return;
 
             newTheme.SetToTextEditBox(TextEditBox);
             CurrentTheme = newTheme;

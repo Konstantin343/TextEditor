@@ -61,12 +61,13 @@
     <Compile Include="Framework\Forms\MenuForms\BaseMenuForm.cs" />
     <Compile Include="Framework\Forms\MenuForms\ContextMenuForm.cs" />
     <Compile Include="Framework\Forms\MenuForms\FileMenuForm.cs" />
+    <Compile Include="Framework\Forms\MenuForms\ThemesMenuForm.cs" />
     <Compile Include="Framework\Forms\ModalForns\ModalForm.cs" />
+    <Compile Include="Framework\Forms\ScrollBarForm.cs" />
     <Compile Include="Framework\Forms\TextForms\TextEditBoxForm.cs" />
     <Compile Include="Framework\TextEditorAppLoader.cs" />
     <Compile Include="Framework\Utils\ClipboardHelper.cs" />
     <Compile Include="Framework\Utils\EnvironmentHelper.cs" />
-    <Compile Include="Framework\Utils\FileHelper.cs" />
     <Compile Include="Framework\Utils\Logger\TestLogger.cs" />
     <Compile Include="Framework\Utils\Logger\TestLoggerTypes.cs" />
     <Compile Include="Framework\Utils\PointHelper.cs" />
@@ -80,11 +81,14 @@
     <Compile Include="Tests\DataProviders\FocusPositionProviders.cs" />
     <Compile Include="Tests\DataProviders\KeysProviders.cs" />
     <Compile Include="Tests\DataProviders\TextProviders.cs" />
+    <Compile Include="Tests\DataProviders\ThemesProviders.cs" />
     <Compile Include="Tests\FocusPositionTests.cs" />
+    <Compile Include="Tests\FullSystemTests.cs" />
     <Compile Include="Tests\KeysTests.cs" />
     <Compile Include="Tests\TestData\BaseTestObjects.cs" />
     <Compile Include="Tests\FileMenuTests.cs" />
     <Compile Include="Tests\TextTests.cs" />
+    <Compile Include="Tests\ThemesMenuTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TextEditor\TextEditor.csproj">
@@ -104,6 +108,10 @@
     <None Include="Resources\java.java" CopyToOutputDirectory="Always" />
     <None Include="Resources\csharp.cs" CopyToOutputDirectory="Always" />
     <None Include="Resources\clojure.clj" CopyToOutputDirectory="Always" />
+    <None Include="Resources\to_change.txt" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\to_change.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

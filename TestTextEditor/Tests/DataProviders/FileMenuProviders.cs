@@ -89,7 +89,57 @@ namespace TestTextEditor.Tests.DataProviders
                         EnvironmentHelper.GetOutputPath("test.txt"),
                         textToInsert,
                         textToChange)
-                    .SetName("TestCase" + "_{m}");
+                    .SetName("TestCase_{m}");
+            }
+        }
+
+        public static IEnumerable SaveAfterOpenProviders
+        {
+            get
+            {
+                var textToChange = new List<string>(
+                    new[]
+                    {
+                        "texttext", ""
+                    });
+
+                yield return new TestCaseData(
+                        EnvironmentHelper.GetResourcePath("to_change.txt"),
+                        textToChange)
+                    .SetName("TestCase_{m}");
+            }
+        }
+
+        public static IEnumerable SaveAsAfterSaveAsProviders
+        {
+            get
+            {
+                var textToInsert = BaseTestObjects.TextToInsertSelectedTests;
+                var textToChange = new List<string>(
+                    new[]
+                    {
+                        "123123",
+                        "323233232",
+                        "abc"
+                    });
+
+                yield return new TestCaseData(
+                        EnvironmentHelper.GetOutputPath("test1.txt"),
+                        EnvironmentHelper.GetOutputPath("test2.txt"),
+                        textToInsert,
+                        textToChange)
+                    .SetName("TestCase_{m}");
+            }
+        }
+
+        public static IEnumerable OpenAfterOpenProviders
+        {
+            get
+            {
+                yield return new TestCaseData(
+                        EnvironmentHelper.GetResourcePath("large.txt"),
+                        EnvironmentHelper.GetResourcePath("small.txt"))
+                    .SetName("TestCase_{m}");
             }
         }
     }

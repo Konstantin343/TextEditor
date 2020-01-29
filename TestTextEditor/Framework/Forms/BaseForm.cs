@@ -25,19 +25,19 @@ namespace TestTextEditor.Framework.Forms
         
         public void Click()
         {
-            TestLogger.Instance.Info($"Clicking on {_name}");
+            TestLogger.Instance.Info($"Clicking on '{_name}'");
             _source.Click();
         }
 
         public void RightClick()
         {
-            TestLogger.Instance.Info($"Right clicking on {_name}");
+            TestLogger.Instance.Info($"Right clicking on '{_name}'");
             _source.RightClick();
         }
         
         public void RightClickAt(Point relativePoint)
         {
-            TestLogger.Instance.Info($"Right clicking on {_name}");
+            TestLogger.Instance.Info($"Right clicking on '{_name}'");
             _source.RightClickAt(GetAbsolutePoint(relativePoint));
         }
 

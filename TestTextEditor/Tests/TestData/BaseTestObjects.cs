@@ -44,5 +44,8 @@ namespace TestTextEditor.Tests.TestData
             (new List<string>(new[] {"         ", "   ", "aaaa", "scascsaca"}), "FirstLinesOnlySpaces"),
             (new List<string>(new[] {"dasdadas", "esesese", "          ", "    "}), "LastLinesOnlySpaces"),
         };
+
+        public static readonly IList<string> BaseThemes = 
+            new List<string>(new[] {"Classic", "Gold", "White", "Black"});
     }
 }
