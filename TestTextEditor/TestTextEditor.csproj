@@ -94,7 +94,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\test.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\small.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\large.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\one_line.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\many_lines.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\empty.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\empty_lines.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\spaces.txt" CopyToOutputDirectory="Always" />
+    <None Include="Resources\java.java" CopyToOutputDirectory="Always" />
+    <None Include="Resources\csharp.cs" CopyToOutputDirectory="Always" />
+    <None Include="Resources\clojure.clj" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

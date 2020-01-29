@@ -23,6 +23,8 @@ namespace TestTextEditor.Framework.Windows
             SearchCriteria.ByAutomationId("TextEditBox");
 
         private static readonly string SaveFileAsModalWindowTitle = "Save File As";
+        
+        private static readonly string OpenFileModalWindowTitle = "Open File";
 
         private Window _source;
         
@@ -50,6 +52,10 @@ namespace TestTextEditor.Framework.Windows
         public ModalForm SaveFileAsModalForm =>
             new ModalForm(_source.ModalWindow(SaveFileAsModalWindowTitle),
                 "Save file as modal window");
+        
+        public ModalForm OpenFileModalForm =>
+            new ModalForm(_source.ModalWindow(OpenFileModalWindowTitle),
+                "Open file as modal window");
 
         public string CurrentOpenedFile => _source.Get(CurrentOpenedFileSearchCriteria).Name;
     }

@@ -6,11 +6,11 @@ namespace TestTextEditor.Framework.Utils
     {
         public static string ReadAndDelete(string path)
         {
-            var sr = new StreamReader(path);
-            var result = sr.ReadToEnd();
-            sr.Close();
+            var result = File.ReadAllText(path);
             File.Delete(path);
             return result;
         }
+
+        public static string Read(string path) => File.ReadAllText(path);
     }
 }

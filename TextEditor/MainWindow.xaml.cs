@@ -17,7 +17,7 @@ namespace TextEditor
         public MainWindow()
         {
             InitializeComponent();
-            FileDialogManager = new FileDialogManager(Encoding.UTF8, "Text|*.txt|Java|*.java|C#|*.cs|All files|*.*");
+            FileDialogManager = new FileDialogManager(Encoding.UTF8, "All files|*.*|Text|*.txt|Java|*.java|C#|*.cs");
             ThemesManager = new ThemesManager(TextEditBox);
             Themes.ItemsSource = ThemesManager.GetThemesAsMenuItems(Theme_OnClick);
         }

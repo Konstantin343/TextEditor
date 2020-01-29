@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace TextEditor.FileDialog
@@ -36,7 +38,7 @@ namespace TextEditor.FileDialog
         {
             if (!string.IsNullOrEmpty(CurrentOpenedFile))
             {
-                File.WriteAllLines(CurrentOpenedFile, text, Encoding);
+                File.WriteAllText(CurrentOpenedFile, string.Join("\r\n", text), Encoding);
             }
             else
             {
@@ -50,7 +52,8 @@ namespace TextEditor.FileDialog
             if (openFileDialog.ShowDialog() != true || string.IsNullOrEmpty(openFileDialog.FileName))
                 return null;
             CurrentOpenedFile = openFileDialog.FileName;
-            return new List<string>(File.ReadAllLines(CurrentOpenedFile, Encoding));
+            var lines = File.ReadAllText(CurrentOpenedFile, Encoding);
+            return Regex.Split(lines, "\r\n").ToList();
         }
     }
 }
