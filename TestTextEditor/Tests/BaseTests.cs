@@ -77,5 +77,12 @@ namespace TestTextEditor.Tests
             fileMenu.Click();
             fileMenu.SaveFile();
         }
+
+        protected void NewFile()
+        {
+            var fileMenu = MainWindow.FileMenuForm;
+            fileMenu.Click();
+            fileMenu.NewFile();
+        }
     }
 }

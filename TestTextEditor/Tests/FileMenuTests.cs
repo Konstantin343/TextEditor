@@ -3,6 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using TestTextEditor.Framework.Utils;
 using TestTextEditor.Tests.DataProviders;
+using TestTextEditor.Tests.TestData;
 
 namespace TestTextEditor.Tests
 {
@@ -159,6 +160,33 @@ namespace TestTextEditor.Tests
                 "Text after second open save is not equal to expected");
             Assert.AreEqual(filePath2, MainWindow.CurrentOpenedFile,
                 "Current opened file after second open is not equal to expected");
+        }
+
+        [Test]
+        [TestCaseSource(typeof(FileMenuProviders), nameof(FileMenuProviders.NewAfterOpenProviders))]
+        public void NewAfterOpenFileTest(
+            string filePath)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+            OpenFile(filePath);
+            Assert.AreEqual(File.ReadAllText(filePath), textEditBox.Text);
+            NewFile();
+            Assert.IsEmpty(textEditBox.Text);
+            Assert.IsEmpty(MainWindow.CurrentOpenedFile);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(FileMenuProviders), nameof(FileMenuProviders.NewAfterSaveAsProviders))]
+        public void NewAfterSaveAsFileTest(
+            string filePath)
+        {
+            var textEditBox = MainWindow.TextEditBoxForm;
+            textEditBox.EnterMultiLineText(BaseTestObjects.TextToInsertSelectedTests);
+            SaveFileAs(filePath);
+            Assert.AreEqual(File.ReadAllText(filePath), textEditBox.Text);
+            NewFile();
+            Assert.IsEmpty(textEditBox.Text);
+            Assert.IsEmpty(MainWindow.CurrentOpenedFile);
         }
     }
 }

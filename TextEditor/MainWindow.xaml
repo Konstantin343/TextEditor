@@ -17,6 +17,7 @@
         <DockPanel DockPanel.Dock="Top">
             <Menu DockPanel.Dock="Left" VerticalAlignment="Top">
                 <MenuItem Header="File" Focusable="False" Uid="File">
+                    <MenuItem Header="New File" Click="NewFile_OnClick" Uid="New" />
                     <MenuItem Header="Open" Click="OpenFile_OnClick" Uid="Open" />
                     <MenuItem Header="Save" Click="SaveFile_OnClick" Uid="Save" />
                     <MenuItem Header="Save As" Click="SaveAsFile_OnClick" Uid="SaveAs" />

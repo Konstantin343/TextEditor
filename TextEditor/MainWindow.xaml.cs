@@ -26,8 +26,8 @@ namespace TextEditor
         {
             var text = FileDialogManager.ReadTextFromFile();
             if (text == null) return;
-            TextEditBox.SetTextLines(text);
             OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
+            TextEditBox.SetTextLines(text);
         }
 
         private void SaveFile_OnClick(object sender, RoutedEventArgs e)
@@ -39,6 +39,13 @@ namespace TextEditor
         private void SaveAsFile_OnClick(object sender, RoutedEventArgs e)
         {
             FileDialogManager.SaveTextInNewFile(TextEditBox.TextLines.RawLines);
+            OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
+        }
+
+        private void NewFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            FileDialogManager.NewFile(TextEditBox.TextLines.RawLines);
+            TextEditBox.SetTextLines(new[] {""});
             OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
         }
 

@@ -142,5 +142,23 @@ namespace TestTextEditor.Tests.DataProviders
                     .SetName("TestCase_{m}");
             }
         }
+        
+        public static IEnumerable NewAfterOpenProviders
+        {
+            get
+            {
+                yield return new TestCaseData(EnvironmentHelper.GetResourcePath("small.txt"))
+                    .SetName("TestCase_{m}");
+            }
+        }
+        
+        public static IEnumerable NewAfterSaveAsProviders
+        {
+            get
+            {
+                yield return new TestCaseData(EnvironmentHelper.GetOutputPath("test.txt"))
+                    .SetName("TestCase_{m}");
+            }
+        }
     }
 }

@@ -10,6 +10,8 @@ namespace TestTextEditor.Framework.Forms.MenuForms
         
         public void SelectItem(FileMenuItem item) => SelectItem(item.ToString());
 
+        public void NewFile() => SelectItem(FileMenuItem.New);
+        
         public void OpenFile() => SelectItem(FileMenuItem.Open);
 
         public void SaveFile() => SelectItem(FileMenuItem.Save);
@@ -19,6 +21,7 @@ namespace TestTextEditor.Framework.Forms.MenuForms
 
     public enum FileMenuItem
     {
+        New,
         Open,
         Save,
         SaveAs

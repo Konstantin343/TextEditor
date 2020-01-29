@@ -55,5 +55,12 @@ namespace TextEditor.FileDialog
             var lines = File.ReadAllText(CurrentOpenedFile, Encoding);
             return Regex.Split(lines, "\r\n").ToList();
         }
+
+        public void NewFile(IEnumerable<string> text)
+        {
+            if (!string.IsNullOrEmpty(CurrentOpenedFile))
+                SaveTextInOpenedFile(text);
+            CurrentOpenedFile = string.Empty;
+        }
     }
 }
