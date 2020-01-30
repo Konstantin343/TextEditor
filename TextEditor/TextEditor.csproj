@@ -55,6 +55,8 @@
     </ApplicationDefinition>
     <Compile Include="FileDialog\FileDialogManager.cs" />
     <Compile Include="Highlight\BasicWordsToHighlight.cs" />
+    <Compile Include="Highlight\HighlightedLanguages.cs" />
+    <Compile Include="Highlight\LanguageMapper.cs" />
     <Compile Include="Themes\BasicThemes.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemesManager.cs" />

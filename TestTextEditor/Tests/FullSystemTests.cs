@@ -482,7 +482,7 @@ namespace TestTextEditor.Tests
                 "6. Current opened file doesn't displayed");
 
             var count = textEditBox.Text.Length;
-            for (var i = 0; i < count / 2; i++)
+            for (var i = 0; i < 20; i++)
             {
                 textEditBox.ClickAt(clickStr, clickChr);
                 var toEnter = TextHelper.GenerateRandom(2);

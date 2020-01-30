@@ -18,7 +18,6 @@ namespace TextEditor
         public MainWindow()
         {
             InitializeComponent();
-            TextEditBox.SetWordsToHighlight(BasicWordsToHighlight.JavaWords);
             FileDialogManager = new FileDialogManager(Encoding.UTF8, "All files|*.*|Text|*.txt|Java|*.java|C#|*.cs");
             ThemesManager = new ThemesManager(TextEditBox);
             Themes.ItemsSource = ThemesManager.GetThemesAsMenuItems(Theme_OnClick);
@@ -30,24 +29,28 @@ namespace TextEditor
             if (text == null) return;
             OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
             TextEditBox.SetTextLines(text);
+            UpdateWordsToHighlight();
         }
 
         private void SaveFile_OnClick(object sender, RoutedEventArgs e)
         {
             FileDialogManager.SaveTextInOpenedFile(TextEditBox.TextLines.RawLines);
             OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
+            UpdateWordsToHighlight();
         }
 
         private void SaveAsFile_OnClick(object sender, RoutedEventArgs e)
         {
             FileDialogManager.SaveTextInNewFile(TextEditBox.TextLines.RawLines);
             OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
+            UpdateWordsToHighlight();
         }
 
         private void NewFile_OnClick(object sender, RoutedEventArgs e)
         {
             FileDialogManager.NewFile(TextEditBox.TextLines.RawLines);
             TextEditBox.SetTextLines(new[] {""});
+            UpdateWordsToHighlight();
             OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
         }
 
@@ -56,5 +59,10 @@ namespace TextEditor
             ThemesManager.SelectTheme(((MenuItem) e.Source).Header.ToString());
             Themes.ItemsSource = ThemesManager.GetThemesAsMenuItems(Theme_OnClick);
         }
+
+        private void UpdateWordsToHighlight() =>
+            TextEditBox.SetWordsToHighlight(
+                LanguageMapper.GetLanguageByName(FileDialogManager.CurrentOpenedFile)
+                    .Map());
     }
 }
