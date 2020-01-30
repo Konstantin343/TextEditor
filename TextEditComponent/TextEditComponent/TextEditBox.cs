@@ -141,7 +141,8 @@ namespace TextEditComponent.TextEditComponent
         public void SetWordsToHighlight(ISet<string> words)
         {
             TextLines.HighlightTextManager.WordsToHighlight = words;
-            InvalidateAll();
+            InvalidateVisual();
+            TextLines.UpdateAll();
         }
 
         #region Scroll

@@ -50,8 +50,8 @@ namespace TextEditor
         {
             FileDialogManager.NewFile(TextEditBox.TextLines.RawLines);
             TextEditBox.SetTextLines(new[] {""});
-            UpdateWordsToHighlight();
             OpenedFileName.Text = FileDialogManager.CurrentOpenedFile;
+            UpdateWordsToHighlight();
         }
 
         private void Theme_OnClick(object sender, RoutedEventArgs e)
