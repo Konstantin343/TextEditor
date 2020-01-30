@@ -239,7 +239,7 @@ namespace TestTextEditor.Tests
             textEditBox.PressDeleteKey();
             Assert.IsEmpty(
                 textEditBox.Text,
-                "11. Text in text box isn't empty'");
+                "11. Text in text box isn't empty");
 
             SaveFile();
             Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
@@ -249,8 +249,8 @@ namespace TestTextEditor.Tests
         [Test]
         public void SystemTest5()
         {
-            var fileToOpen = EnvironmentHelper.GetResourcePath("small.txt");
-            var fileToSave = EnvironmentHelper.GetOutputPath("system_test_4.txt");
+            var fileToOpen = EnvironmentHelper.GetResourcePath("large.txt");
+            var fileToSave = EnvironmentHelper.GetOutputPath("system_test_5.txt");
 
             var textEditBox = MainWindow.TextEditBoxForm;
             OpenFile(fileToOpen);
@@ -263,43 +263,141 @@ namespace TestTextEditor.Tests
             var contextMenu = MainWindow.ContextMenuForm;
             contextMenu.SelectAll();
             textEditBox.RightClick();
-            contextMenu.Copy();
-            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText(),
+            var copiedText = textEditBox.Text;
+            contextMenu.Cut();
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
                 "3. Copied text is not equal to expected");
-
-            NewFile();
-            Assert.IsEmpty(textEditBox.Text, "4. New file wasn't created");
-            Assert.IsEmpty(MainWindow.CurrentOpenedFile, "5. Current opened file is not empty");
+            Assert.IsEmpty(textEditBox.Text,
+                "4. Text wasn't cut");
 
             textEditBox.RightClick();
             contextMenu.Paste();
             Assert.AreEqual(
                 ClipboardHelper.GetText(),
                 textEditBox.Text,
-                "6. Copied text wasn't paste");
+                "5. Copied text wasn't paste");
 
             SaveFileAs(fileToSave);
             Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
-                "7. File wasn't save");
-            Assert.AreEqual(MainWindow.CurrentOpenedFile, fileToSave,
-                "8. Current opened file doesn't displayed");
+                "6. File wasn't save");
+            Assert.AreEqual(MainWindow.CurrentOpenedFile, fileToOpen,
+                "7. Current opened file doesn't displayed");
 
             OpenFile(fileToSave);
             Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
-                "9. File wasn't open");
+                "8. File wasn't open");
             Assert.AreEqual(MainWindow.CurrentOpenedFile, fileToSave,
-                "10. Current opened file doesn't displayed");
+                "9. Current opened file doesn't displayed");
 
+            var expectedText = TextHelper.InsertLinesInText(
+                textEditBox.SplittedText, textEditBox.SplittedText, 0, 0);
             textEditBox.RightClick();
-            contextMenu.SelectAll();
-            textEditBox.PressDeleteKey();
-            Assert.IsEmpty(
+            contextMenu.Paste();
+            Assert.AreEqual(
+                expectedText,
                 textEditBox.Text,
-                "11. Text in text box isn't empty'");
+                "10. Text wasn't paste");
 
             SaveFile();
             Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
-                "12. File wasn't save");
+                "11. File wasn't save");
         }
+
+        [Test]
+        public void SystemTest6()
+        {
+            var fileToOpen = EnvironmentHelper.GetResourcePath("large.txt");
+            var fileToSave = EnvironmentHelper.GetOutputPath("system_test_6.txt");
+            var textToChange = new List<string>(new[] {"123213", "abcd", "  ee  e ee "});
+            var (enterStr, enterChr) = (2, 3);
+
+            var textEditBox = MainWindow.TextEditBoxForm;
+            OpenFile(fileToOpen);
+            Assert.AreEqual(File.ReadAllText(fileToOpen), textEditBox.Text,
+                "1. File wasn't open");
+            Assert.AreEqual(MainWindow.CurrentOpenedFile, fileToOpen,
+                "2. Current opened file doesn't displayed");
+
+            textEditBox.RightClick();
+            var contextMenu = MainWindow.ContextMenuForm;
+            contextMenu.SelectAll();
+            textEditBox.RightClick();
+            var copiedText = textEditBox.Text;
+            contextMenu.Cut();
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
+                "3. Copied text is not equal to expected");
+            Assert.IsEmpty(textEditBox.Text,
+                "4. Text wasn't cut");
+
+            textEditBox.RightClick();
+            contextMenu.Paste();
+            Assert.AreEqual(
+                ClipboardHelper.GetText(),
+                textEditBox.Text,
+                "5. Copied text wasn't paste");
+
+            SaveFileAs(fileToSave);
+            Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
+                "6. File wasn't save");
+            Assert.AreEqual(MainWindow.CurrentOpenedFile, fileToOpen,
+                "7. Current opened file doesn't displayed");
+
+            OpenFile(fileToSave);
+            Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
+                "8. File wasn't open");
+            Assert.AreEqual(MainWindow.CurrentOpenedFile, fileToSave,
+                "9. Current opened file doesn't displayed");
+
+            MainWindow.ScrollBarForm.ScrollToBegin();
+            var expectedText = TextHelper.InsertLinesInText(
+                textEditBox.SplittedText, textToChange, enterStr, enterChr);
+            textEditBox.ClickAt(enterStr, enterChr);
+            textEditBox.EnterMultiLineText(textToChange);
+            Assert.AreEqual(
+                expectedText,
+                textEditBox.Text,
+                "10. Text wasn't enter");
+
+            SaveFile();
+            Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
+                "11. File wasn't save");
+        }
+
+//        [Test]
+//        public void SystemTest7()
+//        {
+//            var fileToSave = EnvironmentHelper.GetOutputPath("system_test_7.txt");
+//            var textToEnter = new List<string>(new[] {"123213", "abcd", "  ee  e ee "});
+//            var (enterStr, enterChr) = (2, 11);
+//
+//            var textEditBox = MainWindow.TextEditBoxForm;
+//            var contextMenu = MainWindow.ContextMenuForm;
+//
+//            ClipboardHelper.SetText(string.Join("\r\n", textToEnter));
+//            textEditBox.RightClick();
+//            contextMenu.Paste();
+//            Assert.AreEqual(
+//                ClipboardHelper.GetText(),
+//                textEditBox.Text,
+//                "1. Copied text wasn't paste");
+//
+//            SaveFileAs(fileToSave);
+//            Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
+//                "2. File wasn't save");
+//            Assert.AreEqual(MainWindow.CurrentOpenedFile, fileToSave,
+//                "3. Current opened file doesn't displayed");
+//
+//            var expectedText = TextHelper.InsertLinesInText(textToEnter, textToEnter, enterStr, enterChr);
+//            textEditBox.ClickAt(enterStr, enterChr);
+//            textEditBox.EnterMultiLineText(textToEnter);
+//            Assert.AreEqual(
+//                expectedText,
+//                textEditBox.Text,
+//                "4. Text wasn't enter");
+//
+//            SaveFile();
+//            Assert.AreEqual(File.ReadAllText(fileToSave), textEditBox.Text,
+//                "12. File wasn't save");
+//        }
     }
 }

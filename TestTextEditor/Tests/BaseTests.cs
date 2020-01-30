@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using NUnit.Framework;
 using TestTextEditor.Framework;
 using TestTextEditor.Framework.Forms;
@@ -11,7 +12,7 @@ namespace TestTextEditor.Tests
     public abstract class BaseTests
     {
         protected MainTextEditorWindow MainWindow;
-        private IList<string> _createdFiles = new List<string>();
+        private readonly IList<string> _createdFiles = new List<string>();
 
         [SetUp]
         public void StartApp()
@@ -28,6 +29,8 @@ namespace TestTextEditor.Tests
             {
                 File.Delete(file);
             }
+
+            _createdFiles.Clear();
         }
 
         protected static void EnterAndClick(
@@ -69,6 +72,7 @@ namespace TestTextEditor.Tests
             saveFileAsModalForm.EnterText(filePath);
             saveFileAsModalForm.Submit();
             _createdFiles.Add(filePath);
+            while (!File.Exists(filePath)) Thread.Sleep(10);
         }
 
         protected void SaveFile()
