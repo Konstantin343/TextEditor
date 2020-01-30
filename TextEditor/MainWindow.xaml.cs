@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using TextEditor.FileDialog;
+using TextEditor.Highlight;
 using TextEditor.Themes;
 
 namespace TextEditor
@@ -17,6 +18,7 @@ namespace TextEditor
         public MainWindow()
         {
             InitializeComponent();
+            TextEditBox.SetWordsToHighlight(BasicWordsToHighlight.JavaWords);
             FileDialogManager = new FileDialogManager(Encoding.UTF8, "All files|*.*|Text|*.txt|Java|*.java|C#|*.cs");
             ThemesManager = new ThemesManager(TextEditBox);
             Themes.ItemsSource = ThemesManager.GetThemesAsMenuItems(Theme_OnClick);

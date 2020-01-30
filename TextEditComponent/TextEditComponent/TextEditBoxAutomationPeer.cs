@@ -1,6 +1,6 @@
 ﻿using System.Windows.Automation.Peers;
 
-namespace TextEditor.TextEditComponent
+namespace TextEditComponent.TextEditComponent
 {
     public class TextEditBoxAutomationPeer : FrameworkElementAutomationPeer
     {

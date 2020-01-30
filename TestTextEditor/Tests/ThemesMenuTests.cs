@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using NUnit.Framework;
-using TestStack.White.UIItems.Finders;
-using TestStack.White.UIItems.WPFUIItems;
+﻿using NUnit.Framework;
 using TestTextEditor.Tests.DataProviders;
 using TestTextEditor.Tests.TestData;
 

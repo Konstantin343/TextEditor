@@ -105,12 +105,23 @@ namespace TestTextEditor.Tests.DataProviders
                 {
                     var (strFrom, chrFrom, strTo, chrTo) = testData[j];
 
-
                     yield return new TestCaseData(textToInsert, strFrom, chrFrom, strTo, chrTo,
                             TextHelper.GetTextInBounds(
                                 textToInsert,
                                 strFrom, chrFrom,
                                 strTo, chrTo))
+                        .SetName($"TestCase{j + 1}" + "_{m}");
+                }
+
+                for (var j = 0; j < testData.Length; j++)
+                {
+                    var (strTo, chrTo, strFrom, chrFrom) = testData[j];
+
+                    yield return new TestCaseData(textToInsert, strFrom, chrFrom, strTo, chrTo,
+                            TextHelper.GetTextInBounds(
+                                textToInsert,
+                                strTo, chrTo,
+                                strFrom, chrFrom))
                         .SetName($"TestCase{j + 1}" + "_{m}");
                 }
             }

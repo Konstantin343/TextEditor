@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:textEditComponent="clr-namespace:TextEditor.TextEditComponent"
+        xmlns:textEditComponent1="clr-namespace:TextEditComponent.TextEditComponent;assembly=TextEditComponent"
         mc:Ignorable="d"
-        Title="Text Editor" Height="350" Width="525">
+        Title="Text Editor" Height="350" Width="525"
+        Icon="Resources/app_icon.ico">
     <Window.Resources>
         <Style TargetType="MenuItem">
             <Setter Property="FontFamily" Value="Verdana" />
@@ -31,7 +32,7 @@
                       VerticalScrollBarVisibility="Auto"
                       Focusable="False"
                       Uid="Scroll">
-            <textEditComponent:TextEditBox x:Name="TextEditBox" Uid="TextEditBox" />
+            <textEditComponent1:TextEditBox x:Name="TextEditBox" Uid="TextEditBox" />
         </ScrollViewer>
     </DockPanel>
 </Window>

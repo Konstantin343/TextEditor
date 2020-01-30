@@ -1,4 +1,4 @@
-﻿namespace TextEditor.TextEditComponent.Constants
+﻿namespace TextEditComponent.TextEditComponent.Constants
 {
     public static class KeysCharacters
     {

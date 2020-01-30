@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace TextEditor.TextEditComponent.TextHelpers
+namespace TextEditComponent.TextEditComponent.TextHelpers
 {
     public static class FormattedTextHelper
     {

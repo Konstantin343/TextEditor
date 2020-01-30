@@ -1,4 +1,4 @@
-﻿namespace TextEditor.TextEditComponent.Text
+﻿namespace TextEditComponent.TextEditComponent.Text
 {
     internal class SelectedTextBounds
     {

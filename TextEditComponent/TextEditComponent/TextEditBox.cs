@@ -7,12 +7,11 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using TextEditor.Highlight;
-using TextEditor.TextEditComponent.Constants;
-using TextEditor.TextEditComponent.Text;
-using TextEditor.TextEditComponent.TextHelpers;
+using TextEditComponent.TextEditComponent.Constants;
+using TextEditComponent.TextEditComponent.Text;
+using TextEditComponent.TextEditComponent.TextHelpers;
 
-namespace TextEditor.TextEditComponent
+namespace TextEditComponent.TextEditComponent
 {
     public class TextEditBox : Control, IScrollInfo
     {
@@ -136,6 +135,12 @@ namespace TextEditor.TextEditComponent
         public void SetTextLines(IEnumerable<string> source)
         {
             TextLines.SetText(source);
+            InvalidateAll();
+        }
+
+        public void SetWordsToHighlight(ISet<string> words)
+        {
+            TextLines.HighlightTextManager.WordsToHighlight = words;
             InvalidateAll();
         }
 
@@ -446,6 +451,7 @@ namespace TextEditor.TextEditComponent
             {
                 DeleteSelected();
             }
+
             TextLines.InsertInLine(CurrentString, "\t", CurrentChar);
             CurrentPosition.Chr++;
         }
@@ -644,24 +650,24 @@ namespace TextEditor.TextEditComponent
 
         private void SetDefaultSettings()
         {
-            HorizontalDelta = 10;
-            VerticalDelta = 5;
-            CaretHeightParameter = 1.2;
+            HorizontalDelta = Settings.HorizontalDelta;
+            VerticalDelta = Settings.VerticalDelta;
+            CaretHeightParameter = Settings.CaretHeightParameter;
             PaddingLeft = Settings.PaddingLeft;
-            BorderWidth = 1;
-            BorderBrush = Brushes.LightSkyBlue;
-            Background = Brushes.White;
+            BorderWidth = Settings.BorderWidth;
+            BorderBrush = Settings.BorderBrush;
+            Background = Settings.Background;
             VerticalAlignment = VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
-            Focusable = true;
+            Focusable = Settings.Focusable;
             SelectedText = new SelectedTextBounds();
             TextLines = new TextLines(
                 new[] {""},
                 Settings.FontStyle,
                 Settings.FontSize,
-                Brushes.Black,
+                Settings.TextBrush,
                 Settings.LineInterval,
-                new HighlightTextManager(BasicWordsToHighlight.JavaWords, Brushes.DarkBlue));
+                new HighlightTextManager(new string[0], Settings.HighlightBrush));
         }
 
         private SelectedTextBounds SelectedText { get; set; }

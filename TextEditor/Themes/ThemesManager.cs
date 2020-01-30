@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using TextEditor.TextEditComponent;
+using TextEditComponent.TextEditComponent;
 
 namespace TextEditor.Themes
 {

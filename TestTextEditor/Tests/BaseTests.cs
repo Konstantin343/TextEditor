@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading;
 using NUnit.Framework;
 using TestTextEditor.Framework;
-using TestTextEditor.Framework.Forms;
 using TestTextEditor.Framework.Forms.TextForms;
 using TestTextEditor.Framework.Windows;
 

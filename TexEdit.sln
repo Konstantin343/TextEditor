@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditor", "TextEditor\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTextEditor", "TestTextEditor\TestTextEditor.csproj", "{6C9B367F-7C65-4A4B-AD55-0397FD8EF2DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditComponent", "TextEditComponent\TextEditComponent.csproj", "{90CF9A0D-CB89-4D8E-951B-A75740261D64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{6C9B367F-7C65-4A4B-AD55-0397FD8EF2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C9B367F-7C65-4A4B-AD55-0397FD8EF2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C9B367F-7C65-4A4B-AD55-0397FD8EF2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90CF9A0D-CB89-4D8E-951B-A75740261D64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90CF9A0D-CB89-4D8E-951B-A75740261D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90CF9A0D-CB89-4D8E-951B-A75740261D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90CF9A0D-CB89-4D8E-951B-A75740261D64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

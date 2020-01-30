@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace TestTextEditor.Framework.Utils
 {
@@ -107,5 +106,6 @@ namespace TestTextEditor.Framework.Utils
 
             return expectedTest.ToString();
         }
+        
     }
 }
