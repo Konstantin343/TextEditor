@@ -55,7 +55,7 @@
     </ApplicationDefinition>
     <Compile Include="FileDialog\FileDialogManager.cs" />
     <Compile Include="Highlight\BasicWordsToHighlight.cs" />
-    <Compile Include="Highlight\HighlightedLanguages.cs" />
+    <Compile Include="Highlight\Language.cs" />
     <Compile Include="Highlight\LanguageMapper.cs" />
     <Compile Include="Themes\BasicThemes.cs" />
     <Compile Include="Themes\Theme.cs" />
@@ -99,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
-    <Content Include="Resources\DogEditor.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

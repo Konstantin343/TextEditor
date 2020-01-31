@@ -532,14 +532,14 @@ namespace TestTextEditor.Tests
             textEditBox.PressBackspaceKey();
             Assert.AreEqual(remainingText, textEditBox.Text,
                 "5. Text wasn't delete");
-            
+
             textEditBox.RightClick();
             contextMenu.Paste();
             Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
                 "6. Copied text is not equal to expected");
             Assert.AreEqual(textBeforeCopy, textEditBox.Text,
                 "7. Text after paste is not equal to test before copy");
-            
+
             textEditBox.Select(selectStartStr, selectStartChr, selectEndStr, selectEndChr);
             textEditBox.PressDeleteKey();
             Assert.AreEqual(remainingText, textEditBox.Text,
