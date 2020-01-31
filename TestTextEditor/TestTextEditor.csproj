@@ -72,6 +72,7 @@
     <Compile Include="Framework\Utils\Logger\TestLoggerTypes.cs" />
     <Compile Include="Framework\Utils\PointHelper.cs" />
     <Compile Include="Framework\Utils\TextHelper.cs" />
+    <Compile Include="Framework\Utils\Waiter.cs" />
     <Compile Include="Framework\Windows\MainTextEditorWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\BaseTests.cs" />

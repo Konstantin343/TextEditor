@@ -8,10 +8,14 @@ namespace TestTextEditor.Framework.Utils
         public static string GetText()
         {
             string result = null;
-            var thread = new Thread(() => result = Clipboard.GetText());
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-            thread.Join();
+            Waiter.WaitUntil(() =>
+            {
+                var thread = new Thread(() => result = Clipboard.GetText());
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+                return result != null;
+            });
             return result;
         }
         
