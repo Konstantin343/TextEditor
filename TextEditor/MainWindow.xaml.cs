@@ -21,6 +21,7 @@ namespace TextEditor
             FileDialogManager = new FileDialogManager(Encoding.UTF8, "All files|*.*|Text|*.txt|Java|*.java|C#|*.cs");
             ThemesManager = new ThemesManager(TextEditBox);
             Themes.ItemsSource = ThemesManager.GetThemesAsMenuItems(Theme_OnClick);
+            UpdateWordsToHighlight();
         }
 
         private void OpenFile_OnClick(object sender, RoutedEventArgs e)
@@ -62,7 +63,7 @@ namespace TextEditor
 
         private void UpdateWordsToHighlight() =>
             TextEditBox.SetWordsToHighlight(
-                LanguageMapper.GetLanguageByName(FileDialogManager.CurrentOpenedFile)
-                    .Map());
+                LanguageMapper.GetLanguageByName(
+                        FileDialogManager.CurrentOpenedFile).Map());
     }
 }

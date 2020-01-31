@@ -16,16 +16,23 @@ namespace TextEditor.Highlight
                 case Language.Cs:
                     return BasicWordsToHighlight.CsWords;
                 default:
-                    return BasicWordsToHighlight.NoWords;
+                    return BasicWordsToHighlight.CsWords;
             }
         }
 
         public static Language GetLanguageByName(
-            string fileName) =>
-            Enum.TryParse<Language>(
+            string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return Language.None;
+            }
+
+            return Enum.TryParse<Language>(
                 fileName.Split('.').Last(),
                 true, out var language)
                 ? language
                 : Language.None;
+        }
     }
 }
