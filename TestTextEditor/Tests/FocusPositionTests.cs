@@ -44,7 +44,7 @@ namespace TestTextEditor.Tests
             textEditBox.RightClick();
             var contextMenu = MainWindow.ContextMenuForm;
             contextMenu.Copy();
-            Assert.IsEmpty(ClipboardHelper.GetText());
+            Assert.IsEmpty(ClipboardHelper.GetText(string.Empty));
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace TestTextEditor.Tests
             textEditBox.RightClick();
             var contextMenu = MainWindow.ContextMenuForm;
             contextMenu.Copy();
-            Assert.IsEmpty(ClipboardHelper.GetText());
+            Assert.IsEmpty(ClipboardHelper.GetText(string.Empty));
         }
     }
 }

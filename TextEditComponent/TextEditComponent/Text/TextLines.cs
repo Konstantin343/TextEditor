@@ -147,7 +147,7 @@ namespace TextEditComponent.TextEditComponent.Text
 
         public TextLine this[int i] => _textLines[i];
 
-        public IEnumerable<string> RawLines => _textLines.Select(tl => tl.RawValue);
+        public IList<string> RawLines => _textLines.Select(tl => tl.RawValue).ToList();
 
         public void UpdateAll()
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using NUnit.Framework;
 using TestTextEditor.Framework.Utils;
 
@@ -32,7 +33,7 @@ namespace TestTextEditor.Tests
             contextMenu.Copy();
             var copiedText = TextHelper.GetTextInBounds(textEditBox.SplittedText, selectStartStr, selectStartChr,
                 selectEndStr, selectEndChr);
-            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(copiedText),
                 "3. Copied text is not equal to expected");
 
             textEditBox.ClickAt(pasteStr, pasteChr);
@@ -98,7 +99,7 @@ namespace TestTextEditor.Tests
             var remainingText = TextHelper.GetTextNotInBounds(textEditBox.SplittedText, selectStartStr, selectStartChr,
                 selectEndStr, selectEndChr);
             contextMenu.Cut();
-            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(copiedText),
                 "3. Copied text is not equal to expected");
             Assert.AreEqual(remainingText, textEditBox.Text,
                 "4. Remaining text is not equal to expected");
@@ -209,7 +210,7 @@ namespace TestTextEditor.Tests
             contextMenu.SelectAll();
             textEditBox.RightClick();
             contextMenu.Copy();
-            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText(),
+            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText(textEditBox.Text),
                 "3. Copied text is not equal to expected");
 
             NewFile();
@@ -219,7 +220,7 @@ namespace TestTextEditor.Tests
             textEditBox.RightClick();
             contextMenu.Paste();
             Assert.AreEqual(
-                ClipboardHelper.GetText(),
+                ClipboardHelper.GetText(textEditBox.Text),
                 textEditBox.Text,
                 "6. Copied text wasn't paste");
 
@@ -266,16 +267,18 @@ namespace TestTextEditor.Tests
             textEditBox.RightClick();
             var copiedText = textEditBox.Text;
             contextMenu.Cut();
-            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(copiedText),
                 "3. Copied text is not equal to expected");
             Assert.IsEmpty(textEditBox.Text,
                 "4. Text wasn't cut");
-
+            
             textEditBox.RightClick();
             contextMenu.Paste();
+            
+            var expectedPastedText = textEditBox.Text;
             Assert.AreEqual(
-                ClipboardHelper.GetText(),
-                textEditBox.Text,
+                ClipboardHelper.GetText(expectedPastedText),
+                expectedPastedText,
                 "5. Copied text wasn't paste");
 
             SaveFileAs(fileToSave);
@@ -325,7 +328,7 @@ namespace TestTextEditor.Tests
             textEditBox.RightClick();
             var copiedText = textEditBox.Text;
             contextMenu.Cut();
-            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(copiedText),
                 "3. Copied text is not equal to expected");
             Assert.IsEmpty(textEditBox.Text,
                 "4. Text wasn't cut");
@@ -333,7 +336,7 @@ namespace TestTextEditor.Tests
             textEditBox.RightClick();
             contextMenu.Paste();
             Assert.AreEqual(
-                ClipboardHelper.GetText(),
+                ClipboardHelper.GetText(textEditBox.Text),
                 textEditBox.Text,
                 "5. Copied text wasn't paste");
 
@@ -378,7 +381,7 @@ namespace TestTextEditor.Tests
             var contextMenu = MainWindow.ContextMenuForm;
             contextMenu.Paste();
             Assert.AreEqual(
-                ClipboardHelper.GetText(),
+                ClipboardHelper.GetText(textEditBox.Text),
                 textEditBox.Text,
                 "1. Copied text wasn't paste");
 
@@ -403,6 +406,7 @@ namespace TestTextEditor.Tests
 
         [Test]
         public void SystemTest8()
+        
         {
             var fileToOpen = EnvironmentHelper.GetResourcePath("small.txt");
             var fileToSave = EnvironmentHelper.GetOutputPath("system_test_8.txt");
@@ -420,7 +424,7 @@ namespace TestTextEditor.Tests
             contextMenu.SelectAll();
             textEditBox.RightClick();
             contextMenu.Copy();
-            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText(),
+            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText(textEditBox.Text),
                 "3. Copied text is not equal to expected");
 
             var count = textEditBox.Text.Length;
@@ -436,7 +440,7 @@ namespace TestTextEditor.Tests
 
             textEditBox.RightClick();
             contextMenu.Paste();
-            Assert.AreEqual(ClipboardHelper.GetText(), textEditBox.Text,
+            Assert.AreEqual(ClipboardHelper.GetText(textEditBox.Text), textEditBox.Text,
                 "5. Copied text wasn't paste");
 
             for (var i = 0; i < count; i++)
@@ -521,7 +525,7 @@ namespace TestTextEditor.Tests
             var copiedText = TextHelper.GetTextInBounds(textEditBox.SplittedText,
                 selectStartStr, selectStartChr,
                 selectEndStr, selectEndChr);
-            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(copiedText),
                 "3. Copied text is not equal to expected");
             Assert.AreEqual(textBeforeCopy, textEditBox.Text,
                 "4. Text after copy is not equal to test before copy");
@@ -535,7 +539,7 @@ namespace TestTextEditor.Tests
 
             textEditBox.RightClick();
             contextMenu.Paste();
-            Assert.AreEqual(copiedText, ClipboardHelper.GetText(),
+            Assert.AreEqual(copiedText, ClipboardHelper.GetText(copiedText),
                 "6. Copied text is not equal to expected");
             Assert.AreEqual(textBeforeCopy, textEditBox.Text,
                 "7. Text after paste is not equal to test before copy");

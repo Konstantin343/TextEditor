@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Windows.Data;
 using System.Windows.Input;
+using TextEditComponent.TextEditComponent.Text;
 using TextEditor.FileDialog;
 using TextEditor.Highlight;
 using TextEditor.Themes;
@@ -36,7 +38,7 @@ namespace TextEditor.ViewModel
                 OnPropertyChanged(nameof(FileDialogManager));
             }
         }
-
+        
         public ThemesManager ThemesManager
         {
             get => _themesManager;
@@ -73,7 +75,8 @@ namespace TextEditor.ViewModel
             _newFileCommand ??
             (_newFileCommand = new RelayCommand(obj =>
             {
-                FileDialogManager.NewFile(_rawTextLines);
+                var textLines = (obj as TextLines)?.RawLines;
+                FileDialogManager.NewFile(textLines);
                 RawTextLines = new List<string>(new[] {""});
                 UpdateWordsToHighlight();
             }));
@@ -96,7 +99,8 @@ namespace TextEditor.ViewModel
             _saveFileCommand ??
             (_saveFileCommand = new RelayCommand(obj =>
             {
-                FileDialogManager.SaveTextInOpenedFile(RawTextLines);
+                var textLines = (obj as TextLines)?.RawLines;
+                FileDialogManager.SaveTextInOpenedFile(textLines);
                 UpdateWordsToHighlight();
             }));
         
@@ -106,7 +110,8 @@ namespace TextEditor.ViewModel
             _saveAsFileCommand ??
             (_saveAsFileCommand = new RelayCommand(obj =>
             {
-                FileDialogManager.SaveTextInNewFile(RawTextLines);
+                var textLines = (obj as TextLines)?.RawLines;
+                FileDialogManager.SaveTextInNewFile(textLines);
                 UpdateWordsToHighlight();
             }));
 

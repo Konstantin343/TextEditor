@@ -54,7 +54,7 @@ namespace TestTextEditor.Tests
 
             var contextMenu = MainWindow.ContextMenuForm;
             contextMenu.Copy();
-            Assert.AreEqual(expectedText, ClipboardHelper.GetText());
+            Assert.AreEqual(expectedText, ClipboardHelper.GetText(expectedText));
         }
 
         [Test]

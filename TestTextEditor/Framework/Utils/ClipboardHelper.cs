@@ -5,7 +5,7 @@ namespace TestTextEditor.Framework.Utils
 {
     public static class ClipboardHelper
     {
-        public static string GetText()
+        public static string GetText(string expected)
         {
             string result = null;
             Waiter.WaitUntil(() =>
@@ -14,7 +14,7 @@ namespace TestTextEditor.Framework.Utils
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
                 thread.Join();
-                return result != null;
+                return result == expected && result != null;
             });
             return result;
         }

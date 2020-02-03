@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using TextEditComponent.TextEditComponent.Constants;
@@ -614,6 +616,7 @@ namespace TextEditComponent.TextEditComponent
 
         private void AddText(string text)
         {
+            BindingOperations.GetBindingExpression(this, RawTextLinesProperty)?.UpdateSource();
             if (IsInsertKeyPressed && CurrentChar < TextLines[CurrentString].Length)
                 TextLines.RemoveInLine(CurrentString, CurrentChar, text.Length);
             TextLines.InsertInLine(CurrentString, text, CurrentChar);

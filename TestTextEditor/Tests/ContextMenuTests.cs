@@ -30,7 +30,7 @@ namespace TestTextEditor.Tests
             textEditBox.RightClick();
             MainWindow.ContextMenuForm.Copy();
 
-            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText());
+            Assert.AreEqual(textEditBox.Text, ClipboardHelper.GetText(textEditBox.Text));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace TestTextEditor.Tests
 
             var contextMenu = MainWindow.ContextMenuForm;
             contextMenu.Copy();
-            Assert.AreEqual(expectedText, ClipboardHelper.GetText());
+            Assert.AreEqual(expectedText, ClipboardHelper.GetText(expectedText));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace TestTextEditor.Tests
 
             var contextMenu = MainWindow.ContextMenuForm;
             contextMenu.Cut();
-            Assert.AreEqual(expectedCopiedText, ClipboardHelper.GetText());
+            Assert.AreEqual(expectedCopiedText, ClipboardHelper.GetText(expectedCopiedText));
             Assert.AreEqual(expectedText, textEditBox.Text);
         }
 

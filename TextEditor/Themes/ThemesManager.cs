@@ -25,18 +25,22 @@ namespace TextEditor.Themes
 
         public ThemesManager(IEnumerable<Theme> themes)
         {
-            Themes = new ObservableCollection<Theme>(themes.Select(t => t.SetOwner(this)));
+            Themes = new ObservableCollection<Theme>(themes);
             CurrentTheme = Themes.FirstOrDefault();
-            if (CurrentTheme != null) CurrentTheme.IsSelected = true;
         }
 
         public void SelectTheme(string themeName)
         {
             var newTheme = Themes.FirstOrDefault(theme => theme.Name == themeName);
             if (newTheme == null) return;
-            CurrentTheme.IsSelected = false;
             CurrentTheme = newTheme;
-            CurrentTheme.IsSelected = true;
         }
+        
+        private ICommand _selectThemeCommand;
+
+        public ICommand SelectThemeCommand =>
+            _selectThemeCommand ??
+            (_selectThemeCommand = new RelayCommand(obj => { SelectTheme((string) obj); }));
+
     }
 }

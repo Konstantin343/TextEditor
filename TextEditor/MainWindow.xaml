@@ -22,20 +22,27 @@
         <DockPanel DockPanel.Dock="Top">
             <Menu DockPanel.Dock="Left" VerticalAlignment="Top">
                 <MenuItem Header="File" Focusable="False" Uid="File">
-                    <MenuItem Header="New File" Command="{Binding NewFileCommand}" Uid="New" />
+                    <MenuItem Header="New File" Command="{Binding NewFileCommand}"
+                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="New" />
                     <MenuItem Header="Open" Command="{Binding OpenFileCommand}" Uid="Open" />
-                    <MenuItem Header="Save" Command="{Binding SaveFileCommand}" Uid="Save" />
-                    <MenuItem Header="Save As" Command="{Binding SaveAsFileCommand}" Uid="SaveAs" />
+                    <MenuItem Header="Save" Command="{Binding SaveFileCommand}"
+                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="Save" />
+                    <MenuItem Header="Save As" Command="{Binding SaveAsFileCommand}"
+                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="SaveAs" />
                 </MenuItem>
                 <MenuItem Header="Themes" Uid="Themes"
                           ItemsSource="{Binding ThemesManager.Themes, UpdateSourceTrigger=PropertyChanged}">
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
-                            <!-- <MenuItem Header="{Binding Name}" Command="{Binding SelectThemeCommand}" -->
-                            <!--           IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"/> -->
-                            <TextBlock Text="{Binding Name}"></TextBlock>
+                            <MenuItem ></MenuItem>
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
+                    <!-- <MenuItem.ItemContainerStyle> -->
+                    <!--     <Style TargetType="MenuItem"> -->
+                    <!--         <Setter Property="Header" Value="123"></Setter> -->
+                    <!--         <Setter Property="Command" Value="{Binding ThemesManager.SelectThemeCommand}"/>  -->
+                    <!--     </Style> -->
+                    <!-- </MenuItem.ItemContainerStyle> -->
                 </MenuItem>
             </Menu>
             <TextBlock Padding="5 0 0 0" Background="LightGray" Foreground="DarkGray"
@@ -46,7 +53,7 @@
                       VerticalScrollBarVisibility="Auto"
                       Focusable="False"
                       Uid="Scroll">
-            <tec:TextEditBox Uid="TextEditBox"
+            <tec:TextEditBox Uid="TextEditBox" Name="TextEditBox"
                              RawTextLines="{Binding RawTextLines, UpdateSourceTrigger=PropertyChanged}"
                              Background="{Binding ThemesManager.CurrentTheme.Background, UpdateSourceTrigger=PropertyChanged}"
                              TextBrush="{Binding ThemesManager.CurrentTheme.TextBrush, UpdateSourceTrigger=PropertyChanged}"
