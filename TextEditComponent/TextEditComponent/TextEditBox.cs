@@ -18,7 +18,7 @@ namespace TextEditComponent.TextEditComponent
         #region DependencyProperties
 
         public static readonly DependencyProperty TextLinesProperty = DependencyProperty.Register(
-            "TextLines",
+            nameof(TextLines),
             typeof(TextLines),
             typeof(TextEditBox),
             new FrameworkPropertyMetadata(
@@ -27,7 +27,7 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty IsInsertKeyPressedProperty = DependencyProperty.Register(
-            "IsInsertKeyPressed",
+            nameof(IsInsertKeyPressed),
             typeof(bool),
             typeof(TextEditBox),
             new FrameworkPropertyMetadata(
@@ -36,7 +36,7 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty NormalModePositionBrushProperty = DependencyProperty.Register(
-            "NormalModePositionBrush",
+            nameof(NormalModePositionBrush),
             typeof(Brush),
             typeof(TextEditBox),
             new FrameworkPropertyMetadata(
@@ -45,7 +45,7 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty InsertModePositionBrushProperty = DependencyProperty.Register(
-            "InsertModePositionBrush",
+            nameof(InsertModePositionBrush),
             typeof(Brush),
             typeof(TextEditBox),
             new FrameworkPropertyMetadata(
@@ -54,7 +54,7 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty PaddingLeftProperty = DependencyProperty.Register(
-            "PaddingLeft",
+            nameof(PaddingLeft),
             typeof(int),
             typeof(TextEditBox),
             new FrameworkPropertyMetadata(
@@ -63,13 +63,67 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty BorderWidthProperty = DependencyProperty.Register(
-            "BorderWidth",
+            nameof(BorderWidth),
             typeof(int),
             typeof(TextEditBox),
             new FrameworkPropertyMetadata(
                 0,
                 FrameworkPropertyMetadataOptions.AffectsMeasure |
                 FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty TextBrushProperty = DependencyProperty.Register(
+            nameof(TextBrush),
+            typeof(Brush),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                Brushes.White,
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnTextBrushChanged)
+        );
+
+        private static void OnTextBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var teb = (TextEditBox) d;
+            teb.TextLines.TextBrush = (Brush) e.NewValue;
+        }
+
+        public static readonly DependencyProperty WordsToHighlightProperty = DependencyProperty.Register(
+            nameof(WordsToHighlight),
+            typeof(ISet<string>),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                new HashSet<string>(),
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnWordsToHighlightChanged)
+        );
+
+        private static void OnWordsToHighlightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var teb = (TextEditBox) d;
+            teb.TextLines.HighlightTextManager.WordsToHighlight = (ISet<string>) e.NewValue;
+            teb.TextLines.UpdateAll();
+            teb.InvalidateVisual();
+        }
+
+        public static readonly DependencyProperty RawTextLinesProperty = DependencyProperty.Register(
+            nameof(RawTextLines),
+            typeof(IList<string>),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                new List<string>(new[] {""}),
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnRawTextLinesChanged)
+        );
+
+        private static void OnRawTextLinesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var teb = (TextEditBox) d;
+            teb.TextLines.SetText((IList<string>) e.NewValue);
+            teb.InvalidateAll();
+        }
 
         public TextLines TextLines
         {
@@ -107,6 +161,24 @@ namespace TextEditComponent.TextEditComponent
             set => SetValue(PaddingLeftProperty, value);
         }
 
+        public Brush TextBrush
+        {
+            get => (Brush) GetValue(TextBrushProperty);
+            set => SetValue(TextBrushProperty, value);
+        }
+
+        public ISet<string> WordsToHighlight
+        {
+            get => (ISet<string>) GetValue(WordsToHighlightProperty);
+            set => SetValue(WordsToHighlightProperty, value);
+        }
+
+        public IList<string> RawTextLines
+        {
+            get => (IList<string>) GetValue(RawTextLinesProperty);
+            set => SetValue(RawTextLinesProperty, value);
+        }
+
         #endregion
 
         public double HorizontalDelta { get; set; }
@@ -120,7 +192,6 @@ namespace TextEditComponent.TextEditComponent
         public int CurrentString => CurrentPosition.Str;
         public int CurrentChar => CurrentPosition.Chr;
         public string Text => TextLines.ToString();
-        public string SelectedTextString => TextLines.GetInBounds(SelectedText);
 
         public TextEditBox() => SetDefaultSettings();
 
@@ -128,19 +199,6 @@ namespace TextEditComponent.TextEditComponent
         {
             SelectedText.Invalidate();
             CurrentPosition = new TextPosition();
-            InvalidateVisual();
-            TextLines.UpdateAll();
-        }
-
-        public void SetTextLines(IEnumerable<string> source)
-        {
-            TextLines.SetText(source);
-            InvalidateAll();
-        }
-
-        public void SetWordsToHighlight(ISet<string> words)
-        {
-            TextLines.HighlightTextManager.WordsToHighlight = words;
             InvalidateVisual();
             TextLines.UpdateAll();
         }
@@ -669,6 +727,7 @@ namespace TextEditComponent.TextEditComponent
                 Settings.TextBrush,
                 Settings.LineInterval,
                 new HighlightTextManager(new string[0], Settings.HighlightBrush));
+            TextBrush = Settings.TextBrush;
         }
 
         private SelectedTextBounds SelectedText { get; set; }

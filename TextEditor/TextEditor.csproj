@@ -57,9 +57,13 @@
     <Compile Include="Highlight\BasicWordsToHighlight.cs" />
     <Compile Include="Highlight\Language.cs" />
     <Compile Include="Highlight\LanguageMapper.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Themes\BasicThemes.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemesManager.cs" />
+    <Compile Include="ViewModel\BaseNotifyPropertyChanged.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="ViewModel\TextEditorViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

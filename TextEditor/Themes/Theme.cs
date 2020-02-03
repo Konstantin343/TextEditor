@@ -1,24 +1,69 @@
-﻿using System.Windows.Media;
-using TextEditComponent.TextEditComponent;
+﻿using System.Windows.Input;
+using System.Windows.Media;
+using TextEditor.ViewModel;
 
 namespace TextEditor.Themes
 {
-    internal class Theme
+    public class Theme : BaseNotifyPropertyChanged
     {
-        public Brush Background { get; set; }
-        public Brush TextBrush { get; set; }
-        public string Name { get; }
+        private ThemesManager _owner;
 
-        public Theme(string name)
+        private Brush _background;
+
+        private Brush _textBrush;
+
+        private bool _isSelected;
+
+        public Brush Background
         {
-            Name = name;
+            get => _background;
+            set
+            {
+                _background = value;
+                OnPropertyChanged(nameof(Background));
+            }
         }
 
-        public void SetToTextEditBox(TextEditBox textEditBox)
+        public bool IsSelected
         {
-            textEditBox.Background = Background;
-            textEditBox.TextLines.TextBrush = TextBrush;
-            textEditBox.InvalidateAll();
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+            }
+        }
+
+        public Brush TextBrush
+        {
+            get => _textBrush;
+            set
+            {
+                _textBrush = value;
+                OnPropertyChanged(nameof(TextBrush));
+            }
+        }
+
+        public string Name { get; }
+
+        public Theme(string name, ThemesManager owner = null)
+        {
+            Name = name;
+            _owner = owner;
+        }
+
+        private ICommand _selectThemeCommand;
+
+        public ICommand SelectThemeCommand =>
+            _selectThemeCommand ??
+            (_selectThemeCommand = new RelayCommand(obj => { _owner.SelectTheme(Name); }));
+
+        public override string ToString() => Name;
+
+        public Theme SetOwner(ThemesManager owner)
+        {
+            _owner = owner;
+            return this;
         }
     }
 }

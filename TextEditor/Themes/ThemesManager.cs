@@ -1,46 +1,42 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
-using TextEditComponent.TextEditComponent;
+using System.Windows.Input;
+using TextEditor.ViewModel;
 
 namespace TextEditor.Themes
 {
-    internal class ThemesManager
+    public class ThemesManager : BaseNotifyPropertyChanged
     {
-        public TextEditBox TextEditBox { get; }
-        public IList<Theme> Themes { get; }
-        public Theme CurrentTheme { get; private set; }
+        public ObservableCollection<Theme> Themes { get; set; }
 
-        public ThemesManager(TextEditBox textEditBox)
+        private Theme _currentTheme;
+
+        public Theme CurrentTheme
         {
-            TextEditBox = textEditBox;
-            Themes = BasicThemes.AllBasicThemes;
-            CurrentTheme = Themes.FirstOrDefault();
-            CurrentTheme?.SetToTextEditBox(textEditBox);
+            get => _currentTheme;
+            private set
+            {
+                _currentTheme = value;
+                OnPropertyChanged(nameof(CurrentTheme));
+            }
         }
 
-        public IEnumerable<MenuItem> GetThemesAsMenuItems(RoutedEventHandler themeOnClick) =>
-            Themes.Select(theme =>
-                {
-                    var name = (CurrentTheme == theme ? "• " : "") + theme.Name;
-                    var item = new MenuItem
-                    {
-                        Header = name,
-                        Uid = theme.Name + "Theme"
-                    };
-                    item.Click += themeOnClick;
-                    return item;
-                })
-                .ToList();
+        public ThemesManager(IEnumerable<Theme> themes)
+        {
+            Themes = new ObservableCollection<Theme>(themes.Select(t => t.SetOwner(this)));
+            CurrentTheme = Themes.FirstOrDefault();
+            if (CurrentTheme != null) CurrentTheme.IsSelected = true;
+        }
 
         public void SelectTheme(string themeName)
         {
             var newTheme = Themes.FirstOrDefault(theme => theme.Name == themeName);
             if (newTheme == null) return;
-
-            newTheme.SetToTextEditBox(TextEditBox);
+            CurrentTheme.IsSelected = false;
             CurrentTheme = newTheme;
+            CurrentTheme.IsSelected = true;
         }
     }
 }

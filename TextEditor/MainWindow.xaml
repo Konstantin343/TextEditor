@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:textEditComponent1="clr-namespace:TextEditComponent.TextEditComponent;assembly=TextEditComponent"
+        xmlns:tec="clr-namespace:TextEditComponent.TextEditComponent;assembly=TextEditComponent"
+        xmlns:viewModel="clr-namespace:TextEditor.ViewModel"
         mc:Ignorable="d"
         Title="Text Editor" Height="350" Width="525"
         Icon="Resources/app_icon.ico">
+    <Window.DataContext>
+        <viewModel:TextEditorViewModel />
+    </Window.DataContext>
     <Window.Resources>
         <Style TargetType="MenuItem">
             <Setter Property="FontFamily" Value="Verdana" />
@@ -18,21 +22,35 @@
         <DockPanel DockPanel.Dock="Top">
             <Menu DockPanel.Dock="Left" VerticalAlignment="Top">
                 <MenuItem Header="File" Focusable="False" Uid="File">
-                    <MenuItem Header="New File" Click="NewFile_OnClick" Uid="New" />
-                    <MenuItem Header="Open" Click="OpenFile_OnClick" Uid="Open" />
-                    <MenuItem Header="Save" Click="SaveFile_OnClick" Uid="Save" />
-                    <MenuItem Header="Save As" Click="SaveAsFile_OnClick" Uid="SaveAs" />
+                    <MenuItem Header="New File" Command="{Binding NewFileCommand}" Uid="New" />
+                    <MenuItem Header="Open" Command="{Binding OpenFileCommand}" Uid="Open" />
+                    <MenuItem Header="Save" Command="{Binding SaveFileCommand}" Uid="Save" />
+                    <MenuItem Header="Save As" Command="{Binding SaveAsFileCommand}" Uid="SaveAs" />
                 </MenuItem>
-                <MenuItem Header="Themes" Focusable="False" x:Name="Themes" Uid="Themes" />
+                <MenuItem Header="Themes" Uid="Themes"
+                          ItemsSource="{Binding ThemesManager.Themes, UpdateSourceTrigger=PropertyChanged}">
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <!-- <MenuItem Header="{Binding Name}" Command="{Binding SelectThemeCommand}" -->
+                            <!--           IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"/> -->
+                            <TextBlock Text="{Binding Name}"></TextBlock>
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+                </MenuItem>
             </Menu>
-            <TextBlock Padding="5 0 0 0" Background="LightGray" Foreground="DarkGray" x:Name="OpenedFileName"
+            <TextBlock Padding="5 0 0 0" Background="LightGray" Foreground="DarkGray"
+                       Text="{Binding FileDialogManager.CurrentOpenedFile, UpdateSourceTrigger=PropertyChanged}"
                        Uid="OpenedFile" />
         </DockPanel>
         <ScrollViewer DockPanel.Dock="Bottom" CanContentScroll="True" HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto"
                       Focusable="False"
                       Uid="Scroll">
-            <textEditComponent1:TextEditBox x:Name="TextEditBox" Uid="TextEditBox" />
+            <tec:TextEditBox Uid="TextEditBox"
+                             RawTextLines="{Binding RawTextLines, UpdateSourceTrigger=PropertyChanged}"
+                             Background="{Binding ThemesManager.CurrentTheme.Background, UpdateSourceTrigger=PropertyChanged}"
+                             TextBrush="{Binding ThemesManager.CurrentTheme.TextBrush, UpdateSourceTrigger=PropertyChanged}"
+                             WordsToHighlight="{Binding WordsToHighlight, UpdateSourceTrigger=PropertyChanged}" />
         </ScrollViewer>
     </DockPanel>
 </Window>

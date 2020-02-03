@@ -9,7 +9,7 @@ namespace TextEditComponent.TextEditComponent.Text
     public class TextLines
     {
         private IList<TextLine> _textLines;
-
+        
         private string _fontStyle;
         private double _fontSize;
         private double _lineInterval;

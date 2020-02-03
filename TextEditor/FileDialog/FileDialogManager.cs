@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
+using TextEditor.ViewModel;
 
 namespace TextEditor.FileDialog
 {
-    internal class FileDialogManager
+    public sealed class FileDialogManager : BaseNotifyPropertyChanged
     {
         public FileDialogManager(Encoding encoding, string filter)
         {
@@ -17,9 +18,19 @@ namespace TextEditor.FileDialog
 
         public string Filter { get; }
 
-        public string CurrentOpenedFile { get; private set; }
-
         public Encoding Encoding { get; }
+
+        private string _currentOpenedFile;
+
+        public string CurrentOpenedFile
+        {
+            get => _currentOpenedFile;
+            private set
+            {
+                _currentOpenedFile = value;
+                OnPropertyChanged(nameof(CurrentOpenedFile));
+            }
+        }
 
         public void SaveTextInNewFile(IEnumerable<string> text)
         {
