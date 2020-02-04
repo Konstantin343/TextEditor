@@ -1,27 +1,27 @@
 ﻿namespace TextEditComponent.TextEditComponent.Text
 {
-    internal class TextPosition
+    public class TextPosition
     {
-        internal TextPosition()
+        public TextPosition()
         {
             Str = 0;
             Chr = 0;
         }
 
-        internal TextPosition(TextPosition toCopy)
+        public TextPosition(TextPosition toCopy)
         {
             Str = toCopy.Str;
             Chr = toCopy.Chr;
         }
 
-        internal TextPosition(int str, int chr)
+        public TextPosition(int str, int chr)
         {
             Str = str;
             Chr = chr;
         }
         
-        internal int Str { get; set; }
-        internal int Chr { get; set; }
+        public int Str { get; set; }
+        public int Chr { get; set; }
 
         public override bool Equals(object obj)
         {

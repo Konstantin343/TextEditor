@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tec="clr-namespace:TextEditComponent.TextEditComponent;assembly=TextEditComponent"
+        xmlns:tec2="clr-namespace:TextEditComponent;assembly=TextEditComponent"
         xmlns:viewModel="clr-namespace:TextEditor.ViewModel"
         mc:Ignorable="d"
         Title="Text Editor" Height="350" Width="525"

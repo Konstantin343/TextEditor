@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WPFUIItems;
 using TestTextEditor.Framework.Utils.Logger;
-using Menu = TestStack.White.UIItems.MenuItems.Menu;
 
 namespace TestTextEditor.Framework.Forms.MenuForms
 {

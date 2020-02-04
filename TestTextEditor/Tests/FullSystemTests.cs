@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading;
 using NUnit.Framework;
 using TestTextEditor.Framework.Utils;
 

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using TextEditComponent.TextEditComponent.Constants;
@@ -183,6 +181,10 @@ namespace TextEditComponent.TextEditComponent
 
         #endregion
 
+        public SelectedTextBounds SelectedText { get; set; }
+
+        public TextPosition CurrentPosition { get; set; }
+
         public double HorizontalDelta { get; set; }
         public double VerticalDelta { get; set; }
         public double CaretHeightParameter { get; set; }
@@ -194,6 +196,7 @@ namespace TextEditComponent.TextEditComponent
         public int CurrentString => CurrentPosition.Str;
         public int CurrentChar => CurrentPosition.Chr;
         public string Text => TextLines.ToString();
+        public string SelectedTextString => TextLines.GetInBounds(SelectedText);
 
         public TextEditBox() => SetDefaultSettings();
 
@@ -329,28 +332,17 @@ namespace TextEditComponent.TextEditComponent
             base.OnTextInput(e);
             if (string.IsNullOrEmpty(e.Text)) return;
 
-            if (KeysCharacters.Backspace.Equals(e.Text))
+            if (KeysCharacters.Backspace.Equals(e.Text) || KeysCharacters.Enter.Equals(e.Text))
             {
-                BackspaceKey();
-            }
-            else
-            {
-                if (!SelectedText.IsEmpty)
-                {
-                    DeleteSelected();
-                }
-
-                if (KeysCharacters.Enter.Equals(e.Text))
-                {
-                    EnterKey();
-                }
-                else
-                {
-                    AddText(e.Text);
-                }
+                return;
             }
 
-
+            if (!SelectedText.IsEmpty)
+            {
+                DeleteSelected();
+            }
+            AddText(e.Text);
+            
             UpdateOffsetByCaretPosition();
             InvalidateVisual();
             SelectedText.Invalidate();
@@ -361,6 +353,12 @@ namespace TextEditComponent.TextEditComponent
             base.OnKeyDown(e);
             switch (e.Key)
             {
+                case Key.Enter:
+                    EnterKey();
+                    break;
+                case Key.Back:
+                    BackspaceKey();
+                    break;
                 case Key.Left:
                     LeftKey();
                     break;
@@ -495,6 +493,10 @@ namespace TextEditComponent.TextEditComponent
 
         private void EnterKey()
         {
+            if (!SelectedText.IsEmpty)
+            {
+                DeleteSelected();
+            }
             TextLines.InsertLine(
                 CurrentString + 1,
                 CurrentChar < TextLines[CurrentString].Length
@@ -616,7 +618,6 @@ namespace TextEditComponent.TextEditComponent
 
         private void AddText(string text)
         {
-            BindingOperations.GetBindingExpression(this, RawTextLinesProperty)?.UpdateSource();
             if (IsInsertKeyPressed && CurrentChar < TextLines[CurrentString].Length)
                 TextLines.RemoveInLine(CurrentString, CurrentChar, text.Length);
             TextLines.InsertInLine(CurrentString, text, CurrentChar);
@@ -732,10 +733,6 @@ namespace TextEditComponent.TextEditComponent
                 new HighlightTextManager(new string[0], Settings.HighlightBrush));
             TextBrush = Settings.TextBrush;
         }
-
-        private SelectedTextBounds SelectedText { get; set; }
-
-        private TextPosition CurrentPosition { get; set; }
 
         #endregion
     }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.Win32;
-using NUnit.Framework;
-using TextEditor;
+﻿using NUnit.Framework;
 using TextEditor.ViewModel;
 
 namespace TestTextEditorViewModel
@@ -19,7 +14,7 @@ namespace TestTextEditorViewModel
             textEditorViewModel.RawTextLines.Add("333");
             textEditorViewModel.SaveFile();
             textEditorViewModel.ThemesService.SelectTheme("Gold");
-            Assert.AreEqual(textEditorViewModel.ThemesService.CurrentTheme.Name, "Golds");
+            Assert.AreEqual(textEditorViewModel.ThemesService.CurrentTheme.Name, "Gold");
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using TextEditComponent.TextEditComponent;
+using TextEditComponent;
 using TextEditComponent.TextEditComponent.TextHelpers;
 
 namespace TestTextEditor.Framework.Utils

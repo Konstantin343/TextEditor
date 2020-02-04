@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace TextEditComponent.TextEditComponent
+namespace TextEditComponent
 {
     public static class Settings
     {

@@ -1,5 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using TextEditComponent.TextEditComponent;
 
 namespace TestTextEditComponent
 {
@@ -9,7 +9,7 @@ namespace TestTextEditComponent
         [Test]
         public void Test1()
         {
-            Assert.True(true);
+            var textBox = new TextEditBox();
         }
     }
 }
