@@ -84,7 +84,7 @@ namespace TestTextEditor.Tests
 
             SaveFile();
 
-            Assert.AreEqual(File.ReadAllText(filePath), textEditBox.Text,
+            Assert.AreEqual(textEditBox.Text, File.ReadAllText(filePath),
                 "Text after save is not equal to expected");
             Assert.AreEqual(fileAfterChanges, textBeforeChanges,
                 "Text before save is not equal to expected");

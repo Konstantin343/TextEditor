@@ -30,11 +30,11 @@
                     <MenuItem Header="Save As" Command="{Binding SaveAsFileCommand}"
                               CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="SaveAs" />
                 </MenuItem>
-                <MenuItem HeaderStringFormat="Themes ({0})" Header="{Binding ThemesManager.CurrentTheme}" Uid="Themes"
+                <MenuItem HeaderStringFormat="Themes ({0})" Header="{Binding ThemesService.CurrentTheme}" Uid="Themes"
                           ItemsSource="{Binding MenuItemThemes, UpdateSourceTrigger=PropertyChanged}" />
             </Menu>
             <TextBlock Padding="5 0 0 0" Background="LightGray" Foreground="DarkGray"
-                       Text="{Binding FileDialogManager.CurrentOpenedFile, UpdateSourceTrigger=PropertyChanged}"
+                       Text="{Binding FileService.CurrentOpenedFile, UpdateSourceTrigger=PropertyChanged}"
                        Uid="OpenedFile" />
         </DockPanel>
         <ScrollViewer DockPanel.Dock="Bottom" CanContentScroll="True" HorizontalScrollBarVisibility="Auto"
@@ -43,9 +43,9 @@
                       Uid="Scroll">
             <tec:TextEditBox Uid="TextEditBox" Name="TextEditBox"
                              RawTextLines="{Binding RawTextLines, UpdateSourceTrigger=PropertyChanged}"
-                             Background="{Binding ThemesManager.CurrentTheme.Background, UpdateSourceTrigger=PropertyChanged}"
-                             TextBrush="{Binding ThemesManager.CurrentTheme.TextBrush, UpdateSourceTrigger=PropertyChanged}"
-                             WordsToHighlight="{Binding WordsToHighlight, UpdateSourceTrigger=PropertyChanged}" />
+                             Background="{Binding ThemesService.CurrentTheme.Background, UpdateSourceTrigger=PropertyChanged}"
+                             TextBrush="{Binding ThemesService.CurrentTheme.TextBrush, UpdateSourceTrigger=PropertyChanged}"
+                             WordsToHighlight="{Binding HighlightService.WordsToHighlight, UpdateSourceTrigger=PropertyChanged}" />
         </ScrollViewer>
     </DockPanel>
 </Window>

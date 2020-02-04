@@ -13,51 +13,62 @@ namespace TextEditor.ViewModel
 {
     public class TextEditorViewModel : BaseNotifyPropertyChanged
     {
-        private FileDialogManager _fileDialogManager;
+        private IFileService _fileService;
 
-        private ThemesManager _themesManager;
+        private IDialogService _dialogService;
 
-        private ISet<string> _wordsToHighlight;
+        private IThemesService _themesService;
+
+        private IHighlightService _highlightService;
 
         private IList<string> _rawTextLines;
 
         public TextEditorViewModel()
         {
-            FileDialogManager = new FileDialogManager(
-                Encoding.UTF8,
-                "All files|*.*|Text|*.txt|Java|*.java|C#|*.cs");
-            ThemesManager = new ThemesManager(BasicThemes.AllBasicThemes);
-            WordsToHighlight = BasicWordsToHighlight.CsWords;
-            _rawTextLines = new List<string>(new[] {""});
+            DialogService = new DialogService("All files|*.*|Text|*.txt|Java|*.java|C#|*.cs");
+            FileService = new FileService(Encoding.UTF8);
+            ThemesService = new ThemesService(BasicThemes.AllBasicThemes);
+            HighlightService = new HighlightService(BasicWordsToHighlight.CsWords);
+            RawTextLines = new List<string>(new[] {""});
         }
 
-        public FileDialogManager FileDialogManager
+        public IFileService FileService
         {
-            get => _fileDialogManager;
+            get => _fileService;
             set
             {
-                _fileDialogManager = value;
-                OnPropertyChanged(nameof(FileDialogManager));
+                _fileService = value;
+                OnPropertyChanged(nameof(FileService));
             }
         }
 
-        public ThemesManager ThemesManager
+        public IDialogService DialogService
         {
-            get => _themesManager;
+            get => _dialogService;
             set
             {
-                _themesManager = value;
-                OnPropertyChanged(nameof(ThemesManager));
+                _dialogService = value;
+                OnPropertyChanged(nameof(DialogService));
             }
         }
 
-        public ISet<string> WordsToHighlight
+        public IThemesService ThemesService
         {
-            get => _wordsToHighlight;
+            get => _themesService;
             set
             {
-                _wordsToHighlight = value;
-                OnPropertyChanged(nameof(WordsToHighlight));
+                _themesService = value;
+                OnPropertyChanged(nameof(ThemesService));
+            }
+        }
+
+        public IHighlightService HighlightService
+        {
+            get => _highlightService;
+            set
+            {
+                _highlightService = value;
+                OnPropertyChanged(nameof(HighlightService));
             }
         }
 
@@ -73,7 +84,7 @@ namespace TextEditor.ViewModel
 
         public ObservableCollection<MenuItem> MenuItemThemes =>
             new ObservableCollection<MenuItem>(
-                ThemesManager.Themes.Select(t => new MenuItem
+                ThemesService.Themes.Select(t => new MenuItem
                 {
                     Header = t.Name,
                     Command = SelectThemeCommand,
@@ -88,22 +99,24 @@ namespace TextEditor.ViewModel
             (_newFileCommand = new RelayCommand(obj =>
             {
                 var textLines = (obj as TextLines)?.RawLines;
-                FileDialogManager.NewFile(textLines);
+                FileService.SaveAndCreateNewFile(textLines);
                 RawTextLines = new List<string>(new[] {""});
-                UpdateWordsToHighlight();
+                HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
             }));
 
         private ICommand _openFileCommand;
 
         public ICommand OpenFileCommand =>
             _openFileCommand ??
-            (_openFileCommand = new RelayCommand(obj =>
-            {
-                var text = FileDialogManager.ReadTextFromFile();
-                if (text == null) return;
-                RawTextLines = text;
-                UpdateWordsToHighlight();
-            }));
+            (_openFileCommand = new RelayCommand(obj => OpenFile(DialogService.OpenFileDialog())));
+
+        public void OpenFile(string fileName)
+        {
+            var text = FileService.OpenNewFile(fileName);
+            if (text == null) return;
+            RawTextLines = text;
+            HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
+        }
 
         private ICommand _saveFileCommand;
 
@@ -112,9 +125,16 @@ namespace TextEditor.ViewModel
             (_saveFileCommand = new RelayCommand(obj =>
             {
                 var textLines = (obj as TextLines)?.RawLines;
-                FileDialogManager.SaveTextInOpenedFile(textLines);
-                UpdateWordsToHighlight();
+                RawTextLines = textLines;
+                if (!string.IsNullOrEmpty(FileService.CurrentOpenedFile))
+                    SaveFile();
+                else
+                    SaveAsFile(DialogService.SaveFileDialog());
+
+                HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
             }));
+
+        public void SaveFile() => FileService.SaveTextInCurrentFile(RawTextLines);
 
         private ICommand _saveAsFileCommand;
 
@@ -123,17 +143,18 @@ namespace TextEditor.ViewModel
             (_saveAsFileCommand = new RelayCommand(obj =>
             {
                 var textLines = (obj as TextLines)?.RawLines;
-                FileDialogManager.SaveTextInNewFile(textLines);
-                UpdateWordsToHighlight();
+                RawTextLines = textLines;
+                SaveAsFile(DialogService.SaveFileDialog());
+                HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
             }));
+
+        public void SaveAsFile(string fileName) =>
+            FileService.SaveTextInFile(fileName, RawTextLines);
 
         private ICommand _selectThemeCommand;
 
         public ICommand SelectThemeCommand =>
             _selectThemeCommand ??
-            (_selectThemeCommand = new RelayCommand(obj => { ThemesManager.SelectTheme((string) obj); }));
-
-        private void UpdateWordsToHighlight() =>
-            WordsToHighlight = LanguageMapper.GetLanguageByName(FileDialogManager.CurrentOpenedFile).Map();
+            (_selectThemeCommand = new RelayCommand(obj => { ThemesService.SelectTheme((string) obj); }));
     }
 }

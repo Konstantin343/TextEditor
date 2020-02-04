@@ -5,7 +5,7 @@ using TextEditor.ViewModel;
 
 namespace TextEditor.Themes
 {
-    public class ThemesManager : BaseNotifyPropertyChanged
+    public class ThemesService : BaseNotifyPropertyChanged, IThemesService
     {
         public ObservableCollection<Theme> Themes { get; }
 
@@ -21,7 +21,7 @@ namespace TextEditor.Themes
             }
         }
 
-        public ThemesManager(IEnumerable<Theme> themes)
+        public ThemesService(IEnumerable<Theme> themes)
         {
             Themes = new ObservableCollection<Theme>(themes);
             CurrentTheme = Themes.FirstOrDefault();

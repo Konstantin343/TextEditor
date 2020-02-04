@@ -32,7 +32,7 @@ namespace TextEditor.Themes
 
         public string Name { get; }
 
-        public Theme(string name, ThemesManager owner = null)
+        public Theme(string name, ThemesService owner = null)
         {
             Name = name;
         }

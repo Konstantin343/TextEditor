@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTextEditor", "TestTextE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditComponent", "TextEditComponent\TextEditComponent.csproj", "{90CF9A0D-CB89-4D8E-951B-A75740261D64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTextEditorViewModel", "TestTextEditorViewModel\TestTextEditorViewModel.csproj", "{9A233726-D64F-43A2-B3E9-B03C15099F64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTextEditComponent", "TestTextEditComponent\TestTextEditComponent.csproj", "{03BB78E2-09A5-4167-9962-78D9E5F423A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{A009B09C-33B0-496B-BE40-E8B159A89D65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,18 @@ Global
 		{90CF9A0D-CB89-4D8E-951B-A75740261D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90CF9A0D-CB89-4D8E-951B-A75740261D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90CF9A0D-CB89-4D8E-951B-A75740261D64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A233726-D64F-43A2-B3E9-B03C15099F64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A233726-D64F-43A2-B3E9-B03C15099F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A233726-D64F-43A2-B3E9-B03C15099F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A233726-D64F-43A2-B3E9-B03C15099F64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03BB78E2-09A5-4167-9962-78D9E5F423A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03BB78E2-09A5-4167-9962-78D9E5F423A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03BB78E2-09A5-4167-9962-78D9E5F423A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03BB78E2-09A5-4167-9962-78D9E5F423A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{03BB78E2-09A5-4167-9962-78D9E5F423A1} = {A009B09C-33B0-496B-BE40-E8B159A89D65}
+		{6C9B367F-7C65-4A4B-AD55-0397FD8EF2DF} = {A009B09C-33B0-496B-BE40-E8B159A89D65}
+		{9A233726-D64F-43A2-B3E9-B03C15099F64} = {A009B09C-33B0-496B-BE40-E8B159A89D65}
 	EndGlobalSection
 EndGlobal

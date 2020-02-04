@@ -53,14 +53,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FileDialog\FileDialogManager.cs" />
+    <Compile Include="FileDialog\DialogService.cs" />
+    <Compile Include="FileDialog\FileService.cs" />
+    <Compile Include="FileDialog\IDialogService.cs" />
+    <Compile Include="FileDialog\IFileService.cs" />
     <Compile Include="Highlight\BasicWordsToHighlight.cs" />
+    <Compile Include="Highlight\HighlightService.cs" />
+    <Compile Include="Highlight\IHighlightService.cs" />
     <Compile Include="Highlight\Language.cs" />
-    <Compile Include="Highlight\LanguageMapper.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Themes\BasicThemes.cs" />
+    <Compile Include="Themes\IThemesService.cs" />
     <Compile Include="Themes\Theme.cs" />
-    <Compile Include="Themes\ThemesManager.cs" />
+    <Compile Include="Themes\ThemesService.cs" />
     <Compile Include="ViewModel\BaseNotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\TextEditorViewModel.cs" />
