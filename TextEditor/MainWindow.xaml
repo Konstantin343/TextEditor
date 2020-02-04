@@ -30,20 +30,8 @@
                     <MenuItem Header="Save As" Command="{Binding SaveAsFileCommand}"
                               CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="SaveAs" />
                 </MenuItem>
-                <MenuItem Header="Themes" Uid="Themes"
-                          ItemsSource="{Binding ThemesManager.Themes, UpdateSourceTrigger=PropertyChanged}">
-                    <MenuItem.ItemTemplate>
-                        <DataTemplate>
-                            <MenuItem ></MenuItem>
-                        </DataTemplate>
-                    </MenuItem.ItemTemplate>
-                    <!-- <MenuItem.ItemContainerStyle> -->
-                    <!--     <Style TargetType="MenuItem"> -->
-                    <!--         <Setter Property="Header" Value="123"></Setter> -->
-                    <!--         <Setter Property="Command" Value="{Binding ThemesManager.SelectThemeCommand}"/>  -->
-                    <!--     </Style> -->
-                    <!-- </MenuItem.ItemContainerStyle> -->
-                </MenuItem>
+                <MenuItem HeaderStringFormat="Themes ({0})" Header="{Binding ThemesManager.CurrentTheme}" Uid="Themes"
+                          ItemsSource="{Binding MenuItemThemes, UpdateSourceTrigger=PropertyChanged}" />
             </Menu>
             <TextBlock Padding="5 0 0 0" Background="LightGray" Foreground="DarkGray"
                        Text="{Binding FileDialogManager.CurrentOpenedFile, UpdateSourceTrigger=PropertyChanged}"

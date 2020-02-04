@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
-using System.Windows.Data;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TextEditComponent.TextEditComponent.Text;
 using TextEditor.FileDialog;
@@ -38,7 +40,7 @@ namespace TextEditor.ViewModel
                 OnPropertyChanged(nameof(FileDialogManager));
             }
         }
-        
+
         public ThemesManager ThemesManager
         {
             get => _themesManager;
@@ -69,6 +71,16 @@ namespace TextEditor.ViewModel
             }
         }
 
+        public ObservableCollection<MenuItem> MenuItemThemes =>
+            new ObservableCollection<MenuItem>(
+                ThemesManager.Themes.Select(t => new MenuItem
+                {
+                    Header = t.Name,
+                    Command = SelectThemeCommand,
+                    CommandParameter = t.Name,
+                    Uid = t.Name
+                }));
+
         private ICommand _newFileCommand;
 
         public ICommand NewFileCommand =>
@@ -92,7 +104,7 @@ namespace TextEditor.ViewModel
                 RawTextLines = text;
                 UpdateWordsToHighlight();
             }));
-        
+
         private ICommand _saveFileCommand;
 
         public ICommand SaveFileCommand =>
@@ -103,7 +115,7 @@ namespace TextEditor.ViewModel
                 FileDialogManager.SaveTextInOpenedFile(textLines);
                 UpdateWordsToHighlight();
             }));
-        
+
         private ICommand _saveAsFileCommand;
 
         public ICommand SaveAsFileCommand =>
@@ -114,6 +126,12 @@ namespace TextEditor.ViewModel
                 FileDialogManager.SaveTextInNewFile(textLines);
                 UpdateWordsToHighlight();
             }));
+
+        private ICommand _selectThemeCommand;
+
+        public ICommand SelectThemeCommand =>
+            _selectThemeCommand ??
+            (_selectThemeCommand = new RelayCommand(obj => { ThemesManager.SelectTheme((string) obj); }));
 
         private void UpdateWordsToHighlight() =>
             WordsToHighlight = LanguageMapper.GetLanguageByName(FileDialogManager.CurrentOpenedFile).Map();

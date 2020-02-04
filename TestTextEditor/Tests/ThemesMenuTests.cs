@@ -17,8 +17,16 @@ namespace TestTextEditor.Tests
             
             themesMenuForm.Click();
             Assert.AreEqual(theme, themesMenuForm.SelectedTheme);
-            Assert.IsTrue(themesMenuForm.IsOneSelectedTheme);
-            CollectionAssert.AreEquivalent(BaseTestObjects.BaseThemes, themesMenuForm.AllThemes);
+        }
+
+        [Test]
+        public void AllThemesTest()
+        {
+            var themesMenuForm = MainWindow.ThemesMenuForm;
+            themesMenuForm.Click();
+            CollectionAssert.AreEquivalent(
+                BaseTestObjects.BaseThemes, 
+                themesMenuForm.AllThemes);
         }
     }
 }
