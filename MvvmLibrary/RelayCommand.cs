@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace TextEditor.ViewModel
+namespace Utils
 {
     public class RelayCommand : ICommand
     {

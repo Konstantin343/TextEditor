@@ -8,6 +8,7 @@ using TextEditComponent.TextEditComponent.Text;
 using TextEditor.FileDialog;
 using TextEditor.Highlight;
 using TextEditor.Themes;
+using Utils;
 
 namespace TextEditor.ViewModel
 {

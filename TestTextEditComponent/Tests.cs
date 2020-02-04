@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using TextEditComponent.TextEditComponent;
+﻿using System.Windows.Controls;
+using NUnit.Framework;
 
 namespace TestTextEditComponent
 {
@@ -9,7 +9,8 @@ namespace TestTextEditComponent
         [Test]
         public void Test1()
         {
-            var textBox = new TextEditBox();
+            var textBox = new TextBox();
+            textBox.Copy();
         }
     }
 }

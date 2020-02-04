@@ -1,5 +1,5 @@
 ﻿using System.Windows.Media;
-using TextEditor.ViewModel;
+using Utils;
 
 namespace TextEditor.Themes
 {

@@ -10,6 +10,7 @@ using System.Windows.Media;
 using TextEditComponent.TextEditComponent.Constants;
 using TextEditComponent.TextEditComponent.Text;
 using TextEditComponent.TextEditComponent.TextHelpers;
+using Utils;
 
 namespace TextEditComponent.TextEditComponent
 {
@@ -341,8 +342,9 @@ namespace TextEditComponent.TextEditComponent
             {
                 DeleteSelected();
             }
+
             AddText(e.Text);
-            
+
             UpdateOffsetByCaretPosition();
             InvalidateVisual();
             SelectedText.Invalidate();
@@ -497,6 +499,7 @@ namespace TextEditComponent.TextEditComponent
             {
                 DeleteSelected();
             }
+
             TextLines.InsertLine(
                 CurrentString + 1,
                 CurrentChar < TextLines[CurrentString].Length
@@ -563,14 +566,10 @@ namespace TextEditComponent.TextEditComponent
 
         private void CreateContextMenu()
         {
-            var copyItem = new MenuItem {Header = "Copy", Uid = "Copy"};
-            copyItem.Click += CopySelected;
-            var cutItem = new MenuItem {Header = "Cut", Uid = "Cut"};
-            cutItem.Click += CutSelected;
-            var pasteItem = new MenuItem {Header = "Paste", Uid = "Paste"};
-            pasteItem.Click += PasteSelected;
-            var selectAllItem = new MenuItem {Header = "Select all", Uid = "SelectAll"};
-            selectAllItem.Click += SelectAll;
+            var copyItem = new MenuItem {Header = "Copy", Uid = "Copy", Command = CopyCommand};
+            var cutItem = new MenuItem {Header = "Cut", Uid = "Cut", Command = CutCommand};
+            var pasteItem = new MenuItem {Header = "Paste", Uid = "Paste", Command = PasteCommand};
+            var selectAllItem = new MenuItem {Header = "Select all", Uid = "SelectAll", Command = SelectAllCommand};
             ContextMenu = new ContextMenu
             {
                 Placement = PlacementMode.MousePoint,
@@ -579,40 +578,53 @@ namespace TextEditComponent.TextEditComponent
             };
         }
 
-        private void SelectAll(object sender, RoutedEventArgs e)
-        {
-            SelectedText.MouseSelectionStart = new TextPosition();
-            SelectedText.MouseSelectionEnd =
-                new TextPosition(TextLines.Count - 1, TextLines[TextLines.Count - 1].Length);
-            InvalidateVisual();
-        }
-
-        private void CutSelected(object sender, RoutedEventArgs e)
-        {
-            CopySelected(sender, e);
-            DeleteSelected();
-            UpdateOffsetByCaretPosition();
-            InvalidateVisual();
-        }
-
-        private void CopySelected(object sender, RoutedEventArgs e) =>
-            Clipboard.SetText(TextLines.GetInBounds(SelectedText));
-
-        private void PasteSelected(object sender, RoutedEventArgs e)
-        {
-            if (!SelectedText.IsEmpty) DeleteSelected();
-            var textLinesToPaste = Regex.Split(Clipboard.GetText(), "\r\n");
-            for (var i = 0; i < textLinesToPaste.Length; i++)
+        private ICommand _selectAllCommand;
+        public ICommand SelectAllCommand =>
+            _selectAllCommand ??
+            (_selectAllCommand = new RelayCommand(obj =>
             {
-                AddText(textLinesToPaste[i]);
-                if (i != textLinesToPaste.Length - 1)
-                    EnterKey();
-            }
+                SelectedText.MouseSelectionStart = new TextPosition();
+                SelectedText.MouseSelectionEnd =
+                    new TextPosition(TextLines.Count - 1, TextLines[TextLines.Count - 1].Length);
+                InvalidateVisual();
+            }));
 
-            UpdateOffsetByCaretPosition();
-            SelectedText.Invalidate();
-            InvalidateVisual();
-        }
+        private ICommand _сutCommand;
+        public ICommand CutCommand =>
+            _сutCommand ??
+            (_сutCommand = new RelayCommand(obj =>
+            {
+                CopyCommand.Execute(obj);
+                DeleteSelected();
+                UpdateOffsetByCaretPosition();
+                InvalidateVisual();
+            }));
+        
+
+        private ICommand _сopyCommand;
+        public ICommand CopyCommand =>
+            _сopyCommand ??
+            (_сopyCommand = new RelayCommand(obj => 
+                Clipboard.SetText(TextLines.GetInBounds(SelectedText))));
+
+        private ICommand _pasteCommand;
+        public ICommand PasteCommand =>
+            _pasteCommand ??
+            (_pasteCommand = new RelayCommand(obj =>
+            {
+                if (!SelectedText.IsEmpty) DeleteSelected();
+                var textLinesToPaste = Regex.Split(Clipboard.GetText(), "\r\n");
+                for (var i = 0; i < textLinesToPaste.Length; i++)
+                {
+                    AddText(textLinesToPaste[i]);
+                    if (i != textLinesToPaste.Length - 1)
+                        EnterKey();
+                }
+
+                UpdateOffsetByCaretPosition();
+                SelectedText.Invalidate();
+                InvalidateVisual();
+            }));
 
         #endregion
 
