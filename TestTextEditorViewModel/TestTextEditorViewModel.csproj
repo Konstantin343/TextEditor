@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MvvmLibrary\MvvmLibrary.csproj">
+    <ProjectReference Include="..\MvvmBaseClasses\MvvmBaseClasses.csproj">
       <Project>{9bff71d7-0774-422f-b946-316b9e4d6a92}</Project>
-      <Name>MvvmLibrary</Name>
+      <Name>MvvmBaseClasses</Name>
     </ProjectReference>
     <ProjectReference Include="..\TextEditor\TextEditor.csproj">
       <Project>{f2348051-804a-4e34-b0fd-8dd7308ee765}</Project>

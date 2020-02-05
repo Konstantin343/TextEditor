@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tec="clr-namespace:TextEditComponent.TextEditComponent;assembly=TextEditComponent"
-        xmlns:tec2="clr-namespace:TextEditComponent;assembly=TextEditComponent"
         xmlns:viewModel="clr-namespace:TextEditor.ViewModel"
         mc:Ignorable="d"
         Title="Text Editor" Height="350" Width="525"
@@ -32,7 +31,8 @@
                               CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="SaveAs" />
                 </MenuItem>
                 <MenuItem HeaderStringFormat="Themes ({0})" Header="{Binding ThemesService.CurrentTheme}" Uid="Themes"
-                          ItemsSource="{Binding MenuItemThemes, UpdateSourceTrigger=PropertyChanged}" />
+                          ItemsSource="{Binding MenuItemThemes, UpdateSourceTrigger=PropertyChanged}"
+                          Focusable="False"/>
             </Menu>
             <TextBlock Padding="5 0 0 0" Background="LightGray" Foreground="DarkGray"
                        Text="{Binding FileService.CurrentOpenedFile, UpdateSourceTrigger=PropertyChanged}"
@@ -46,7 +46,8 @@
                              RawTextLines="{Binding RawTextLines, UpdateSourceTrigger=PropertyChanged}"
                              Background="{Binding ThemesService.CurrentTheme.Background, UpdateSourceTrigger=PropertyChanged}"
                              TextBrush="{Binding ThemesService.CurrentTheme.TextBrush, UpdateSourceTrigger=PropertyChanged}"
-                             WordsToHighlight="{Binding HighlightService.WordsToHighlight, UpdateSourceTrigger=PropertyChanged}" />
+                             WordsToHighlight="{Binding HighlightService.WordsToHighlight, UpdateSourceTrigger=PropertyChanged}"
+                             TextLines=""/>
         </ScrollViewer>
     </DockPanel>
 </Window>

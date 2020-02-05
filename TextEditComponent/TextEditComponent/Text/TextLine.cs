@@ -14,20 +14,20 @@ namespace TextEditComponent.TextEditComponent.Text
             string fontStyle,
             double fontSize,
             Brush textBrush,
-            HighlightTextManager highlightTextManager)
+            HighlightTextService highlightTextService)
         {
             SetValue(line);
-            UpdateFormatted(fontStyle, fontSize, textBrush, highlightTextManager);
+            UpdateFormatted(fontStyle, fontSize, textBrush, highlightTextService);
         }
 
         public void UpdateFormatted(
             string fontStyle,
             double fontSize,
             Brush textBrush,
-            HighlightTextManager highlightTextManager)
+            HighlightTextService highlightTextService)
         {
             _formattedLine = FormattedTextHelper.GetFormattedText(_rawLine, fontStyle, fontSize, textBrush);
-            highlightTextManager.HighlightText(_formattedLine);
+            highlightTextService.HighlightText(_formattedLine);
         }
 
         public void SetValue(string newValue) => _rawLine = newValue;

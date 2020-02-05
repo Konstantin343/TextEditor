@@ -47,18 +47,18 @@
     <Compile Include="TextEditComponent\Constants\KeysCharacters.cs" />
     <Compile Include="TextEditComponent\TextEditBox.cs" />
     <Compile Include="TextEditComponent\TextEditBoxAutomationPeer.cs" />
-    <Compile Include="TextEditComponent\TextEditBoxBase.cs" />
+    <Compile Include="TextEditComponent\TextEditBoxModel.cs" />
     <Compile Include="TextEditComponent\TextHelpers\FormattedTextHelper.cs" />
-    <Compile Include="TextEditComponent\TextHelpers\HighlightTextManager.cs" />
+    <Compile Include="TextEditComponent\TextHelpers\HighlightTextService.cs" />
     <Compile Include="TextEditComponent\Text\SelectedTextBounds.cs" />
     <Compile Include="TextEditComponent\Text\TextLine.cs" />
     <Compile Include="TextEditComponent\Text\TextLines.cs" />
     <Compile Include="TextEditComponent\Text\TextPosition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MvvmLibrary\MvvmLibrary.csproj">
+    <ProjectReference Include="..\MvvmBaseClasses\MvvmBaseClasses.csproj">
       <Project>{9bff71d7-0774-422f-b946-316b9e4d6a92}</Project>
-      <Name>MvvmLibrary</Name>
+      <Name>MvvmBaseClasses</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

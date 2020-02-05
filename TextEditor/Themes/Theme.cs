@@ -5,7 +5,6 @@ namespace TextEditor.Themes
 {
     public class Theme : BaseNotifyPropertyChanged
     {
-        public int T => 12;
         private Brush _background;
 
         private Brush _textBrush;

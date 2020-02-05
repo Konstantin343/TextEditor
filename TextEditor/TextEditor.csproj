@@ -99,9 +99,9 @@
     <None Include="Resources\app_icon.ico" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MvvmLibrary\MvvmLibrary.csproj">
+    <ProjectReference Include="..\MvvmBaseClasses\MvvmBaseClasses.csproj">
       <Project>{9bff71d7-0774-422f-b946-316b9e4d6a92}</Project>
-      <Name>MvvmLibrary</Name>
+      <Name>MvvmBaseClasses</Name>
     </ProjectReference>
     <ProjectReference Include="..\TextEditComponent\TextEditComponent.csproj">
       <Project>{90cf9a0d-cb89-4d8e-951b-a75740261d64}</Project>

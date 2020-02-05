@@ -61,7 +61,7 @@ namespace TextEditComponent.TextEditComponent.Text
 
         public int Count => _textLines.Count;
 
-        public HighlightTextManager HighlightTextManager { get; set; }
+        public HighlightTextService HighlightTextService { get; set; }
 
         public TextLines(
             IEnumerable<string> source,
@@ -69,13 +69,13 @@ namespace TextEditComponent.TextEditComponent.Text
             double fontSize,
             Brush textBrush,
             double lineInterval,
-            HighlightTextManager highlightTextManager)
+            HighlightTextService highlightTextService)
         {
             _fontSize = fontSize;
             _fontStyle = fontStyle;
             _lineInterval = lineInterval;
             _textBrush = textBrush;
-            HighlightTextManager = highlightTextManager;
+            HighlightTextService = highlightTextService;
             SetText(source);
         }
 
@@ -88,7 +88,7 @@ namespace TextEditComponent.TextEditComponent.Text
 
         public void SetHighlightWords(IEnumerable<string> source)
         {
-            HighlightTextManager.WordsToHighlight = new HashSet<string>(source);
+            HighlightTextService.WordsToHighlight = new HashSet<string>(source);
             UpdateAll();
         }
 
@@ -239,7 +239,7 @@ namespace TextEditComponent.TextEditComponent.Text
         internal void RemoveDecoration(SelectedTextBounds bounds) => Decorate(null, bounds);
 
         private TextLine CreateTextLine(string line) =>
-            new TextLine(line, FontStyle, FontSize, TextBrush, HighlightTextManager);
+            new TextLine(line, FontStyle, FontSize, TextBrush, HighlightTextService);
 
         private double _maxLineWidth = 0d;
 
@@ -249,7 +249,7 @@ namespace TextEditComponent.TextEditComponent.Text
                 : 0d;
 
         private void UpdateLine(int index) =>
-            _textLines[index].UpdateFormatted(FontStyle, FontSize, TextBrush, HighlightTextManager);
+            _textLines[index].UpdateFormatted(FontStyle, FontSize, TextBrush, HighlightTextService);
 
         public override string ToString() => string.Join("\r\n", _textLines.Select(tl => tl.RawValue));
     }

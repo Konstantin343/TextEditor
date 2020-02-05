@@ -4,13 +4,13 @@ using System.Windows.Media;
 
 namespace TextEditComponent.TextEditComponent.TextHelpers
 {
-    public class HighlightTextManager
+    public class HighlightTextService
     {
         public ISet<string> WordsToHighlight { get; set; }
         
         public Brush HighlightBrush { get; set; }
 
-        public HighlightTextManager(IEnumerable<string> wordsToHighlight, Brush highlighter)
+        public HighlightTextService(IEnumerable<string> wordsToHighlight, Brush highlighter)
         {
             WordsToHighlight = new HashSet<string>(wordsToHighlight);
             HighlightBrush = highlighter;

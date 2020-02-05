@@ -103,7 +103,7 @@ namespace TextEditComponent.TextEditComponent
         private static void OnWordsToHighlightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var teb = (TextEditBox) d;
-            teb.TextLines.HighlightTextManager.WordsToHighlight = (ISet<string>) e.NewValue;
+            teb.TextLines.HighlightTextService.WordsToHighlight = (ISet<string>) e.NewValue;
             teb.TextLines.UpdateAll();
             teb.InvalidateVisual();
         }
@@ -181,6 +181,8 @@ namespace TextEditComponent.TextEditComponent
         }
 
         #endregion
+
+        public TextEditBoxModel TextEditBoxModel { get; set; }
 
         public SelectedTextBounds SelectedText { get; set; }
 
@@ -285,9 +287,12 @@ namespace TextEditComponent.TextEditComponent
             base.OnMouseLeftButtonDown(e);
             Focus();
             CaptureMouse();
-            var textPosition = GetCharByPixels(e.GetPosition(this));
+            var textPosition = GetCharByPoint(e.GetPosition(this));
             SelectedText.SetBounds(textPosition);
-            CurrentPosition = textPosition;
+            CurrentPosition = textPosition; // 1
+            //
+            TextEditBoxModel.SetCurrentPosition(textPosition);
+            //
             UpdateOffsetByCaretPosition();
             InvalidateVisual();
         }
@@ -296,9 +301,12 @@ namespace TextEditComponent.TextEditComponent
         {
             base.OnMouseLeftButtonUp(e);
             ReleaseMouseCapture();
-            var textPosition = GetCharByPixels(e.GetPosition(this));
-            SelectedText.MouseSelectionEnd = new TextPosition(textPosition);
+            var textPosition = GetCharByPoint(e.GetPosition(this));
+            SelectedText.MouseSelectionEnd = new TextPosition(textPosition); // 2
             CurrentPosition = textPosition;
+            //
+            TextEditBoxModel.SelectToPosition(textPosition);
+            //
             InvalidateVisual();
         }
 
@@ -307,9 +315,12 @@ namespace TextEditComponent.TextEditComponent
             base.OnMouseMove(e);
             if (IsMouseOver && e.LeftButton == MouseButtonState.Pressed)
             {
-                var textPosition = GetCharByPixels(e.GetPosition(this));
-                SelectedText.MouseSelectionEnd = new TextPosition(textPosition);
+                var textPosition = GetCharByPoint(e.GetPosition(this));
+                SelectedText.MouseSelectionEnd = new TextPosition(textPosition); // 2
                 CurrentPosition = textPosition;
+                //
+                TextEditBoxModel.SelectToPosition(textPosition);
+                //
                 UpdateOffsetByCaretPosition();
                 InvalidateVisual();
             }
@@ -331,20 +342,16 @@ namespace TextEditComponent.TextEditComponent
         protected override void OnTextInput(TextCompositionEventArgs e)
         {
             base.OnTextInput(e);
-            if (string.IsNullOrEmpty(e.Text)) return;
+            if (string.IsNullOrEmpty(e.Text)
+                || KeysCharacters.Backspace.Equals(e.Text)
+                || KeysCharacters.Enter.Equals(e.Text)) return;
 
-            if (KeysCharacters.Backspace.Equals(e.Text) || KeysCharacters.Enter.Equals(e.Text))
-            {
-                return;
-            }
-
-            if (!SelectedText.IsEmpty)
-            {
-                DeleteSelected();
-            }
-
+            //
+            TextEditBoxModel.DeleteSelectedText();
+            TextEditBoxModel.AddLinesOnCurrentPosition(Regex.Split(e.Text, "\r\n"));
+            //
             AddText(e.Text);
-
+            
             UpdateOffsetByCaretPosition();
             InvalidateVisual();
             SelectedText.Invalidate();
@@ -356,7 +363,7 @@ namespace TextEditComponent.TextEditComponent
             switch (e.Key)
             {
                 case Key.Enter:
-                    EnterKey();
+                    OnEnterKey();
                     break;
                 case Key.Back:
                     BackspaceKey();
@@ -377,7 +384,7 @@ namespace TextEditComponent.TextEditComponent
                     InsertKey();
                     break;
                 case Key.Delete:
-                    DeleteKey();
+                    OnDeleteKey();
                     break;
                 case Key.Tab:
                     TabKey();
@@ -400,7 +407,7 @@ namespace TextEditComponent.TextEditComponent
 
         #region Keys
 
-        private void DeleteKey()
+        private void OnDeleteKey()
         {
             if (!SelectedText.IsEmpty)
             {
@@ -408,7 +415,7 @@ namespace TextEditComponent.TextEditComponent
                 return;
             }
 
-            if (CurrentChar == TextLines[CurrentString].Length)
+            if (CurrentChar == TextLines[CurrentString].Length) // 4
             {
                 if (CurrentString == TextLines.Count - 1) return;
                 var nextString = CurrentString + 1;
@@ -424,21 +431,21 @@ namespace TextEditComponent.TextEditComponent
             UpdateHorizontalOffset();
         }
 
-        private void DownKey()
+        private void DownKey() // 5
         {
             if (CurrentString == TextLines.Count - 1) return;
             CurrentPosition.Str++;
             CurrentPosition.Chr = Math.Min(CurrentChar, TextLines[CurrentString].Length);
         }
 
-        private void UpKey()
+        private void UpKey() // 6
         {
             if (CurrentString == 0) return;
             CurrentPosition.Str--;
             CurrentPosition.Chr = Math.Min(CurrentChar, TextLines[CurrentString].Length);
         }
 
-        private void RightKey()
+        private void RightKey() // 7
         {
             if (CurrentChar == TextLines[CurrentString].Length)
             {
@@ -451,7 +458,7 @@ namespace TextEditComponent.TextEditComponent
             CurrentPosition.Chr++;
         }
 
-        private void LeftKey()
+        private void LeftKey() // 8
         {
             if (CurrentChar == 0)
             {
@@ -464,9 +471,9 @@ namespace TextEditComponent.TextEditComponent
             CurrentPosition.Chr--;
         }
 
-        private void InsertKey() => IsInsertKeyPressed = !IsInsertKeyPressed;
+        private void InsertKey() => IsInsertKeyPressed = !IsInsertKeyPressed; // 9
 
-        private void BackspaceKey()
+        private void BackspaceKey() // 10
         {
             if (!SelectedText.IsEmpty)
             {
@@ -493,7 +500,7 @@ namespace TextEditComponent.TextEditComponent
             UpdateHorizontalOffset();
         }
 
-        private void EnterKey()
+        private void OnEnterKey() // 11
         {
             if (!SelectedText.IsEmpty)
             {
@@ -579,6 +586,7 @@ namespace TextEditComponent.TextEditComponent
         }
 
         private ICommand _selectAllCommand;
+
         public ICommand SelectAllCommand =>
             _selectAllCommand ??
             (_selectAllCommand = new RelayCommand(obj =>
@@ -590,6 +598,7 @@ namespace TextEditComponent.TextEditComponent
             }));
 
         private ICommand _сutCommand;
+
         public ICommand CutCommand =>
             _сutCommand ??
             (_сutCommand = new RelayCommand(obj =>
@@ -599,15 +608,17 @@ namespace TextEditComponent.TextEditComponent
                 UpdateOffsetByCaretPosition();
                 InvalidateVisual();
             }));
-        
+
 
         private ICommand _сopyCommand;
+
         public ICommand CopyCommand =>
             _сopyCommand ??
-            (_сopyCommand = new RelayCommand(obj => 
+            (_сopyCommand = new RelayCommand(obj =>
                 Clipboard.SetText(TextLines.GetInBounds(SelectedText))));
 
         private ICommand _pasteCommand;
+
         public ICommand PasteCommand =>
             _pasteCommand ??
             (_pasteCommand = new RelayCommand(obj =>
@@ -618,7 +629,7 @@ namespace TextEditComponent.TextEditComponent
                 {
                     AddText(textLinesToPaste[i]);
                     if (i != textLinesToPaste.Length - 1)
-                        EnterKey();
+                        OnEnterKey();
                 }
 
                 UpdateOffsetByCaretPosition();
@@ -628,8 +639,9 @@ namespace TextEditComponent.TextEditComponent
 
         #endregion
 
-        private void AddText(string text)
+        private void AddText(string text) // 12
         {
+            DeleteSelected();
             if (IsInsertKeyPressed && CurrentChar < TextLines[CurrentString].Length)
                 TextLines.RemoveInLine(CurrentString, CurrentChar, text.Length);
             TextLines.InsertInLine(CurrentString, text, CurrentChar);
@@ -684,7 +696,7 @@ namespace TextEditComponent.TextEditComponent
 
         private void UpdateVerticalOffset() => UpdateVerticalOffsetBy(VerticalOffset);
 
-        private TextPosition GetCharByPixels(Point point)
+        private TextPosition GetCharByPoint(Point point)
         {
             var (realX, realY) = (point.X + HorizontalOffset, point.Y + VerticalOffset);
             var stringNumber = Math.Min((int) (realY / LineHeight), TextLines.Count - 1);
@@ -714,8 +726,11 @@ namespace TextEditComponent.TextEditComponent
 
         private void DeleteSelected()
         {
+            if (SelectedText.IsEmpty) // 3
+                return;
+
             TextLines.DeleteInBounds(SelectedText);
-            CurrentPosition = new TextPosition(SelectedText.RealStart.Str, SelectedText.RealStart.Chr);
+            CurrentPosition = new TextPosition(SelectedText.RealStart);
             UpdateOffsetByCaretPosition();
             UpdateVerticalOffset();
             UpdateHorizontalOffset();
@@ -742,7 +757,8 @@ namespace TextEditComponent.TextEditComponent
                 Settings.FontSize,
                 Settings.TextBrush,
                 Settings.LineInterval,
-                new HighlightTextManager(new string[0], Settings.HighlightBrush));
+                new HighlightTextService(new string[0], Settings.HighlightBrush));
+            TextEditBoxModel = new TextEditBoxModel();
             TextBrush = Settings.TextBrush;
         }
 
