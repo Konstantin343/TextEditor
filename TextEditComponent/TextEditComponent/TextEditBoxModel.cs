@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TextEditComponent.TextEditComponent.Text;
 
 namespace TextEditComponent.TextEditComponent
 {
     public class TextEditBoxModel
     {
-        public TextLines TextLines { get; private set; }
+        public TextLines TextLines { get; }
 
-        public SelectedTextBounds SelectedText { get; private set; }
+        public SelectedTextBounds SelectedText { get; }
 
         public TextPosition CurrentPosition { get; private set; }
 
@@ -98,7 +97,7 @@ namespace TextEditComponent.TextEditComponent
             CurrentPosition.Chr = Math.Min(CurrentChar, TextLines[CurrentString].Length);
         }
 
-        public void SetPositionOneLineRight()
+        public void SetPositionOneCharRight()
         {
             if (CurrentChar == TextLines[CurrentString].Length)
             {
@@ -111,7 +110,7 @@ namespace TextEditComponent.TextEditComponent
             CurrentPosition.Chr++;
         }
 
-        public void SetPositionOneLineLeft()
+        public void SetPositionOneCharLeft()
         {
             if (CurrentChar == 0)
             {
@@ -144,7 +143,8 @@ namespace TextEditComponent.TextEditComponent
             TextLines.InsertInLine(CurrentString, "\t", CurrentChar);
             CurrentPosition.Chr++;
         }
-
+        
+        
         public void AddTextOnCurrentPosition(string text)
         {
             if (IsInsertMode && CurrentChar < TextLines[CurrentString].Length)

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using TestStack.White.WindowsAPI;
-using TestTextEditor.Framework.Utils;
 using TestTextEditor.Tests.DataProviders;
 using TestTextEditor.Tests.TestData;
+using TestTools.Utils;
 
 namespace TestTextEditor.Tests
 {

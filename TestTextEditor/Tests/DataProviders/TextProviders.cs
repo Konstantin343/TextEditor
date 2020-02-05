@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using TestTextEditor.Framework.Utils;
 using TestTextEditor.Tests.TestData;
+using TestTools.Utils;
 
 namespace TestTextEditor.Tests.DataProviders
 {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TestTextEditor.Framework.Utils;
+using TestTools.Utils;
 
 namespace TestTextEditor.Tests.TestData
 {

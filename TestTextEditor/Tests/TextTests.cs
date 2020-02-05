@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using TestTextEditor.Framework.Utils;
 using TestTextEditor.Tests.DataProviders;
+using TestTools.Utils;
 
 namespace TestTextEditor.Tests
 {

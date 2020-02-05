@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Windows;
 
-namespace TestTextEditor.Framework.Utils
+namespace TestTools.Utils
 {
     public static class ClipboardHelper
     {

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using TestStack.White;
 using TestStack.White.UIItems.WindowItems;
-using TestTextEditor.Framework.Utils.Logger;
+using TestTools.Logger;
 using TextEditor;
 
 namespace TestTextEditor.Framework

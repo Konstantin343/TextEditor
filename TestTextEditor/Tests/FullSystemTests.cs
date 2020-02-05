@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using TestTextEditor.Framework.Utils;
+using TestTools.Utils;
 
 namespace TestTextEditor.Tests
 {

@@ -31,5 +31,7 @@
                 return Str == textBound.Str && Chr == textBound.Chr;
             return false;
         }
+
+        public override string ToString() => $"({Str}; {Chr})";
     }
 }

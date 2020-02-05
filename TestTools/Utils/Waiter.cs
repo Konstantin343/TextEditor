@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace TestTextEditor.Framework.Utils
+namespace TestTools.Utils
 {
     public static class Waiter
     {

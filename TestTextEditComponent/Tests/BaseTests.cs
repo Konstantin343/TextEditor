@@ -1,14 +1,14 @@
 ﻿using NUnit.Framework;
-using TextEditComponent.TextEditComponent;
+using TestTextEditComponent.Models;
 
-namespace TestTextEditComponent
+namespace TestTextEditComponent.Tests
 {
     public abstract class BaseTests
     {
-        protected TextEditBoxModel TextEditBoxModel;
+        protected TestTextEditBoxModel TestTextEditBoxModel;
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp() => 
-            TextEditBoxModel = new TextEditBoxModel();
+        [SetUp]
+        public void SetUp() => 
+            TestTextEditBoxModel = new TestTextEditBoxModel();
     }
 }

@@ -66,14 +66,8 @@
     <Compile Include="Framework\Forms\ScrollBarForm.cs" />
     <Compile Include="Framework\Forms\TextForms\TextEditBoxForm.cs" />
     <Compile Include="Framework\TextEditorAppLoader.cs" />
-    <Compile Include="Framework\Utils\ClipboardHelper.cs" />
-    <Compile Include="Framework\Utils\EnvironmentHelper.cs" />
-    <Compile Include="Framework\Utils\Logger\TestLogger.cs" />
-    <Compile Include="Framework\Utils\Logger\TestLoggerTypes.cs" />
-    <Compile Include="Framework\Utils\PointHelper.cs" />
-    <Compile Include="Framework\Utils\TextHelper.cs" />
-    <Compile Include="Framework\Utils\Waiter.cs" />
     <Compile Include="Framework\Windows\MainTextEditorWindow.cs" />
+    <Compile Include="Helpers\PointHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\BaseTests.cs" />
     <Compile Include="Tests\ContextMenuTests.cs" />
@@ -92,6 +86,10 @@
     <Compile Include="Tests\ThemesMenuTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TestTools\TestTools.csproj">
+      <Project>{8306cdeb-b616-4988-9de5-9869f9c4f8d6}</Project>
+      <Name>TestTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TextEditComponent\TextEditComponent.csproj">
       <Project>{90cf9a0d-cb89-4d8e-951b-a75740261d64}</Project>
       <Name>TextEditComponent</Name>

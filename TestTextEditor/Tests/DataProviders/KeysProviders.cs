@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using TestStack.White.WindowsAPI;
-using TestTextEditor.Framework.Utils;
 using TestTextEditor.Tests.TestData;
+using TestTools.Utils;
 
 namespace TestTextEditor.Tests.DataProviders
 {

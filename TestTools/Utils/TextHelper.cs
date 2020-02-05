@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
-namespace TestTextEditor.Framework.Utils
+namespace TestTools.Utils
 {
     public static class TextHelper
     {
@@ -49,6 +50,13 @@ namespace TestTextEditor.Framework.Utils
                    string.Join("\r\n", endLines);
         }
 
+        public static IList<string> GetSplittedTextNotInBounds(
+            IList<string> text,
+            int strFrom, int chrFrom,
+            int strTo, int chrTo,
+            string joinMiddleLineBy = "") =>
+            Regex.Split(GetTextNotInBounds(text, strFrom, chrFrom, strTo, chrTo, joinMiddleLineBy), "\r\n");
+
         public static string GetTextInBounds(
             IList<string> text,
             int strFrom, int chrFrom,
@@ -70,6 +78,12 @@ namespace TestTextEditor.Framework.Utils
 
             return expectedText;
         }
+
+        public static IList<string> GetSplittedTextInBounds(
+            IList<string> text,
+            int strFrom, int chrFrom,
+            int strTo, int chrTo) =>
+            Regex.Split(GetTextInBounds(text, strFrom, chrFrom, strTo, chrTo), "\r\n");
 
         public static string InsertLinesInText(
             IList<string> text,
@@ -106,6 +120,11 @@ namespace TestTextEditor.Framework.Utils
 
             return expectedTest.ToString();
         }
-        
+
+        public static IList<string> SplittedInsertLineInText(
+            IList<string> text,
+            IList<string> lines,
+            int str, int chr) =>
+            Regex.Split(InsertLinesInText(text, lines, str, chr), "\r\n");
     }
 }

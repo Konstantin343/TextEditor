@@ -4,8 +4,8 @@ using System.Text.RegularExpressions;
 using TestStack.White.InputDevices;
 using TestStack.White.UIItems;
 using TestStack.White.WindowsAPI;
-using TestTextEditor.Framework.Utils;
-using TestTextEditor.Framework.Utils.Logger;
+using TestTextEditor.Helpers;
+using TestTools.Logger;
 
 namespace TestTextEditor.Framework.Forms.TextForms
 {

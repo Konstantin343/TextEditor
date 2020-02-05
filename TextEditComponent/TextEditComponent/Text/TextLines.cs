@@ -50,7 +50,7 @@ namespace TextEditComponent.TextEditComponent.Text
 
         public void RemoveInLine(int lineIndex, int startIndex)
         {
-            _textLines[lineIndex].Remove(startIndex);
+            _textLines[lineIndex] = _textLines[lineIndex].Remove(startIndex);
             UpdateLineEvent?.Invoke(this, new TextLineEventArgs(lineIndex));
         }
 

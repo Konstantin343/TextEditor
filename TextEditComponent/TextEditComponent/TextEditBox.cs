@@ -555,9 +555,9 @@ namespace TextEditComponent.TextEditComponent
 
         private void OnUpKey() => TextEditBoxModel.SetPositionOneLineUp();
 
-        private void OnRightKey() => TextEditBoxModel.SetPositionOneLineRight();
+        private void OnRightKey() => TextEditBoxModel.SetPositionOneCharRight();
 
-        private void OnLeftKey() => TextEditBoxModel.SetPositionOneLineLeft();
+        private void OnLeftKey() => TextEditBoxModel.SetPositionOneCharLeft();
 
         private void OnInsertKey() => TextEditBoxModel.ChangeInsertMode();
 

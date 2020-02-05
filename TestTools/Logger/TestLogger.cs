@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TestTextEditor.Framework.Utils.Logger
+namespace TestTools.Logger
 {
     public class TestLogger
     {

@@ -1,16 +1,11 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Forms;
 
-namespace TestTextEditor.Framework.Utils
+namespace TestTools.Utils
 {
     public static class EnvironmentHelper
     {
-        public static readonly double PixelCoefficient =
-            Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth;
-
         public static readonly string OutputDirectory =
             Regex.Replace(Assembly.GetExecutingAssembly().Location,
                 $@"{Assembly.GetExecutingAssembly().GetName().Name}.dll$", "");

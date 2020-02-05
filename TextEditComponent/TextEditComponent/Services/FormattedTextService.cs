@@ -9,7 +9,7 @@ namespace TextEditComponent.TextEditComponent.Services
 {
     public class FormattedTextService
     {
-        private IList<FormattedText> _formattedTextLines;
+        private readonly IList<FormattedText> _formattedTextLines;
 
         public string FontStyle { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using TestStack.White.UIItems;
-using TestTextEditor.Framework.Utils.Logger;
+using TestTools.Logger;
 
 namespace TestTextEditor.Framework.Forms
 {
