@@ -48,6 +48,7 @@
     <Compile Include="TextEditComponent\TextEditBox.cs" />
     <Compile Include="TextEditComponent\TextEditBoxAutomationPeer.cs" />
     <Compile Include="TextEditComponent\TextEditBoxModel.cs" />
+    <Compile Include="TextEditComponent\TextEditContextMenu.cs" />
     <Compile Include="TextEditComponent\TextHelpers\FormattedTextHelper.cs" />
     <Compile Include="TextEditComponent\TextHelpers\HighlightTextService.cs" />
     <Compile Include="TextEditComponent\Text\SelectedTextBounds.cs" />

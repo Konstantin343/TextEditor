@@ -20,15 +20,9 @@ namespace TextEditComponent.TextEditComponent
 
         public bool IsInsertMode { get; set; }
 
-        public TextEditBoxModel()
+        public TextEditBoxModel(TextLines textLines)
         {
-            TextLines = new TextLines(
-                new[] {""},
-                Settings.FontStyle,
-                Settings.FontSize,
-                Settings.TextBrush,
-                Settings.LineInterval,
-                new HighlightTextService(new string[0], Settings.HighlightBrush));
+            TextLines = textLines;
             SelectedText = new SelectedTextBounds();
             CurrentPosition = new TextPosition();
         }
@@ -36,13 +30,13 @@ namespace TextEditComponent.TextEditComponent
         public void SetCurrentPosition(TextPosition textPosition)
         {
             SelectedText.SetBounds(textPosition);
-            CurrentPosition = textPosition;
+            CurrentPosition = new TextPosition(textPosition);
         }
 
         public void SelectToPosition(TextPosition textPosition)
         {
             SelectedText.MouseSelectionEnd = new TextPosition(textPosition);
-            CurrentPosition = textPosition;
+            CurrentPosition = new TextPosition(textPosition);
         }
 
         public bool DeleteSelectedText()
@@ -52,6 +46,7 @@ namespace TextEditComponent.TextEditComponent
 
             TextLines.DeleteInBounds(SelectedText);
             CurrentPosition = new TextPosition(SelectedText.RealStart);
+            SelectedText.Invalidate();
             return true;
         }
 
@@ -165,6 +160,13 @@ namespace TextEditComponent.TextEditComponent
                 if (i != lines.Count - 1)
                     NewLineFromCurrentPosition();
             }
-        } 
+        }
+
+        public void UpdateAll()
+        {
+            TextLines.UpdateAll();
+            SelectedText.Invalidate();
+            CurrentPosition = new TextPosition();
+        }
     }
 }

@@ -10,31 +10,12 @@ using System.Windows.Media;
 using TextEditComponent.TextEditComponent.Constants;
 using TextEditComponent.TextEditComponent.Text;
 using TextEditComponent.TextEditComponent.TextHelpers;
-using Utils;
 
 namespace TextEditComponent.TextEditComponent
 {
     public class TextEditBox : Control, IScrollInfo
     {
         #region DependencyProperties
-
-        public static readonly DependencyProperty TextLinesProperty = DependencyProperty.Register(
-            nameof(TextLines),
-            typeof(TextLines),
-            typeof(TextEditBox),
-            new FrameworkPropertyMetadata(
-                null,
-                FrameworkPropertyMetadataOptions.AffectsMeasure |
-                FrameworkPropertyMetadataOptions.AffectsRender));
-
-        public static readonly DependencyProperty IsInsertKeyPressedProperty = DependencyProperty.Register(
-            nameof(IsInsertKeyPressed),
-            typeof(bool),
-            typeof(TextEditBox),
-            new FrameworkPropertyMetadata(
-                false,
-                FrameworkPropertyMetadataOptions.AffectsMeasure |
-                FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty NormalModePositionBrushProperty = DependencyProperty.Register(
             nameof(NormalModePositionBrush),
@@ -72,6 +53,25 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsMeasure |
                 FrameworkPropertyMetadataOptions.AffectsRender));
 
+        public static readonly DependencyProperty HighlightBrushProperty = DependencyProperty.Register(
+            nameof(HighlightBrush),
+            typeof(Brush),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                Brushes.DarkBlue,
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnHighlightBrushChanged)
+        );
+
+        private static void OnHighlightBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var teb = (TextEditBox) d;
+            teb.TextLines.HighlightTextService.HighlightBrush = (Brush) e.NewValue;
+            teb.TextLines.UpdateAll();
+            teb.InvalidateVisual();
+        }
+        
         public static readonly DependencyProperty TextBrushProperty = DependencyProperty.Register(
             nameof(TextBrush),
             typeof(Brush),
@@ -87,6 +87,57 @@ namespace TextEditComponent.TextEditComponent
         {
             var teb = (TextEditBox) d;
             teb.TextLines.TextBrush = (Brush) e.NewValue;
+        }
+        
+        public new static readonly DependencyProperty FontStyleProperty = DependencyProperty.Register(
+            nameof(FontStyle),
+            typeof(string),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                "Verdana",
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnFontStyleChanged)
+        );
+
+        private static void OnFontStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var teb = (TextEditBox) d;
+            teb.TextLines.FontStyle = (string) e.NewValue;
+        }
+        
+        public new static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register(
+            nameof(FontSize),
+            typeof(double),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                14d,
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnFontSizeChanged)
+        );
+
+        private static void OnFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var teb = (TextEditBox) d;
+            teb.TextLines.FontSize = (double) e.NewValue;
+        }
+        
+        public static readonly DependencyProperty LineIntervalProperty = DependencyProperty.Register(
+            nameof(LineInterval),
+            typeof(double),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                2d,
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnLineIntervalChanged)
+        );
+
+        private static void OnLineIntervalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var teb = (TextEditBox) d;
+            teb.TextLines.LineInterval = (double) e.NewValue;
         }
 
         public static readonly DependencyProperty WordsToHighlightProperty = DependencyProperty.Register(
@@ -123,20 +174,38 @@ namespace TextEditComponent.TextEditComponent
         {
             var teb = (TextEditBox) d;
             teb.TextLines.SetText((IList<string>) e.NewValue);
-            teb.InvalidateAll();
+            teb.TextEditBoxModel.UpdateAll();
         }
 
-        public TextLines TextLines
-        {
-            get => (TextLines) GetValue(TextLinesProperty);
-            set => SetValue(TextLinesProperty, value);
-        }
-
-        public bool IsInsertKeyPressed
-        {
-            get => (bool) GetValue(IsInsertKeyPressedProperty);
-            private set => SetValue(IsInsertKeyPressedProperty, value);
-        }
+        public static readonly DependencyProperty HorizontalDeltaProperty = DependencyProperty.Register(
+            nameof(HorizontalDelta),
+            typeof(double),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                10d,
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender)
+        );
+        
+        public static readonly DependencyProperty VerticalDeltaProperty = DependencyProperty.Register(
+            nameof(VerticalDelta),
+            typeof(double),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                10d,
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender)
+        );
+        
+        public static readonly DependencyProperty CaretHeightParameterProperty = DependencyProperty.Register(
+            nameof(CaretHeightParameter),
+            typeof(double),
+            typeof(TextEditBox),
+            new FrameworkPropertyMetadata(
+                1.2d,
+                FrameworkPropertyMetadataOptions.AffectsMeasure |
+                FrameworkPropertyMetadataOptions.AffectsRender)
+        );
 
         public Brush NormalModePositionBrush
         {
@@ -162,10 +231,34 @@ namespace TextEditComponent.TextEditComponent
             set => SetValue(PaddingLeftProperty, value);
         }
 
+        public Brush HighlightBrush
+        {
+            get => (Brush) GetValue(HighlightBrushProperty);
+            set => SetValue(HighlightBrushProperty, value);
+        }
+        
         public Brush TextBrush
         {
             get => (Brush) GetValue(TextBrushProperty);
             set => SetValue(TextBrushProperty, value);
+        }
+
+        public new string FontStyle
+        {
+            get => (string) GetValue(FontStyleProperty);
+            set => SetValue(FontStyleProperty, value);
+        }
+        
+        public new double FontSize
+        {
+            get => (double) GetValue(FontSizeProperty);
+            set => SetValue(FontSizeProperty, value);
+        }
+        
+        public double LineInterval
+        {
+            get => (double) GetValue(LineIntervalProperty);
+            set => SetValue(LineIntervalProperty, value);
         }
 
         public ISet<string> WordsToHighlight
@@ -180,36 +273,42 @@ namespace TextEditComponent.TextEditComponent
             set => SetValue(RawTextLinesProperty, value);
         }
 
+        public double HorizontalDelta
+        {
+            get => (double) GetValue(HorizontalDeltaProperty);
+            set => SetValue(HorizontalDeltaProperty, value);
+        }
+
+        public double VerticalDelta
+        {
+            get => (double) GetValue(VerticalDeltaProperty);
+            set => SetValue(VerticalDeltaProperty, value);
+        }
+
+        public double CaretHeightParameter
+        {
+            get => (double) GetValue(CaretHeightParameterProperty);
+            set => SetValue(CaretHeightParameterProperty, value);
+        }
+
         #endregion
 
         public TextEditBoxModel TextEditBoxModel { get; set; }
-
-        public SelectedTextBounds SelectedText { get; set; }
-
-        public TextPosition CurrentPosition { get; set; }
-
-        public double HorizontalDelta { get; set; }
-        public double VerticalDelta { get; set; }
-        public double CaretHeightParameter { get; set; }
+        public TextLines TextLines => TextEditBoxModel.TextLines;
+        public int CurrentString => TextEditBoxModel.CurrentString;
+        public int CurrentChar => TextEditBoxModel.CurrentChar;
+        public string Text => TextLines.ToString();
+        public SelectedTextBounds SelectedTextBounds => TextEditBoxModel.SelectedText;
+        public int LinesCount => TextEditBoxModel.TextLines.Count;
+        public string SelectedText => TextLines.GetInBounds(SelectedTextBounds);
+        public bool IsInsertKeyPressed => TextEditBoxModel.IsInsertMode;
 
         public double LineHeight => TextLines.FontSize + TextLines.LineInterval;
         public double TextHeight => LineHeight * VerticalDelta + TextLines.TextHeight;
         public double TextWidth => PaddingLeft + HorizontalDelta + TextLines.MaxLineWidth;
         public double CaretHeight => CaretHeightParameter * TextLines.FontSize;
-        public int CurrentString => CurrentPosition.Str;
-        public int CurrentChar => CurrentPosition.Chr;
-        public string Text => TextLines.ToString();
-        public string SelectedTextString => TextLines.GetInBounds(SelectedText);
 
         public TextEditBox() => SetDefaultSettings();
-
-        public void InvalidateAll()
-        {
-            SelectedText.Invalidate();
-            CurrentPosition = new TextPosition();
-            InvalidateVisual();
-            TextLines.UpdateAll();
-        }
 
         #region Scroll
 
@@ -263,401 +362,7 @@ namespace TextEditComponent.TextEditComponent
 
         public Rect MakeVisible(Visual visual, Rect rectangle) => rectangle;
 
-        #endregion
-
-        #region OverridedMethods
-
-        protected override void OnInitialized(EventArgs e)
-        {
-            base.OnInitialized(e);
-            if (Parent is ScrollViewer sv) ScrollOwner = sv;
-            CreateContextMenu();
-        }
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-            DrawBackground(drawingContext);
-            DrawLines(drawingContext);
-            ScrollOwner.InvalidateScrollInfo();
-        }
-
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            Focus();
-            CaptureMouse();
-            var textPosition = GetCharByPoint(e.GetPosition(this));
-            SelectedText.SetBounds(textPosition);
-            CurrentPosition = textPosition; // 1
-            //
-            TextEditBoxModel.SetCurrentPosition(textPosition);
-            //
-            UpdateOffsetByCaretPosition();
-            InvalidateVisual();
-        }
-
-        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonUp(e);
-            ReleaseMouseCapture();
-            var textPosition = GetCharByPoint(e.GetPosition(this));
-            SelectedText.MouseSelectionEnd = new TextPosition(textPosition); // 2
-            CurrentPosition = textPosition;
-            //
-            TextEditBoxModel.SelectToPosition(textPosition);
-            //
-            InvalidateVisual();
-        }
-
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-            if (IsMouseOver && e.LeftButton == MouseButtonState.Pressed)
-            {
-                var textPosition = GetCharByPoint(e.GetPosition(this));
-                SelectedText.MouseSelectionEnd = new TextPosition(textPosition); // 2
-                CurrentPosition = textPosition;
-                //
-                TextEditBoxModel.SelectToPosition(textPosition);
-                //
-                UpdateOffsetByCaretPosition();
-                InvalidateVisual();
-            }
-        }
-
-        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseRightButtonDown(e);
-            if (ContextMenu != null)
-                ContextMenu.IsOpen = true;
-        }
-
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            base.OnLostFocus(e);
-            InvalidateVisual();
-        }
-
-        protected override void OnTextInput(TextCompositionEventArgs e)
-        {
-            base.OnTextInput(e);
-            if (string.IsNullOrEmpty(e.Text)
-                || KeysCharacters.Backspace.Equals(e.Text)
-                || KeysCharacters.Enter.Equals(e.Text)) return;
-
-            //
-            TextEditBoxModel.DeleteSelectedText();
-            TextEditBoxModel.AddLinesOnCurrentPosition(Regex.Split(e.Text, "\r\n"));
-            //
-            AddText(e.Text);
-            
-            UpdateOffsetByCaretPosition();
-            InvalidateVisual();
-            SelectedText.Invalidate();
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    OnEnterKey();
-                    break;
-                case Key.Back:
-                    BackspaceKey();
-                    break;
-                case Key.Left:
-                    LeftKey();
-                    break;
-                case Key.Right:
-                    RightKey();
-                    break;
-                case Key.Up:
-                    UpKey();
-                    break;
-                case Key.Down:
-                    DownKey();
-                    break;
-                case Key.Insert:
-                    InsertKey();
-                    break;
-                case Key.Delete:
-                    OnDeleteKey();
-                    break;
-                case Key.Tab:
-                    TabKey();
-                    break;
-                default:
-                    return;
-            }
-
-            UpdateOffsetByCaretPosition();
-            SelectedText.Invalidate();
-            InvalidateVisual();
-        }
-
-        protected override AutomationPeer OnCreateAutomationPeer() =>
-            new TextEditBoxAutomationPeer(this);
-
-        #endregion
-
-        #region Private
-
-        #region Keys
-
-        private void OnDeleteKey()
-        {
-            if (!SelectedText.IsEmpty)
-            {
-                DeleteSelected();
-                return;
-            }
-
-            if (CurrentChar == TextLines[CurrentString].Length) // 4
-            {
-                if (CurrentString == TextLines.Count - 1) return;
-                var nextString = CurrentString + 1;
-                TextLines.AddInLine(CurrentString, TextLines[nextString].RawValue);
-                TextLines.RemoveLineAt(nextString);
-            }
-            else
-            {
-                TextLines.RemoveInLine(CurrentString, CurrentChar, 1);
-            }
-
-            UpdateVerticalOffset();
-            UpdateHorizontalOffset();
-        }
-
-        private void DownKey() // 5
-        {
-            if (CurrentString == TextLines.Count - 1) return;
-            CurrentPosition.Str++;
-            CurrentPosition.Chr = Math.Min(CurrentChar, TextLines[CurrentString].Length);
-        }
-
-        private void UpKey() // 6
-        {
-            if (CurrentString == 0) return;
-            CurrentPosition.Str--;
-            CurrentPosition.Chr = Math.Min(CurrentChar, TextLines[CurrentString].Length);
-        }
-
-        private void RightKey() // 7
-        {
-            if (CurrentChar == TextLines[CurrentString].Length)
-            {
-                if (CurrentString == TextLines.Count - 1) return;
-                CurrentPosition.Str++;
-                CurrentPosition.Chr = 0;
-                return;
-            }
-
-            CurrentPosition.Chr++;
-        }
-
-        private void LeftKey() // 8
-        {
-            if (CurrentChar == 0)
-            {
-                if (CurrentString == 0) return;
-                CurrentPosition.Str--;
-                CurrentPosition.Chr = TextLines[CurrentString].Length;
-                return;
-            }
-
-            CurrentPosition.Chr--;
-        }
-
-        private void InsertKey() => IsInsertKeyPressed = !IsInsertKeyPressed; // 9
-
-        private void BackspaceKey() // 10
-        {
-            if (!SelectedText.IsEmpty)
-            {
-                DeleteSelected();
-                return;
-            }
-
-            if (CurrentChar == 0)
-            {
-                if (CurrentString == 0) return;
-                var newPosition = TextLines[CurrentString - 1].Length;
-                TextLines.AddInLine(CurrentString - 1, TextLines[CurrentString].RawValue);
-                TextLines.RemoveLineAt(CurrentString);
-                CurrentPosition.Str--;
-                CurrentPosition.Chr = newPosition;
-            }
-            else
-            {
-                TextLines.RemoveInLine(CurrentString, CurrentChar - 1, 1);
-                CurrentPosition.Chr--;
-            }
-
-            UpdateVerticalOffset();
-            UpdateHorizontalOffset();
-        }
-
-        private void OnEnterKey() // 11
-        {
-            if (!SelectedText.IsEmpty)
-            {
-                DeleteSelected();
-            }
-
-            TextLines.InsertLine(
-                CurrentString + 1,
-                CurrentChar < TextLines[CurrentString].Length
-                    ? TextLines[CurrentString].Substring(CurrentChar)
-                    : string.Empty);
-            if (CurrentChar < TextLines[CurrentString].Length)
-                TextLines.RemoveInLine(CurrentString, CurrentChar);
-            CurrentPosition.Str++;
-            CurrentPosition.Chr = 0;
-        }
-
-        private void TabKey()
-        {
-            if (!SelectedText.IsEmpty)
-            {
-                DeleteSelected();
-            }
-
-            TextLines.InsertInLine(CurrentString, "\t", CurrentChar);
-            CurrentPosition.Chr++;
-        }
-
-        #endregion
-
-        #region Drawing
-
-        private void DrawLines(DrawingContext dc)
-        {
-            var lowerBound = Math.Max(0, VerticalOffset / LineHeight - 1);
-            var upperBound = Math.Min(TextLines.Count - 1, (ActualHeight + VerticalOffset) / LineHeight + 1);
-            TextLines.Underline(SelectedText);
-            for (var i = (int) lowerBound; i <= (int) upperBound; i++)
-            {
-                DrawLine(i, dc);
-            }
-
-            TextLines.RemoveDecoration(SelectedText);
-        }
-
-        private void DrawLine(int index, DrawingContext dc)
-        {
-            var formattedText = TextLines[index].FormattedValue;
-            if (IsFocused && index == CurrentString)
-            {
-                var brush = IsInsertKeyPressed ? InsertModePositionBrush : NormalModePositionBrush;
-                var caretPoint = GetCaretPoint();
-                dc.DrawRectangle(brush, new Pen(),
-                    new Rect(caretPoint.X, caretPoint.Y, 1, CaretHeight));
-            }
-
-            dc.DrawText(formattedText,
-                new Point(PaddingLeft - HorizontalOffset, LineHeight * index - VerticalOffset));
-        }
-
-        private void DrawBackground(DrawingContext dc)
-        {
-            dc.DrawRectangle(Background, new Pen(BorderBrush, BorderWidth),
-                new Rect(0, 0, ActualWidth, ActualHeight));
-        }
-
-        #endregion
-
-        #region ContextMenu
-
-        private void CreateContextMenu()
-        {
-            var copyItem = new MenuItem {Header = "Copy", Uid = "Copy", Command = CopyCommand};
-            var cutItem = new MenuItem {Header = "Cut", Uid = "Cut", Command = CutCommand};
-            var pasteItem = new MenuItem {Header = "Paste", Uid = "Paste", Command = PasteCommand};
-            var selectAllItem = new MenuItem {Header = "Select all", Uid = "SelectAll", Command = SelectAllCommand};
-            ContextMenu = new ContextMenu
-            {
-                Placement = PlacementMode.MousePoint,
-                ItemsSource = new[] {copyItem, cutItem, pasteItem, selectAllItem},
-                Uid = "ContextMenu"
-            };
-        }
-
-        private ICommand _selectAllCommand;
-
-        public ICommand SelectAllCommand =>
-            _selectAllCommand ??
-            (_selectAllCommand = new RelayCommand(obj =>
-            {
-                SelectedText.MouseSelectionStart = new TextPosition();
-                SelectedText.MouseSelectionEnd =
-                    new TextPosition(TextLines.Count - 1, TextLines[TextLines.Count - 1].Length);
-                InvalidateVisual();
-            }));
-
-        private ICommand _сutCommand;
-
-        public ICommand CutCommand =>
-            _сutCommand ??
-            (_сutCommand = new RelayCommand(obj =>
-            {
-                CopyCommand.Execute(obj);
-                DeleteSelected();
-                UpdateOffsetByCaretPosition();
-                InvalidateVisual();
-            }));
-
-
-        private ICommand _сopyCommand;
-
-        public ICommand CopyCommand =>
-            _сopyCommand ??
-            (_сopyCommand = new RelayCommand(obj =>
-                Clipboard.SetText(TextLines.GetInBounds(SelectedText))));
-
-        private ICommand _pasteCommand;
-
-        public ICommand PasteCommand =>
-            _pasteCommand ??
-            (_pasteCommand = new RelayCommand(obj =>
-            {
-                if (!SelectedText.IsEmpty) DeleteSelected();
-                var textLinesToPaste = Regex.Split(Clipboard.GetText(), "\r\n");
-                for (var i = 0; i < textLinesToPaste.Length; i++)
-                {
-                    AddText(textLinesToPaste[i]);
-                    if (i != textLinesToPaste.Length - 1)
-                        OnEnterKey();
-                }
-
-                UpdateOffsetByCaretPosition();
-                SelectedText.Invalidate();
-                InvalidateVisual();
-            }));
-
-        #endregion
-
-        private void AddText(string text) // 12
-        {
-            DeleteSelected();
-            if (IsInsertKeyPressed && CurrentChar < TextLines[CurrentString].Length)
-                TextLines.RemoveInLine(CurrentString, CurrentChar, text.Length);
-            TextLines.InsertInLine(CurrentString, text, CurrentChar);
-            CurrentPosition.Chr += text.Length;
-        }
-
-
-        private Point GetCaretPoint() =>
-            new Point(
-                FormattedTextHelper.GetWidth(TextLines.SubstringFromLine(CurrentString, 0, CurrentChar),
-                    TextLines.FontStyle, TextLines.FontSize)
-                + PaddingLeft
-                - HorizontalOffset,
-                LineHeight * CurrentString - VerticalOffset);
-
-        private void UpdateOffsetByCaretPosition()
+        public void UpdateOffsetByCaretPosition()
         {
             var caretPoint = GetCaretPoint();
             if (caretPoint.X < 0)
@@ -696,7 +401,219 @@ namespace TextEditComponent.TextEditComponent
 
         private void UpdateVerticalOffset() => UpdateVerticalOffsetBy(VerticalOffset);
 
-        private TextPosition GetCharByPoint(Point point)
+        private void UpdateOffset()
+        {
+            UpdateOffsetByCaretPosition();
+            UpdateHorizontalOffset();
+            UpdateVerticalOffset();
+        }
+
+        #endregion
+
+        #region OverridedMethods
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+            if (Parent is ScrollViewer sv) ScrollOwner = sv;
+            ContextMenu = new TextEditContextMenu(this);
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+            DrawBackground(drawingContext);
+            DrawLines(drawingContext);
+            ScrollOwner.InvalidateScrollInfo();
+        }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            Focus();
+            CaptureMouse();
+            TextEditBoxModel.SetCurrentPosition(GetCharByPoint(e.GetPosition(this)));
+            UpdateOffsetByCaretPosition();
+            InvalidateVisual();
+        }
+
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonUp(e);
+            ReleaseMouseCapture();
+            TextEditBoxModel.SelectToPosition(GetCharByPoint(e.GetPosition(this)));
+            InvalidateVisual();
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (!IsMouseOver || e.LeftButton != MouseButtonState.Pressed) return;
+            TextEditBoxModel.SelectToPosition(GetCharByPoint(e.GetPosition(this)));
+            UpdateOffsetByCaretPosition();
+            InvalidateVisual();
+        }
+
+        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseRightButtonDown(e);
+            if (ContextMenu != null)
+                ContextMenu.IsOpen = true;
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            base.OnLostFocus(e);
+            InvalidateVisual();
+        }
+
+        protected override void OnTextInput(TextCompositionEventArgs e)
+        {
+            base.OnTextInput(e);
+            if (string.IsNullOrEmpty(e.Text)
+                || KeysCharacters.Backspace.Equals(e.Text)
+                || KeysCharacters.Enter.Equals(e.Text)) return;
+
+            TextEditBoxModel.DeleteSelectedText();
+            TextEditBoxModel.AddLinesOnCurrentPosition(Regex.Split(e.Text, "\r\n"));
+
+            UpdateOffsetByCaretPosition();
+            InvalidateVisual();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    OnEnterKey();
+                    break;
+                case Key.Back:
+                    OnBackspaceKey();
+                    break;
+                case Key.Left:
+                    OnLeftKey();
+                    break;
+                case Key.Right:
+                    OnRightKey();
+                    break;
+                case Key.Up:
+                    OnUpKey();
+                    break;
+                case Key.Down:
+                    OnDownKey();
+                    break;
+                case Key.Insert:
+                    OnInsertKey();
+                    break;
+                case Key.Delete:
+                    OnDeleteKey();
+                    break;
+                case Key.Tab:
+                    OnTabKey();
+                    break;
+                default:
+                    return;
+            }
+
+            UpdateOffsetByCaretPosition();
+            SelectedTextBounds.Invalidate();
+            InvalidateVisual();
+        }
+
+        protected override AutomationPeer OnCreateAutomationPeer() =>
+            new TextEditBoxAutomationPeer(this);
+
+        #endregion
+
+        #region Keys
+
+        private void OnDeleteKey()
+        {
+            if (DeleteSelected())
+                return;
+
+            TextEditBoxModel.DeleteAfterCurrentPosition();
+
+            UpdateVerticalOffset();
+            UpdateHorizontalOffset();
+        }
+
+        private void OnDownKey() => TextEditBoxModel.SetPositionOneLineDown();
+
+        private void OnUpKey() => TextEditBoxModel.SetPositionOneLineUp();
+
+        private void OnRightKey() => TextEditBoxModel.SetPositionOneLineRight();
+
+        private void OnLeftKey() => TextEditBoxModel.SetPositionOneLineLeft();
+
+        private void OnInsertKey() => TextEditBoxModel.ChangeInsertMode();
+
+        private void OnBackspaceKey()
+        {
+            if (DeleteSelected())
+                return;
+
+            TextEditBoxModel.DeleteBeforeCurrentPosition();
+
+            UpdateVerticalOffset();
+            UpdateHorizontalOffset();
+        }
+
+        private void OnEnterKey()
+        {
+            DeleteSelected();
+
+            TextEditBoxModel.NewLineFromCurrentPosition();
+        }
+
+        private void OnTabKey()
+        {
+            DeleteSelected();
+
+            TextEditBoxModel.AddTabulationOnCurrentPosition();
+        }
+
+        #endregion
+
+        #region Drawing
+
+        private void DrawLines(DrawingContext dc)
+        {
+            var lowerBound = Math.Max(0, VerticalOffset / LineHeight - 1);
+            var upperBound = Math.Min(TextLines.Count - 1,
+                (ActualHeight + VerticalOffset) / LineHeight + 1);
+            TextLines.Underline(SelectedTextBounds);
+            for (var i = (int) lowerBound; i <= (int) upperBound; i++)
+            {
+                DrawLine(i, dc);
+            }
+
+            TextLines.RemoveDecoration(SelectedTextBounds);
+        }
+
+        private void DrawLine(int index, DrawingContext dc)
+        {
+            if (IsFocused && index == CurrentString)
+            {
+                var brush = IsInsertKeyPressed ? InsertModePositionBrush : NormalModePositionBrush;
+                var caretPoint = GetCaretPoint();
+                dc.DrawRectangle(brush, new Pen(),
+                    new Rect(caretPoint.X, caretPoint.Y, 1, CaretHeight));
+            }
+
+            dc.DrawText(TextLines[index].FormattedValue,
+                new Point(PaddingLeft - HorizontalOffset, LineHeight * index - VerticalOffset));
+        }
+
+        private void DrawBackground(DrawingContext dc) =>
+            dc.DrawRectangle(Background, new Pen(BorderBrush, BorderWidth),
+                new Rect(0, 0, ActualWidth, ActualHeight));
+
+        #endregion
+
+        public TextPosition GetCharByPoint(Point point)
         {
             var (realX, realY) = (point.X + HorizontalOffset, point.Y + VerticalOffset);
             var stringNumber = Math.Min((int) (realY / LineHeight), TextLines.Count - 1);
@@ -724,19 +641,24 @@ namespace TextEditComponent.TextEditComponent
             return new TextPosition(stringNumber, i);
         }
 
-        private void DeleteSelected()
+        public bool DeleteSelected()
         {
-            if (SelectedText.IsEmpty) // 3
-                return;
+            if (TextEditBoxModel.DeleteSelectedText())
+                return true;
 
-            TextLines.DeleteInBounds(SelectedText);
-            CurrentPosition = new TextPosition(SelectedText.RealStart);
-            UpdateOffsetByCaretPosition();
-            UpdateVerticalOffset();
-            UpdateHorizontalOffset();
-            SelectedText.Invalidate();
+            UpdateOffset();
             InvalidateVisual();
+            return false;
         }
+
+        private Point GetCaretPoint() =>
+            new Point(
+                FormattedTextHelper.GetWidth(
+                    TextLines.SubstringFromLine(CurrentString, 0, CurrentChar),
+                    TextLines.FontStyle, TextLines.FontSize)
+                + PaddingLeft
+                - HorizontalOffset,
+                LineHeight * CurrentString - VerticalOffset);
 
         private void SetDefaultSettings()
         {
@@ -750,18 +672,19 @@ namespace TextEditComponent.TextEditComponent
             VerticalAlignment = VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
             Focusable = Settings.Focusable;
-            SelectedText = new SelectedTextBounds();
-            TextLines = new TextLines(
-                new[] {""},
-                Settings.FontStyle,
-                Settings.FontSize,
-                Settings.TextBrush,
-                Settings.LineInterval,
-                new HighlightTextService(new string[0], Settings.HighlightBrush));
-            TextEditBoxModel = new TextEditBoxModel();
+            TextEditBoxModel = new TextEditBoxModel(
+                new TextLines(
+                    new[] {""},
+                    Settings.FontStyle,
+                    Settings.FontSize,
+                    Settings.TextBrush,
+                    Settings.LineInterval,
+                    new HighlightTextService(new string[0], Settings.HighlightBrush)));
             TextBrush = Settings.TextBrush;
+            FontStyle = Settings.FontStyle;
+            FontSize = Settings.FontSize;
+            LineInterval = Settings.LineInterval;
+            HighlightBrush = Settings.HighlightBrush;
         }
-
-        #endregion
     }
 }

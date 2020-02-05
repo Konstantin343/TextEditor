@@ -23,12 +23,12 @@
             <Menu DockPanel.Dock="Left" VerticalAlignment="Top">
                 <MenuItem Header="File" Focusable="False" Uid="File">
                     <MenuItem Header="New File" Command="{Binding NewFileCommand}"
-                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="New" />
+                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextEditBoxModel.TextLines}" Uid="New" />
                     <MenuItem Header="Open" Command="{Binding OpenFileCommand}" Uid="Open" />
                     <MenuItem Header="Save" Command="{Binding SaveFileCommand}"
-                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="Save" />
+                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextEditBoxModel.TextLines}" Uid="Save" />
                     <MenuItem Header="Save As" Command="{Binding SaveAsFileCommand}"
-                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextLines}" Uid="SaveAs" />
+                              CommandParameter="{Binding ElementName=TextEditBox, Path=TextEditBoxModel.TextLines}" Uid="SaveAs" />
                 </MenuItem>
                 <MenuItem HeaderStringFormat="Themes ({0})" Header="{Binding ThemesService.CurrentTheme}" Uid="Themes"
                           ItemsSource="{Binding MenuItemThemes, UpdateSourceTrigger=PropertyChanged}"
@@ -46,8 +46,7 @@
                              RawTextLines="{Binding RawTextLines, UpdateSourceTrigger=PropertyChanged}"
                              Background="{Binding ThemesService.CurrentTheme.Background, UpdateSourceTrigger=PropertyChanged}"
                              TextBrush="{Binding ThemesService.CurrentTheme.TextBrush, UpdateSourceTrigger=PropertyChanged}"
-                             WordsToHighlight="{Binding HighlightService.WordsToHighlight, UpdateSourceTrigger=PropertyChanged}"
-                             TextLines=""/>
+                             WordsToHighlight="{Binding HighlightService.WordsToHighlight, UpdateSourceTrigger=PropertyChanged}"/>
         </ScrollViewer>
     </DockPanel>
 </Window>

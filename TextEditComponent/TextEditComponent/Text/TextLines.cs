@@ -58,7 +58,7 @@ namespace TextEditComponent.TextEditComponent.Text
                 UpdateWidth();
             }
         }
-
+        
         public int Count => _textLines.Count;
 
         public HighlightTextService HighlightTextService { get; set; }
@@ -83,12 +83,6 @@ namespace TextEditComponent.TextEditComponent.Text
         {
             _textLines = source.Select(CreateTextLine).ToList();
             UpdateWidth();
-            UpdateAll();
-        }
-
-        public void SetHighlightWords(IEnumerable<string> source)
-        {
-            HighlightTextService.WordsToHighlight = new HashSet<string>(source);
             UpdateAll();
         }
 
@@ -206,7 +200,7 @@ namespace TextEditComponent.TextEditComponent.Text
             return selectedText;
         }
 
-        internal void Decorate(TextDecorationCollection td, SelectedTextBounds bounds)
+        public void Decorate(TextDecorationCollection td, SelectedTextBounds bounds)
         {
             var startStr = bounds.RealStart.Str;
             var startNum = bounds.RealStart.Chr;
@@ -241,7 +235,7 @@ namespace TextEditComponent.TextEditComponent.Text
         private TextLine CreateTextLine(string line) =>
             new TextLine(line, FontStyle, FontSize, TextBrush, HighlightTextService);
 
-        private double _maxLineWidth = 0d;
+        private double _maxLineWidth;
 
         private void UpdateWidth() =>
             _maxLineWidth = _textLines.Any()
