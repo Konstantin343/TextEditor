@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 
-namespace TextEditComponent.TextEditComponent.TextHelpers
+namespace TextEditComponent.TextEditComponent.Services
 {
     public class HighlightTextService
     {

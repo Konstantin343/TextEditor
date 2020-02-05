@@ -45,14 +45,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TextEditComponent\Constants\KeysCharacters.cs" />
+    <Compile Include="TextEditComponent\Helpers\FormattedTextHelper.cs" />
+    <Compile Include="TextEditComponent\Services\FormattedTextService.cs" />
+    <Compile Include="TextEditComponent\Services\HighlightTextService.cs" />
     <Compile Include="TextEditComponent\TextEditBox.cs" />
     <Compile Include="TextEditComponent\TextEditBoxAutomationPeer.cs" />
     <Compile Include="TextEditComponent\TextEditBoxModel.cs" />
     <Compile Include="TextEditComponent\TextEditContextMenu.cs" />
-    <Compile Include="TextEditComponent\TextHelpers\FormattedTextHelper.cs" />
-    <Compile Include="TextEditComponent\TextHelpers\HighlightTextService.cs" />
     <Compile Include="TextEditComponent\Text\SelectedTextBounds.cs" />
-    <Compile Include="TextEditComponent\Text\TextLine.cs" />
+    <Compile Include="TextEditComponent\Text\TextLineEventArgs.cs" />
     <Compile Include="TextEditComponent\Text\TextLines.cs" />
     <Compile Include="TextEditComponent\Text\TextPosition.cs" />
   </ItemGroup>

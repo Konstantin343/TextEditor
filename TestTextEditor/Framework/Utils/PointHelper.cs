@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using TextEditComponent;
-using TextEditComponent.TextEditComponent.TextHelpers;
+using TextEditComponent.TextEditComponent.Helpers;
 
 namespace TestTextEditor.Framework.Utils
 {

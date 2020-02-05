@@ -99,7 +99,7 @@ namespace TextEditor.ViewModel
             _newFileCommand ??
             (_newFileCommand = new RelayCommand(obj =>
             {
-                var textLines = (obj as TextLines)?.RawLines;
+                var textLines = (obj as TextLines)?.Lines;
                 FileService.SaveAndCreateNewFile(textLines);
                 RawTextLines = new List<string>(new[] {""});
                 HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
@@ -125,7 +125,7 @@ namespace TextEditor.ViewModel
             _saveFileCommand ??
             (_saveFileCommand = new RelayCommand(obj =>
             {
-                var textLines = (obj as TextLines)?.RawLines;
+                var textLines = (obj as TextLines)?.Lines;
                 RawTextLines = textLines;
                 if (!string.IsNullOrEmpty(FileService.CurrentOpenedFile))
                     SaveFile();
@@ -143,7 +143,7 @@ namespace TextEditor.ViewModel
             _saveAsFileCommand ??
             (_saveAsFileCommand = new RelayCommand(obj =>
             {
-                var textLines = (obj as TextLines)?.RawLines;
+                var textLines = (obj as TextLines)?.Lines;
                 RawTextLines = textLines;
                 SaveAsFile(DialogService.SaveFileDialog());
                 HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);

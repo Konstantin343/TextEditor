@@ -1,129 +1,57 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
-using System.Windows.Media;
-using TextEditComponent.TextEditComponent.TextHelpers;
 
 namespace TextEditComponent.TextEditComponent.Text
 {
     public class TextLines
     {
-        private IList<TextLine> _textLines;
-        
-        private string _fontStyle;
-        private double _fontSize;
-        private double _lineInterval;
-        private Brush _textBrush;
+        public delegate void TextLineEventHandler(object sender, TextLineEventArgs e);
+        public event TextLineEventHandler ChangeTextEvent;
+        public event TextLineEventHandler AddLineEvent;
+        public event TextLineEventHandler RemoveLineEvent;
+        public event TextLineEventHandler UpdateLineEvent;
 
-        public string FontStyle
-        {
-            get => _fontStyle;
-            set
-            {
-                _fontStyle = value;
-                UpdateAll();
-                UpdateWidth();
-            }
-        }
-
-        public double FontSize
-        {
-            get => _fontSize;
-            set
-            {
-                _fontSize = value;
-                UpdateAll();
-                UpdateWidth();
-            }
-        }
-
-        public Brush TextBrush
-        {
-            get => _textBrush;
-            set
-            {
-                _textBrush = value;
-                UpdateAll();
-                UpdateWidth();
-            }
-        }
-
-        public double LineInterval
-        {
-            get => _lineInterval;
-            set
-            {
-                _lineInterval = value;
-                UpdateAll();
-                UpdateWidth();
-            }
-        }
+        private IList<string> _textLines;
         
         public int Count => _textLines.Count;
-
-        public HighlightTextService HighlightTextService { get; set; }
-
-        public TextLines(
-            IEnumerable<string> source,
-            string fontStyle,
-            double fontSize,
-            Brush textBrush,
-            double lineInterval,
-            HighlightTextService highlightTextService)
-        {
-            _fontSize = fontSize;
-            _fontStyle = fontStyle;
-            _lineInterval = lineInterval;
-            _textBrush = textBrush;
-            HighlightTextService = highlightTextService;
-            SetText(source);
-        }
+        public TextLines(IEnumerable<string> source) => SetText(source);
 
         public void SetText(IEnumerable<string> source)
         {
-            _textLines = source.Select(CreateTextLine).ToList();
-            UpdateWidth();
-            UpdateAll();
+            _textLines = source.ToList();
+            ChangeTextEvent?.Invoke(this, new TextLineEventArgs(0));
         }
-
-        public double MaxLineWidth => _maxLineWidth;
-
-        public double TextHeight => _textLines.Count * (LineInterval + FontSize);
 
         public void InsertLine(int index, string line)
         {
             if (index < 0 || index > _textLines.Count) return;
-            _textLines.Insert(index, CreateTextLine(line));
-            UpdateLine(index);
-            UpdateWidth();
+            _textLines.Insert(index, line);
+            AddLineEvent?.Invoke(this, new TextLineEventArgs(index));
         }
 
         public void RemoveLineAt(int index)
         {
             if (index < 0 || index >= _textLines.Count) return;
             _textLines.RemoveAt(index);
-            UpdateWidth();
+            RemoveLineEvent?.Invoke(this, new TextLineEventArgs(index));
         }
 
         public void InsertInLine(int lineIndex, string toInsert, int startIndex)
         {
-            _textLines[lineIndex].Insert(toInsert, startIndex);
-            UpdateLine(lineIndex);
-            UpdateWidth();
+            _textLines[lineIndex] = _textLines[lineIndex].Insert(startIndex, toInsert);
+            UpdateLineEvent?.Invoke(this, new TextLineEventArgs(lineIndex));
         }
 
         public void RemoveInLine(int lineIndex, int startIndex, int count)
         {
-            _textLines[lineIndex].Remove(startIndex, count);
-            UpdateLine(lineIndex);
-            UpdateWidth();
+            _textLines[lineIndex] = _textLines[lineIndex].Remove(startIndex, count);
+            UpdateLineEvent?.Invoke(this, new TextLineEventArgs(lineIndex));
         }
 
         public void RemoveInLine(int lineIndex, int startIndex)
         {
             _textLines[lineIndex].Remove(startIndex);
-            UpdateLine(lineIndex);
-            UpdateWidth();
+            UpdateLineEvent?.Invoke(this, new TextLineEventArgs(lineIndex));
         }
 
         public string SubstringFromLine(int lineIndex, int startIndex, int count) =>
@@ -131,25 +59,13 @@ namespace TextEditComponent.TextEditComponent.Text
 
         public void AddInLine(int lineIndex, string toAdd)
         {
-            _textLines[lineIndex].Add(toAdd);
-            UpdateLine(lineIndex);
-            UpdateWidth();
+            _textLines[lineIndex] += toAdd;
+            UpdateLineEvent?.Invoke(this, new TextLineEventArgs(lineIndex));
         }
 
-        public string SubstringFromLine(int lineIndex, int startIndex) =>
-            _textLines[lineIndex].Substring(startIndex);
+        public string this[int i] => _textLines[i];
 
-        public TextLine this[int i] => _textLines[i];
-
-        public IList<string> RawLines => _textLines.Select(tl => tl.RawValue).ToList();
-
-        public void UpdateAll()
-        {
-            for (var i = 0; i < _textLines.Count; i++)
-            {
-                UpdateLine(i);
-            }
-        }
+        public IList<string> Lines => new List<string>(_textLines);
 
         internal void DeleteInBounds(SelectedTextBounds bounds)
         {
@@ -160,20 +76,19 @@ namespace TextEditComponent.TextEditComponent.Text
 
             if (bounds.IsOnOneLine)
             {
-                _textLines[startStr].Remove(startNum, endNum - startNum);
-                UpdateLine(startStr);
+                _textLines[startStr] = _textLines[startStr].Remove(startNum, endNum - startNum);
             }
             else
             {
                 if (startNum != _textLines[startStr].Length)
                     _textLines[startStr].Remove(startNum);
-                _textLines[startStr].Add(_textLines[endStr].Substring(endNum));
-                UpdateLine(startStr);
+                _textLines[startStr] += _textLines[endStr].Substring(endNum);
                 for (var i = 0; i < endStr - startStr; i++)
                 {
                     RemoveLineAt(startStr + 1);
                 }
             }
+            UpdateLineEvent?.Invoke(this, new TextLineEventArgs(startStr));
         }
 
         internal string GetInBounds(SelectedTextBounds bounds)
@@ -199,52 +114,7 @@ namespace TextEditComponent.TextEditComponent.Text
 
             return selectedText;
         }
-
-        public void Decorate(TextDecorationCollection td, SelectedTextBounds bounds)
-        {
-            var startStr = bounds.RealStart.Str;
-            var startNum = bounds.RealStart.Chr;
-            var endStr = bounds.RealEnd.Str;
-            var endNum = bounds.RealEnd.Chr;
-
-            for (var i = startStr; i <= endStr; i++)
-            {
-                if (startStr == endStr && startStr == i)
-                {
-                    _textLines[i].Decorate(td, startNum, endNum - startNum);
-                }
-                else if (startStr < i && i < endStr)
-                {
-                    _textLines[i].Decorate(td, 0, _textLines[i].Length);
-                }
-                else if (startStr == i)
-                {
-                    _textLines[i].Decorate(td, startNum, _textLines[i].Length - startNum);
-                }
-                else if (endStr == i)
-                {
-                    _textLines[i].Decorate(td, 0, endNum);
-                }
-            }
-        }
-
-        internal void Underline(SelectedTextBounds bounds) => Decorate(TextDecorations.Underline, bounds);
-
-        internal void RemoveDecoration(SelectedTextBounds bounds) => Decorate(null, bounds);
-
-        private TextLine CreateTextLine(string line) =>
-            new TextLine(line, FontStyle, FontSize, TextBrush, HighlightTextService);
-
-        private double _maxLineWidth;
-
-        private void UpdateWidth() =>
-            _maxLineWidth = _textLines.Any()
-                ? _textLines.Select(line => line.Width).Max()
-                : 0d;
-
-        private void UpdateLine(int index) =>
-            _textLines[index].UpdateFormatted(FontStyle, FontSize, TextBrush, HighlightTextService);
-
-        public override string ToString() => string.Join("\r\n", _textLines.Select(tl => tl.RawValue));
+        
+        public override string ToString() => string.Join("\r\n", _textLines);
     }
 }

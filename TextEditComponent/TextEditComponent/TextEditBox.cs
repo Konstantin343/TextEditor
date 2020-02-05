@@ -8,8 +8,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using TextEditComponent.TextEditComponent.Constants;
+using TextEditComponent.TextEditComponent.Helpers;
+using TextEditComponent.TextEditComponent.Services;
 using TextEditComponent.TextEditComponent.Text;
-using TextEditComponent.TextEditComponent.TextHelpers;
 
 namespace TextEditComponent.TextEditComponent
 {
@@ -67,11 +68,11 @@ namespace TextEditComponent.TextEditComponent
         private static void OnHighlightBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var teb = (TextEditBox) d;
-            teb.TextLines.HighlightTextService.HighlightBrush = (Brush) e.NewValue;
-            teb.TextLines.UpdateAll();
+            teb.FormattedTextService.HighlightTextService.HighlightBrush = (Brush) e.NewValue;
+            teb.FormattedTextService?.UpdateAll();
             teb.InvalidateVisual();
         }
-        
+
         public static readonly DependencyProperty TextBrushProperty = DependencyProperty.Register(
             nameof(TextBrush),
             typeof(Brush),
@@ -86,9 +87,11 @@ namespace TextEditComponent.TextEditComponent
         private static void OnTextBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var teb = (TextEditBox) d;
-            teb.TextLines.TextBrush = (Brush) e.NewValue;
+            teb.FormattedTextService.TextBrush = (Brush) e.NewValue;
+            teb.FormattedTextService?.UpdateAll();
+            teb.InvalidateVisual();
         }
-        
+
         public new static readonly DependencyProperty FontStyleProperty = DependencyProperty.Register(
             nameof(FontStyle),
             typeof(string),
@@ -103,9 +106,11 @@ namespace TextEditComponent.TextEditComponent
         private static void OnFontStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var teb = (TextEditBox) d;
-            teb.TextLines.FontStyle = (string) e.NewValue;
+            teb.FormattedTextService.FontStyle = (string) e.NewValue;
+            teb.FormattedTextService?.UpdateAll();
+            teb.InvalidateVisual();
         }
-        
+
         public new static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register(
             nameof(FontSize),
             typeof(double),
@@ -120,9 +125,11 @@ namespace TextEditComponent.TextEditComponent
         private static void OnFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var teb = (TextEditBox) d;
-            teb.TextLines.FontSize = (double) e.NewValue;
+            teb.FormattedTextService.FontSize = (double) e.NewValue;
+            teb.FormattedTextService?.UpdateAll();
+            teb.InvalidateVisual();
         }
-        
+
         public static readonly DependencyProperty LineIntervalProperty = DependencyProperty.Register(
             nameof(LineInterval),
             typeof(double),
@@ -137,7 +144,9 @@ namespace TextEditComponent.TextEditComponent
         private static void OnLineIntervalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var teb = (TextEditBox) d;
-            teb.TextLines.LineInterval = (double) e.NewValue;
+            teb.FormattedTextService.LineInterval = (double) e.NewValue;
+            teb.FormattedTextService?.UpdateAll();
+            teb.InvalidateVisual();
         }
 
         public static readonly DependencyProperty WordsToHighlightProperty = DependencyProperty.Register(
@@ -154,8 +163,8 @@ namespace TextEditComponent.TextEditComponent
         private static void OnWordsToHighlightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var teb = (TextEditBox) d;
-            teb.TextLines.HighlightTextService.WordsToHighlight = (ISet<string>) e.NewValue;
-            teb.TextLines.UpdateAll();
+            teb.FormattedTextService.HighlightTextService.WordsToHighlight = (ISet<string>) e.NewValue;
+            teb.FormattedTextService?.UpdateAll();
             teb.InvalidateVisual();
         }
 
@@ -175,6 +184,7 @@ namespace TextEditComponent.TextEditComponent
             var teb = (TextEditBox) d;
             teb.TextLines.SetText((IList<string>) e.NewValue);
             teb.TextEditBoxModel.UpdateAll();
+            teb.InvalidateVisual();
         }
 
         public static readonly DependencyProperty HorizontalDeltaProperty = DependencyProperty.Register(
@@ -186,7 +196,7 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsMeasure |
                 FrameworkPropertyMetadataOptions.AffectsRender)
         );
-        
+
         public static readonly DependencyProperty VerticalDeltaProperty = DependencyProperty.Register(
             nameof(VerticalDelta),
             typeof(double),
@@ -196,7 +206,7 @@ namespace TextEditComponent.TextEditComponent
                 FrameworkPropertyMetadataOptions.AffectsMeasure |
                 FrameworkPropertyMetadataOptions.AffectsRender)
         );
-        
+
         public static readonly DependencyProperty CaretHeightParameterProperty = DependencyProperty.Register(
             nameof(CaretHeightParameter),
             typeof(double),
@@ -236,7 +246,7 @@ namespace TextEditComponent.TextEditComponent
             get => (Brush) GetValue(HighlightBrushProperty);
             set => SetValue(HighlightBrushProperty, value);
         }
-        
+
         public Brush TextBrush
         {
             get => (Brush) GetValue(TextBrushProperty);
@@ -248,13 +258,13 @@ namespace TextEditComponent.TextEditComponent
             get => (string) GetValue(FontStyleProperty);
             set => SetValue(FontStyleProperty, value);
         }
-        
+
         public new double FontSize
         {
             get => (double) GetValue(FontSizeProperty);
             set => SetValue(FontSizeProperty, value);
         }
-        
+
         public double LineInterval
         {
             get => (double) GetValue(LineIntervalProperty);
@@ -293,20 +303,21 @@ namespace TextEditComponent.TextEditComponent
 
         #endregion
 
+        public FormattedTextService FormattedTextService { get; set; }
         public TextEditBoxModel TextEditBoxModel { get; set; }
         public TextLines TextLines => TextEditBoxModel.TextLines;
         public int CurrentString => TextEditBoxModel.CurrentString;
         public int CurrentChar => TextEditBoxModel.CurrentChar;
-        public string Text => TextLines.ToString();
+        public string Text => TextEditBoxModel.Text;
         public SelectedTextBounds SelectedTextBounds => TextEditBoxModel.SelectedText;
         public int LinesCount => TextEditBoxModel.TextLines.Count;
         public string SelectedText => TextLines.GetInBounds(SelectedTextBounds);
         public bool IsInsertKeyPressed => TextEditBoxModel.IsInsertMode;
 
-        public double LineHeight => TextLines.FontSize + TextLines.LineInterval;
-        public double TextHeight => LineHeight * VerticalDelta + TextLines.TextHeight;
-        public double TextWidth => PaddingLeft + HorizontalDelta + TextLines.MaxLineWidth;
-        public double CaretHeight => CaretHeightParameter * TextLines.FontSize;
+        public double LineHeight => FormattedTextService.FontSize + FormattedTextService.LineInterval;
+        public double TextHeight => LineHeight * VerticalDelta + FormattedTextService.TextHeight;
+        public double TextWidth => PaddingLeft + HorizontalDelta + FormattedTextService.MaxLineWidth;
+        public double CaretHeight => CaretHeightParameter * FormattedTextService.FontSize;
 
         public TextEditBox() => SetDefaultSettings();
 
@@ -584,13 +595,13 @@ namespace TextEditComponent.TextEditComponent
             var lowerBound = Math.Max(0, VerticalOffset / LineHeight - 1);
             var upperBound = Math.Min(TextLines.Count - 1,
                 (ActualHeight + VerticalOffset) / LineHeight + 1);
-            TextLines.Underline(SelectedTextBounds);
+            FormattedTextService.Underline(SelectedTextBounds);
             for (var i = (int) lowerBound; i <= (int) upperBound; i++)
             {
                 DrawLine(i, dc);
             }
 
-            TextLines.RemoveDecoration(SelectedTextBounds);
+            FormattedTextService.RemoveDecoration(SelectedTextBounds);
         }
 
         private void DrawLine(int index, DrawingContext dc)
@@ -603,7 +614,7 @@ namespace TextEditComponent.TextEditComponent
                     new Rect(caretPoint.X, caretPoint.Y, 1, CaretHeight));
             }
 
-            dc.DrawText(TextLines[index].FormattedValue,
+            dc.DrawText(FormattedTextService[index],
                 new Point(PaddingLeft - HorizontalOffset, LineHeight * index - VerticalOffset));
         }
 
@@ -625,9 +636,9 @@ namespace TextEditComponent.TextEditComponent
             while (i < TextLines[stringNumber].Length && currentLength < realX)
             {
                 lastCharWidth =
-                    FormattedTextHelper.GetWidth(TextLines[stringNumber][i],
-                        TextLines.FontStyle,
-                        TextLines.FontSize);
+                    FormattedTextHelper.GetWidth(TextLines[stringNumber][i].ToString(),
+                        FormattedTextService.FontStyle,
+                        FormattedTextService.FontSize);
                 currentLength += lastCharWidth;
                 i++;
             }
@@ -655,7 +666,7 @@ namespace TextEditComponent.TextEditComponent
             new Point(
                 FormattedTextHelper.GetWidth(
                     TextLines.SubstringFromLine(CurrentString, 0, CurrentChar),
-                    TextLines.FontStyle, TextLines.FontSize)
+                    FormattedTextService.FontStyle, FormattedTextService.FontSize)
                 + PaddingLeft
                 - HorizontalOffset,
                 LineHeight * CurrentString - VerticalOffset);
@@ -672,14 +683,14 @@ namespace TextEditComponent.TextEditComponent
             VerticalAlignment = VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
             Focusable = Settings.Focusable;
-            TextEditBoxModel = new TextEditBoxModel(
-                new TextLines(
-                    new[] {""},
-                    Settings.FontStyle,
-                    Settings.FontSize,
-                    Settings.TextBrush,
-                    Settings.LineInterval,
-                    new HighlightTextService(new string[0], Settings.HighlightBrush)));
+            TextEditBoxModel = new TextEditBoxModel();
+            FormattedTextService = new FormattedTextService(
+                TextLines,
+                Settings.FontStyle,
+                Settings.FontSize,
+                Settings.TextBrush,
+                Settings.LineInterval,
+                new HighlightTextService(new string[0], Settings.HighlightBrush));
             TextBrush = Settings.TextBrush;
             FontStyle = Settings.FontStyle;
             FontSize = Settings.FontSize;

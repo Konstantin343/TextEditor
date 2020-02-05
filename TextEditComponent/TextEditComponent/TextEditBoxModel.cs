@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TextEditComponent.TextEditComponent.Text;
-using TextEditComponent.TextEditComponent.TextHelpers;
 
 namespace TextEditComponent.TextEditComponent
 {
@@ -18,15 +17,17 @@ namespace TextEditComponent.TextEditComponent
 
         public int CurrentChar => CurrentPosition.Chr;
 
+        public string Text => TextLines.ToString();
+
         public bool IsInsertMode { get; set; }
 
-        public TextEditBoxModel(TextLines textLines)
+        public TextEditBoxModel()
         {
-            TextLines = textLines;
+            TextLines = new TextLines(new[] {""});
             SelectedText = new SelectedTextBounds();
             CurrentPosition = new TextPosition();
         }
-        
+
         public void SetCurrentPosition(TextPosition textPosition)
         {
             SelectedText.SetBounds(textPosition);
@@ -56,7 +57,7 @@ namespace TextEditComponent.TextEditComponent
             {
                 if (CurrentString == TextLines.Count - 1) return;
                 var nextString = CurrentString + 1;
-                TextLines.AddInLine(CurrentString, TextLines[nextString].RawValue);
+                TextLines.AddInLine(CurrentString, TextLines[nextString]);
                 TextLines.RemoveLineAt(nextString);
             }
             else
@@ -71,7 +72,7 @@ namespace TextEditComponent.TextEditComponent
             {
                 if (CurrentString == 0) return;
                 var newPosition = TextLines[CurrentString - 1].Length;
-                TextLines.AddInLine(CurrentString - 1, TextLines[CurrentString].RawValue);
+                TextLines.AddInLine(CurrentString - 1, TextLines[CurrentString]);
                 TextLines.RemoveLineAt(CurrentString);
                 CurrentPosition.Str--;
                 CurrentPosition.Chr = newPosition;
@@ -164,7 +165,6 @@ namespace TextEditComponent.TextEditComponent
 
         public void UpdateAll()
         {
-            TextLines.UpdateAll();
             SelectedText.Invalidate();
             CurrentPosition = new TextPosition();
         }
