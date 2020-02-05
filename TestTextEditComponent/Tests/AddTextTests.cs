@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using TestTextEditComponent.DataProviders;
 using TextEditComponent.TextEditComponent;
 
 namespace TestTextEditComponent.Tests
@@ -8,23 +9,23 @@ namespace TestTextEditComponent.Tests
     public class AddTextTests
     {
         [Test]
+        [TestCaseSource(typeof(AddTextProviders), nameof(AddTextProviders.AddOneLineProvider))]
         public void AddLineTest(
-            string textLine,
-            IList<string> expectedLine)
+            string textLine)
         {
             var textBoxModel = new TextEditBoxModel();
             textBoxModel.AddTextOnCurrentPosition(textLine);
-            Assert.AreEqual(expectedLine, textBoxModel.Text);
+            Assert.AreEqual(textLine, textBoxModel.Text);
         }
         
         [Test]
+        [TestCaseSource(typeof(AddTextProviders), nameof(AddTextProviders.AddTextProvider))]
         public void AddTextTest(
-            IList<string> textLines,
-            IList<string> expectedLines)
+            IList<string> textLines)
         {
             var textBoxModel = new TextEditBoxModel();
             textBoxModel.AddLinesOnCurrentPosition(textLines);
-            Assert.AreEqual(expectedLines, textBoxModel.TextLines.Lines);
+            Assert.AreEqual(textLines, textBoxModel.TextLines.Lines);
         }
     }
 }
