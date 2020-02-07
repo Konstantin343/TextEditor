@@ -22,7 +22,7 @@ namespace TestTools.Utils
             return sb.ToString();
         }
 
-        public static IList<string> GetText(int stringsCount, int stringsLength)
+        public static IList<string> GetText(int stringsCount = 10, int stringsLength = 10)
         {
             var textToInsert = new List<string>();
             for (var i = 0; i < stringsCount; i++)

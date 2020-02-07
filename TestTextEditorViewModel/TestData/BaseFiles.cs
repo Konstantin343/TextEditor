@@ -10,6 +10,10 @@ namespace TestTextEditorViewModel.TestData
         
         public static readonly string JavaFile = EnvironmentHelper.GetResourcePath("java.java");
 
-        public static readonly string ToSaveAsFile = EnvironmentHelper.GetOutputPath("test.txt");
+        public static readonly string ToSaveTxtFile = EnvironmentHelper.GetOutputPath("test.txt");
+        
+        public static readonly string ToSaveCsFile = EnvironmentHelper.GetOutputPath("test.cs");
+        
+        public static readonly string ToSaveJavaFile = EnvironmentHelper.GetOutputPath("test.java");
     }
 }

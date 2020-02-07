@@ -19,7 +19,7 @@ namespace TestTextEditorViewModel.Tests
         [Test]
         public void CurrentOpenedFileNewFileAfterSaveAs()
         {
-            TestViewModel.SaveAsFile(BaseFiles.ToSaveAsFile);
+            TestViewModel.SaveAsFile(BaseFiles.ToSaveTxtFile);
             TestViewModel.NewFile();
             AssertAll();
         }
@@ -27,7 +27,7 @@ namespace TestTextEditorViewModel.Tests
         [Test]
         public void CurrentOpenedFileNewFileSetText()
         {
-            TestViewModel.SetText(TextHelper.GetText(10, 10));
+            TestViewModel.SetText(TextHelper.GetText());
             TestViewModel.NewFile();
             AssertAll();
         }
@@ -38,7 +38,7 @@ namespace TestTextEditorViewModel.Tests
                 "Current opened file is wrong");
             Assert.IsEmpty(TestViewModel.Text,
                 "Text is wrong");
-            Assert.AreEqual(BasicWordsToHighlight.CsWords, TestViewModel.WordsToHighlight,
+            CollectionAssert.AreEquivalent(BasicWordsToHighlight.CsWords, TestViewModel.WordsToHighlight,
                 "Words to highlight is wrong");
         }
     }

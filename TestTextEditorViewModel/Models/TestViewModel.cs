@@ -32,13 +32,13 @@ namespace TestTextEditorViewModel.Models
 
         public void SaveAsFile(string fileName)
         {
-            TestLogger.Instance.Info("Select 'Save as file' command");
+            TestLogger.Instance.Info($"Select 'Save as file' command with '{fileName}'");
             TextEditorViewModel.SaveAsFile(fileName);
         }
 
         public void OpenFile(string fileName)
         {
-            TestLogger.Instance.Info("Select 'Open file' command");
+            TestLogger.Instance.Info($"Select 'Open file' command with '{fileName}'");
             TextEditorViewModel.OpenFile(fileName);
         }
 

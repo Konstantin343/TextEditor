@@ -1,0 +1,13 @@
+﻿, 594 insertions(+), 28 deletions(-)
+ create mode 100644 TestTextEditorViewModel/DataProviders/ThemesProviders.cs
+ create mode 100644 TestTextEditorViewModel/Models/TestViewModel.cs
+ create mode 100644 TestTextEditorViewModel/Resources/csharp.cs
+ create mode 100644 TestTextEditorViewModel/Resources/java.java
+ create mode 100644 TestTextEditorViewModel/Resources/text.txt
+ create mode 100644 TestTextEditorViewModel/TestData/BaseFiles.cs
+ delete mode 100644 TestTextEditorViewModel/Tests.cs
+ create mode 100644 TestTextEditorViewModel/Tests/BaseTests.cs
+ create mode 100644 TestTextEditorViewModel/Tests/NewFileTests.cs
+ create mode 100644 TestTextEditorViewModel/Tests/OpenTests.cs
+ create mode 100644 TestTextEditorViewModel/Tests/SaveAsTests.cs
+ create mode 100644 TestTextEditorViewModel/

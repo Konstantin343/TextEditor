@@ -8,17 +8,6 @@ namespace TestTextEditorViewModel.Tests
     public class ThemesTest : BaseTests
     {
         [Test]
-        public void Test1()
-        {
-            //
-            TestViewModel.NewFile();
-            TestViewModel.OpenFile("");
-            TestViewModel.SaveFile();
-            TestViewModel.SaveAsFile("");
-            //
-        }
-
-        [Test]
         [TestCaseSource(typeof(ThemesProviders), nameof(ThemesProviders.AllThemesProviders))]
         public void AllThemesTest(
             IList<string> themes) =>

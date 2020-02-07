@@ -137,11 +137,13 @@ namespace TextEditor.ViewModel
                     SaveFile();
                 else
                     SaveAsFile(DialogService.SaveFileDialog());
-
-                HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
             }));
 
-        public void SaveFile() => FileService.SaveTextInCurrentFile(RawTextLines);
+        public void SaveFile()
+        {
+            FileService.SaveTextInCurrentFile(RawTextLines);
+            HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
+        }
 
         private ICommand _saveAsFileCommand;
 
@@ -152,11 +154,13 @@ namespace TextEditor.ViewModel
                 var textLines = (obj as TextLines)?.Lines;
                 RawTextLines = textLines;
                 SaveAsFile(DialogService.SaveFileDialog());
-                HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
             }));
 
-        public void SaveAsFile(string fileName) =>
+        public void SaveAsFile(string fileName)
+        {
             FileService.SaveTextInFile(fileName, RawTextLines);
+            HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
+        }
 
         private ICommand _selectThemeCommand;
 

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using NUnit.Framework;
+using TestTextEditor.Framework.Forms.MenuForms;
 using TestTools.Utils;
 
 namespace TestTextEditor.Tests
@@ -538,7 +540,7 @@ namespace TestTextEditor.Tests
                 "5. Text wasn't delete");
 
             textEditBox.RightClick();
-            contextMenu.Paste();
+            MainWindow.ContextMenuForm.Paste();
             Assert.AreEqual(copiedText, ClipboardHelper.GetText(copiedText),
                 "6. Copied text is not equal to expected");
             Assert.AreEqual(textBeforeCopy, textEditBox.Text,
