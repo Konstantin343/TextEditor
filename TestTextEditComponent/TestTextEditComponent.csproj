@@ -53,6 +53,7 @@
     <Compile Include="Models\TestTextEditBoxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestData\BaseTestsObjects.cs" />
+    <Compile Include="Tests\ContextMenuTests.cs" />
     <Compile Include="Tests\DeleteTests.cs" />
     <Compile Include="Tests\InsertModeTests.cs" />
     <Compile Include="Tests\NewLineTests.cs" />

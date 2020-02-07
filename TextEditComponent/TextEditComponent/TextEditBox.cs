@@ -427,7 +427,7 @@ namespace TextEditComponent.TextEditComponent
         {
             base.OnInitialized(e);
             if (Parent is ScrollViewer sv) ScrollOwner = sv;
-            ContextMenu = new TextEditContextMenu(this);
+            CreateContextMenu();
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -588,6 +588,37 @@ namespace TextEditComponent.TextEditComponent
 
         #endregion
 
+        #region ContextMenu
+
+        private void CreateContextMenu()
+        {
+            var textEditContextMenu = new TextEditContextMenuModel(TextEditBoxModel);
+            textEditContextMenu.Cut += OnCutPasteSelectAll;
+            textEditContextMenu.Paste += OnCutPasteSelectAll;
+            textEditContextMenu.SelectAll += OnCutPasteSelectAll;
+            
+            ContextMenu = new ContextMenu
+            {
+                Placement = PlacementMode.MousePoint,
+                ItemsSource = new[]
+                {
+                    new MenuItem {Header = "Copy", Uid = "Copy", Command = textEditContextMenu.CopyCommand},
+                    new MenuItem {Header = "Cut", Uid = "Cut", Command = textEditContextMenu.CutCommand},
+                    new MenuItem {Header = "Paste", Uid = "Paste", Command = textEditContextMenu.PasteCommand},
+                    new MenuItem {Header = "Select all", Uid = "SelectAll", Command = textEditContextMenu.SelectAllCommand}
+                },
+                Uid = "ContextMenu"
+            };
+        }
+
+        private void OnCutPasteSelectAll(object sender, EventArgs e)
+        {
+            UpdateOffsetByCaretPosition();
+            InvalidateVisual();
+        }
+
+        #endregion
+        
         #region Drawing
 
         private void DrawLines(DrawingContext dc)
@@ -658,7 +689,6 @@ namespace TextEditComponent.TextEditComponent
             UpdateOffset();
             InvalidateVisual();
             return true;
-
         }
 
         private Point GetCaretPoint() =>

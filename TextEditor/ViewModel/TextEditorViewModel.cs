@@ -100,10 +100,16 @@ namespace TextEditor.ViewModel
             (_newFileCommand = new RelayCommand(obj =>
             {
                 var textLines = (obj as TextLines)?.Lines;
-                FileService.SaveAndCreateNewFile(textLines);
-                RawTextLines = new List<string>(new[] {""});
-                HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
+                RawTextLines = textLines;
+                NewFile();
             }));
+
+        public void NewFile()
+        {
+            FileService.SaveAndCreateNewFile(RawTextLines);
+            RawTextLines = new List<string>(new[] {""});
+            HighlightService.SetWordsToHighlight(FileService.CurrentOpenedFile);
+        }
 
         private ICommand _openFileCommand;
 
