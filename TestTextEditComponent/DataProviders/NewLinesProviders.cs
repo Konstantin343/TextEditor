@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
-using TextEditComponent.TextEditComponent.Text;
+using TestTextEditComponent.TestData;
 
 namespace TestTextEditComponent.DataProviders
 {
@@ -12,28 +11,8 @@ namespace TestTextEditComponent.DataProviders
         {
             get
             {
-                var textLines = new List<string>(new[]
-                    {"     ", "", "abcdefghi", "jklmn", "", "opqrst", "      ", "uvw   xyz", "", "     "});
-
-                var positions = new[]
-                {
-                    new TextPosition(0, 0),
-                    new TextPosition(1, 0),
-                    new TextPosition(2, 0),
-                    new TextPosition(3, 0),
-                    new TextPosition(4, 0),
-                    new TextPosition(5, 0),
-                    new TextPosition(6, 0),
-                    new TextPosition(7, 0),
-                    new TextPosition(8, 0),
-                    new TextPosition(9, 0),
-                    new TextPosition(0, 2),
-                    new TextPosition(2, 3),
-                    new TextPosition(9, 2),
-                    new TextPosition(7, 4),
-                    new TextPosition(9, 5),
-                    new TextPosition(5, 2),
-                };
+                var textLines = BaseTestsObjects.TextLines;
+                var positions = BaseTestsObjects.Positions;
 
                 foreach (var position in positions)
                 {

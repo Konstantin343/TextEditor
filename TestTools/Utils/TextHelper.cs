@@ -121,7 +121,7 @@ namespace TestTools.Utils
             return expectedTest.ToString();
         }
 
-        public static IList<string> SplittedInsertLineInText(
+        public static IList<string> SplittedInsertLinesInText(
             IList<string> text,
             IList<string> lines,
             int str, int chr) =>

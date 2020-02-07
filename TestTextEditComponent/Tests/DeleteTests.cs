@@ -5,37 +5,34 @@ using TextEditComponent.TextEditComponent.Text;
 
 namespace TestTextEditComponent.Tests
 {
-    [TestFixture]
-    public class NewLineTests : BaseTests
+    public class DeleteTests : BaseTests
     {
         [Test]
-        [TestCaseSource(typeof(NewLinesProviders), nameof(NewLinesProviders.NewLineProvider))]
-        public void NewLineTest(
+        [TestCaseSource(typeof(DeleteProviders), nameof(DeleteProviders.DeleteBeforeProvider))]
+        public void DeleteBeforeTest(
             IList<string> textLines,
             IList<string> expectedLines,
             TextPosition position)
         {
             TestTextEditBoxModel.AddLines(textLines);
             TestTextEditBoxModel.SetPositionTo(position);
-            TestTextEditBoxModel.NewLine();
-            CollectionAssert.AreEqual(expectedLines, TestTextEditBoxModel.TextLines,
+            TestTextEditBoxModel.DeleteBefore();
+            Assert.AreEqual(expectedLines, TestTextEditBoxModel.TextLines,
                 "Lines isn't equal to expected");
-        }
-
+        } 
+        
         [Test]
-        [TestCaseSource(typeof(NewLinesProviders), nameof(NewLinesProviders.NewLineProvider))]
-        public void PositionAfterNewLineTest(
+        [TestCaseSource(typeof(DeleteProviders), nameof(DeleteProviders.DeleteAfterProvider))]
+        public void DeleteAfterTest(
             IList<string> textLines,
             IList<string> expectedLines,
             TextPosition position)
         {
             TestTextEditBoxModel.AddLines(textLines);
             TestTextEditBoxModel.SetPositionTo(position);
-            TestTextEditBoxModel.NewLine();
-            Assert.AreEqual(
-                new TextPosition(position.Str + 1, 0),
-                TestTextEditBoxModel.CurrentPosition,
-                "Position not in the end");
-        }
+            TestTextEditBoxModel.DeleteAfter();
+            Assert.AreEqual(expectedLines, TestTextEditBoxModel.TextLines,
+                "Lines isn't equal to expected");
+        } 
     }
 }

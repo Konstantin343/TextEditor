@@ -81,7 +81,7 @@ namespace TextEditComponent.TextEditComponent.Text
             else
             {
                 if (startNum != _textLines[startStr].Length)
-                    _textLines[startStr].Remove(startNum);
+                    _textLines[startStr] = _textLines[startStr].Remove(startNum);
                 _textLines[startStr] += _textLines[endStr].Substring(endNum);
                 for (var i = 0; i < endStr - startStr; i++)
                 {

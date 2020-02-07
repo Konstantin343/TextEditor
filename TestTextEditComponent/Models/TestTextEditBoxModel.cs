@@ -10,7 +10,7 @@ namespace TestTextEditComponent.Models
         private TextEditBoxModel TextEditBoxModel { get; }
 
         public TestTextEditBoxModel() => TextEditBoxModel = new TextEditBoxModel();
-
+        
         public void AddLine(string textLine)
         {
             TestLogger.Instance.Info($"Enter line in Model:\r\n'{textLine}'");

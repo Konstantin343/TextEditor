@@ -143,12 +143,13 @@ namespace TextEditComponent.TextEditComponent
             TextLines.InsertInLine(CurrentString, "\t", CurrentChar);
             CurrentPosition.Chr++;
         }
-        
-        
+
+
         public void AddTextOnCurrentPosition(string text)
         {
             if (IsInsertMode && CurrentChar < TextLines[CurrentString].Length)
-                TextLines.RemoveInLine(CurrentString, CurrentChar, text.Length);
+                TextLines.RemoveInLine(CurrentString, CurrentChar,
+                    Math.Min(text.Length, TextLines[CurrentString].Length - CurrentChar));
             TextLines.InsertInLine(CurrentString, text, CurrentChar);
             CurrentPosition.Chr += text.Length;
         }

@@ -46,12 +46,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataProviders\AddTextProviders.cs" />
+    <Compile Include="DataProviders\DeleteProviders.cs" />
     <Compile Include="DataProviders\NewLinesProviders.cs" />
+    <Compile Include="DataProviders\PositionProviders.cs" />
+    <Compile Include="DataProviders\SelectTextProviders.cs" />
     <Compile Include="Models\TestTextEditBoxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestData\BaseTestsObjects.cs" />
+    <Compile Include="Tests\DeleteTests.cs" />
+    <Compile Include="Tests\InsertModeTests.cs" />
     <Compile Include="Tests\NewLineTests.cs" />
     <Compile Include="Tests\AddTextTests.cs" />
     <Compile Include="Tests\BaseTests.cs" />
+    <Compile Include="Tests\PositionTests.cs" />
+    <Compile Include="Tests\SelectedTextTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestTools\TestTools.csproj">

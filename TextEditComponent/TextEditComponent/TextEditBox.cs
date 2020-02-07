@@ -654,12 +654,11 @@ namespace TextEditComponent.TextEditComponent
 
         public bool DeleteSelected()
         {
-            if (TextEditBoxModel.DeleteSelectedText())
-                return true;
-
+            if (!TextEditBoxModel.DeleteSelectedText()) return false;
             UpdateOffset();
             InvalidateVisual();
-            return false;
+            return true;
+
         }
 
         private Point GetCaretPoint() =>

@@ -10,6 +10,12 @@
 
         public SelectedTextBounds() => Invalidate();
 
+        public SelectedTextBounds(TextPosition from, TextPosition to)
+        {
+            MouseSelectionStart = from;
+            MouseSelectionEnd = to;
+        }
+
         public TextPosition MouseSelectionStart { get; set; }
         public TextPosition MouseSelectionEnd { get; set; }
 
@@ -39,11 +45,11 @@
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj is SelectedTextBounds textBounds)
-                return RealStart == textBounds.RealStart
-                       && RealEnd == textBounds.RealEnd;
+                return RealStart.Equals(textBounds.RealStart)
+                       && RealEnd.Equals(textBounds.RealEnd);
             return false;
         }
 
-        public override string ToString() => $"From {RealStart} to {RealEnd}";
+        public override string ToString() => $"From {MouseSelectionStart} to {MouseSelectionEnd}";
     }
 }
