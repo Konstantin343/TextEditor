@@ -6,6 +6,7 @@ using TestTools.Utils;
 
 namespace TestTextEditor.Tests
 {
+    [TestFixture]
     public class ContextMenuTests : BaseTests
     {
         [Test]

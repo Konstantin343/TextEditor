@@ -43,18 +43,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests.cs" />
+    <Compile Include="DataProviders\ThemesProviders.cs" />
+    <Compile Include="Models\TestViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestData\BaseFiles.cs" />
+    <Compile Include="Tests\BaseTests.cs" />
+    <Compile Include="Tests\NewFileTests.cs" />
+    <Compile Include="Tests\OpenTests.cs" />
+    <Compile Include="Tests\SaveAsTests.cs" />
+    <Compile Include="Tests\SaveTests.cs" />
+    <Compile Include="Tests\ThemesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MvvmBaseClasses\MvvmBaseClasses.csproj">
       <Project>{9bff71d7-0774-422f-b946-316b9e4d6a92}</Project>
       <Name>MvvmBaseClasses</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestTools\TestTools.csproj">
+      <Project>{8306cdeb-b616-4988-9de5-9869f9c4f8d6}</Project>
+      <Name>TestTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TextEditor\TextEditor.csproj">
       <Project>{f2348051-804a-4e34-b0fd-8dd7308ee765}</Project>
       <Name>TextEditor</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\csharp.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\java.java">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\text.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

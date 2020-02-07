@@ -2,7 +2,7 @@
 
 namespace TextEditor.Highlight
 {
-    internal static class BasicWordsToHighlight
+    public static class BasicWordsToHighlight
     {
         public static readonly ISet<string> NoWords = new HashSet<string>();
 

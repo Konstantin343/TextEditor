@@ -2,6 +2,7 @@
 
 namespace TestTextEditComponent.Tests
 {
+    [TestFixture]
     public class InsertModeTests : BaseTests
     {
         [Test]

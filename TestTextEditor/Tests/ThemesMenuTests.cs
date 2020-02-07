@@ -4,6 +4,7 @@ using TestTextEditor.Tests.TestData;
 
 namespace TestTextEditor.Tests
 {
+    [TestFixture]
     public class ThemesMenuTests : BaseTests
     {
         [Test]

@@ -7,6 +7,7 @@ using TestTools.Utils;
 
 namespace TestTextEditor.Tests
 {
+    [TestFixture]
     public class FocusPositionTests : BaseTests
     {
         [Test]

@@ -5,6 +5,7 @@ using TextEditComponent.TextEditComponent.Text;
 
 namespace TestTextEditComponent.Tests
 {
+    [TestFixture]
     public class SelectedTextTests : BaseTests
     {
         [Test]

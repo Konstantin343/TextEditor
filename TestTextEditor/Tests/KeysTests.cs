@@ -5,6 +5,7 @@ using TestTextEditor.Tests.DataProviders;
 
 namespace TestTextEditor.Tests
 {
+    [TestFixture]
     public class KeysTests : BaseTests
     {
         [Test]
