@@ -7,7 +7,7 @@ namespace TestTextEditComponent.Models
 {
     public class TestTextEditBoxModel
     {
-        private TextEditBoxModel TextEditBoxModel { get; }
+        public TextEditBoxModel TextEditBoxModel { get; }
 
         public TestTextEditBoxModel() => TextEditBoxModel = new TextEditBoxModel();
         
