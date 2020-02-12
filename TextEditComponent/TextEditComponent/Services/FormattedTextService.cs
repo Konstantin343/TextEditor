@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -10,6 +11,8 @@ namespace TextEditComponent.TextEditComponent.Services
     public class FormattedTextService
     {
         private readonly IList<FormattedText> _formattedTextLines;
+
+        private readonly TextLines _textLines;
 
         public string FontStyle { get; set; }
 
@@ -37,6 +40,7 @@ namespace TextEditComponent.TextEditComponent.Services
             textLines.ChangeTextEvent += OnChangeText;
             textLines.RemoveLineEvent += OnRemoveLine;
             textLines.UpdateLineEvent += OnUpdateLine;
+            _textLines = textLines;
             FontSize = fontSize;
             FontStyle = fontStyle;
             TextBrush = textBrush;
@@ -45,54 +49,64 @@ namespace TextEditComponent.TextEditComponent.Services
             _formattedTextLines = new List<FormattedText>();
         }
 
-        public FormattedText this[int i] => _formattedTextLines[i];
-        
+        public FormattedText this[int i]
+        {
+            get
+            {
+                if (_formattedTextLines[i] != null) return _formattedTextLines[i];
+                _formattedTextLines[i] = GetFormatted(_textLines[i]);
+                UpdateWidth();
+
+                return _formattedTextLines[i];
+            }
+        }
+
         public void UpdateAll()
         {
             for (var i = 0; i < _formattedTextLines.Count; i++)
             {
-                _formattedTextLines[i] = GetFormatted(_formattedTextLines[i].Text);
+                _formattedTextLines[i] = null;
             }
         }
 
-        public void Decorate(TextDecorationCollection td, SelectedTextBounds bounds)
+        public void Decorate(TextDecorationCollection td, SelectedTextBounds selectionBounds, 
+            int lowerBound, int upperBound)
         {
-            var startStr = bounds.RealStart.Str;
-            var startNum = bounds.RealStart.Chr;
-            var endStr = bounds.RealEnd.Str;
-            var endNum = bounds.RealEnd.Chr;
+            var startStr = selectionBounds.RealStart.Str;
+            var startNum = selectionBounds.RealStart.Chr;
+            var endStr = selectionBounds.RealEnd.Str;
+            var endNum = selectionBounds.RealEnd.Chr;
 
-            for (var i = startStr; i <= endStr; i++)
+            for (var i = Math.Max(startStr, lowerBound); i <= Math.Min(endStr, upperBound); i++)
             {
                 if (startStr == endStr && startStr == i)
                 {
-                    _formattedTextLines[i].SetTextDecorations(td, startNum, endNum - startNum);
+                    this[i].SetTextDecorations(td, startNum, endNum - startNum);
                 }
                 else if (startStr < i && i < endStr)
                 {
-                    _formattedTextLines[i].SetTextDecorations(td, 0, _formattedTextLines[i].Text.Length);
+                    this[i].SetTextDecorations(td, 0, this[i].Text.Length);
                 }
                 else if (startStr == i)
                 {
-                    _formattedTextLines[i]
-                        .SetTextDecorations(td, startNum, _formattedTextLines[i].Text.Length - startNum);
+                    this[i].SetTextDecorations(td, startNum, this[i].Text.Length - startNum);
                 }
                 else if (endStr == i)
                 {
-                    _formattedTextLines[i].SetTextDecorations(td, 0, endNum);
+                    this[i].SetTextDecorations(td, 0, endNum);
                 }
             }
         }
 
-        public void Underline(SelectedTextBounds bounds) => Decorate(TextDecorations.Underline, bounds);
+        public void Underline(SelectedTextBounds selectionBounds, int lowerBound, int upperBound) =>
+            Decorate(TextDecorations.Underline, selectionBounds, lowerBound, upperBound);
 
-        public void RemoveDecoration(SelectedTextBounds bounds) => Decorate(null, bounds);
+        public void RemoveDecoration(SelectedTextBounds bounds, int lowerBound, int upperBound) =>
+            Decorate(null, bounds, lowerBound, upperBound);
 
         private void OnUpdateLine(object sender, TextLineEventArgs e)
         {
-            var textLines = (TextLines) sender;
-            _formattedTextLines[e.Index] = GetFormatted(textLines[e.Index]);
-            UpdateWidth();
+            _formattedTextLines[e.Index] = null;
         }
 
         private void OnRemoveLine(object sender, TextLineEventArgs e)
@@ -107,17 +121,13 @@ namespace TextEditComponent.TextEditComponent.Services
             _formattedTextLines.Clear();
             for (var i = 0; i < textLines.Count; i++)
             {
-                _formattedTextLines.Add(GetFormatted(textLines[i]));
+                _formattedTextLines.Add(null);
             }
-
-            UpdateWidth();
         }
 
         private void OnAddLine(object sender, TextLineEventArgs e)
         {
-            var textLines = (TextLines) sender;
-            _formattedTextLines.Insert(e.Index, GetFormatted(textLines[e.Index]));
-            UpdateWidth();
+            _formattedTextLines.Insert(e.Index, null);
         }
 
         private FormattedText GetFormatted(string s)
@@ -129,7 +139,8 @@ namespace TextEditComponent.TextEditComponent.Services
 
         private void UpdateWidth() =>
             MaxLineWidth = _formattedTextLines.Any()
-                ? _formattedTextLines.Select(line => line.WidthIncludingTrailingWhitespace).Max()
+                ? _formattedTextLines.Select(line => line?.WidthIncludingTrailingWhitespace).Max()
+                  ?? 0d
                 : 0d;
     }
 }

@@ -6,13 +6,14 @@ namespace TextEditComponent.TextEditComponent.Text
     public class TextLines
     {
         public delegate void TextLineEventHandler(object sender, TextLineEventArgs e);
+
         public event TextLineEventHandler ChangeTextEvent;
         public event TextLineEventHandler AddLineEvent;
         public event TextLineEventHandler RemoveLineEvent;
         public event TextLineEventHandler UpdateLineEvent;
 
         private IList<string> _textLines;
-        
+
         public int Count => _textLines.Count;
         public TextLines(IEnumerable<string> source) => SetText(source);
 
@@ -83,11 +84,18 @@ namespace TextEditComponent.TextEditComponent.Text
                 if (startNum != _textLines[startStr].Length)
                     _textLines[startStr] = _textLines[startStr].Remove(startNum);
                 _textLines[startStr] += _textLines[endStr].Substring(endNum);
+                for (var i = endStr + 1; i < _textLines.Count; i++)
+                {
+                    _textLines[i - (endStr - startStr)] = _textLines[i];
+                    // RemoveLineAt(startStr + 1);
+                }
+
                 for (var i = 0; i < endStr - startStr; i++)
                 {
-                    RemoveLineAt(startStr + 1);
+                    RemoveLineAt(_textLines.Count - 1);
                 }
             }
+
             UpdateLineEvent?.Invoke(this, new TextLineEventArgs(startStr));
         }
 
@@ -114,7 +122,7 @@ namespace TextEditComponent.TextEditComponent.Text
 
             return selectedText;
         }
-        
+
         public override string ToString() => string.Join("\r\n", _textLines);
     }
 }
