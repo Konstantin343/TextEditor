@@ -51,7 +51,7 @@ namespace TextEditComponent.TextEditComponent
             _сopyCommand ??
             (_сopyCommand = new RelayCommand(obj =>
             {
-                Clipboard.SetText(Owner.TextLines.GetInBounds(Owner.SelectedText));
+                Clipboard.SetDataObject(Owner.TextLines.GetInBounds(Owner.SelectedText), true);
                 
                 Copy?.Invoke(this, EventArgs.Empty);
             }));

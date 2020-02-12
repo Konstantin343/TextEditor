@@ -13,7 +13,7 @@ namespace TextEditor.Highlight
                 "long",
                 "char",
                 "float", 
-                "double", 
+                "double",
                 "boolean", 
                 "if", 
                 "else", 
@@ -137,7 +137,8 @@ namespace TextEditor.Highlight
                 "using", 
                 "static", 
                 "virtual", 
-                "void"
+                "void",
+                "var"
             });
     }
 }

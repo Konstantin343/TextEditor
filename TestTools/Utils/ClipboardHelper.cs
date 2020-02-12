@@ -21,7 +21,7 @@ namespace TestTools.Utils
         
         public static void SetText(string text)
         {
-            var thread = new Thread(() => Clipboard.SetText(text));
+            var thread = new Thread(() => Clipboard.SetDataObject(text, true));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             thread.Join();

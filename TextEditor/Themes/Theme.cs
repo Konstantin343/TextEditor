@@ -1,8 +1,10 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 using Utils;
 
 namespace TextEditor.Themes
 {
+    
     public class Theme : BaseNotifyPropertyChanged
     {
         private Brush _background;
@@ -35,7 +37,7 @@ namespace TextEditor.Themes
         {
             Name = name;
         }
-        
+
         public override string ToString() => Name;
     }
 }

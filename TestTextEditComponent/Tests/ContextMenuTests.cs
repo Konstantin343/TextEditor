@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using NUnit.Framework;
 using TestTextEditComponent.DataProviders;
 using TestTextEditComponent.Models;
