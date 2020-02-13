@@ -10,7 +10,7 @@ namespace TextEditComponent.TextEditComponent.Services
 {
     public class FormattedTextService
     {
-        private readonly IList<FormattedText> _formattedTextLines;
+        private readonly List<FormattedText> _formattedTextLines;
 
         private readonly TextLines _textLines;
 
@@ -36,9 +36,9 @@ namespace TextEditComponent.TextEditComponent.Services
             double lineInterval,
             HighlightTextService highlightTextService)
         {
-            textLines.AddLineEvent += OnAddLine;
+            textLines.AddLineEvent += OnAddLines;
             textLines.ChangeTextEvent += OnChangeText;
-            textLines.RemoveLineEvent += OnRemoveLine;
+            textLines.RemoveLineEvent += OnRemoveLines;
             textLines.UpdateLineEvent += OnUpdateLine;
             _textLines = textLines;
             FontSize = fontSize;
@@ -109,10 +109,9 @@ namespace TextEditComponent.TextEditComponent.Services
             _formattedTextLines[e.Index] = null;
         }
 
-        private void OnRemoveLine(object sender, TextLineEventArgs e)
+        private void OnRemoveLines(object sender, TextLineEventArgs e)
         {
-            _formattedTextLines.RemoveAt(e.Index);
-            UpdateWidth();
+            _formattedTextLines.RemoveRange(e.Index, e.Count);
         }
 
         private void OnChangeText(object sender, TextLineEventArgs e)
@@ -125,9 +124,9 @@ namespace TextEditComponent.TextEditComponent.Services
             }
         }
 
-        private void OnAddLine(object sender, TextLineEventArgs e)
+        private void OnAddLines(object sender, TextLineEventArgs e)
         {
-            _formattedTextLines.Insert(e.Index, null);
+            _formattedTextLines.InsertRange(e.Index, new FormattedText[e.Count]);
         }
 
         private FormattedText GetFormatted(string s)

@@ -680,11 +680,12 @@ namespace TextEditComponent.TextEditComponent
             var i = 0;
             while (i < TextLines[stringNumber].Length && currentLength < realX)
             {
-                lastCharWidth =
-                    FormattedTextHelper.GetWidth(TextLines[stringNumber][i].ToString(),
+                var newCurrentLength =
+                    FormattedTextHelper.GetWidth(TextLines[stringNumber].Substring(0, i + 1),
                         FormattedTextService.FontStyle,
                         FormattedTextService.FontSize);
-                currentLength += lastCharWidth;
+                lastCharWidth = newCurrentLength - currentLength;
+                currentLength = newCurrentLength;
                 i++;
             }
 

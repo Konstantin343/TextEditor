@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TextEditComponent.TextEditComponent.Text
@@ -12,7 +13,7 @@ namespace TextEditComponent.TextEditComponent.Text
         public event TextLineEventHandler RemoveLineEvent;
         public event TextLineEventHandler UpdateLineEvent;
 
-        private IList<string> _textLines;
+        private List<string> _textLines;
 
         public int Count => _textLines.Count;
         public TextLines(IEnumerable<string> source) => SetText(source);
@@ -28,6 +29,13 @@ namespace TextEditComponent.TextEditComponent.Text
             if (index < 0 || index > _textLines.Count) return;
             _textLines.Insert(index, line);
             AddLineEvent?.Invoke(this, new TextLineEventArgs(index));
+        }
+
+        public void InsertLines(int index, IList<string> lines)
+        {
+            if (index < 0 || index > _textLines.Count) return;
+            _textLines.InsertRange(index, lines);
+            AddLineEvent?.Invoke(this, new TextLineEventArgs(index, lines.Count));
         }
 
         public void RemoveLineAt(int index)
@@ -84,16 +92,10 @@ namespace TextEditComponent.TextEditComponent.Text
                 if (startNum != _textLines[startStr].Length)
                     _textLines[startStr] = _textLines[startStr].Remove(startNum);
                 _textLines[startStr] += _textLines[endStr].Substring(endNum);
-                for (var i = endStr + 1; i < _textLines.Count; i++)
-                {
-                    _textLines[i - (endStr - startStr)] = _textLines[i];
-                    // RemoveLineAt(startStr + 1);
-                }
-
-                for (var i = 0; i < endStr - startStr; i++)
-                {
-                    RemoveLineAt(_textLines.Count - 1);
-                }
+                 var from = startStr + 1;
+                 var count = endStr - startStr;
+                _textLines.RemoveRange(from, count);
+                RemoveLineEvent?.Invoke(this, new TextLineEventArgs(from, count));
             }
 
             UpdateLineEvent?.Invoke(this, new TextLineEventArgs(startStr));
