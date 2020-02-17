@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -52,7 +53,7 @@ namespace TextEditComponent.TextEditComponent
             (_сopyCommand = new RelayCommand(obj =>
             {
                 Clipboard.SetDataObject(Owner.TextLines.GetInBounds(Owner.SelectedText), true);
-                
+
                 Copy?.Invoke(this, EventArgs.Empty);
             }));
 
@@ -63,9 +64,9 @@ namespace TextEditComponent.TextEditComponent
             (_pasteCommand = new RelayCommand(obj =>
             {
                 Owner.DeleteSelectedText();
-                Owner.AddLinesOnCurrentPosition(Regex.Split(Clipboard.GetText(), "\r\n"));
+                Owner.AddLinesOnCurrentPosition(new List<string>(Regex.Split(Clipboard.GetText(), "\r\n")));
                 Owner.SelectedText.Invalidate();
-                
+
                 Paste?.Invoke(this, EventArgs.Empty);
             }));
     }

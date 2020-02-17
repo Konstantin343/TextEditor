@@ -536,6 +536,19 @@ namespace TextEditComponent.TextEditComponent
         protected override AutomationPeer OnCreateAutomationPeer() =>
             new TextEditBoxAutomationPeer(this);
 
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            if (e.Property.Equals(ActualWidthProperty))
+            {
+                UpdateHorizontalOffset();
+            }
+            else if (e.Property.Equals(ActualHeightProperty))
+            {
+                UpdateVerticalOffset();
+            }
+        }
+
         #endregion
 
         #region Keys
@@ -596,7 +609,7 @@ namespace TextEditComponent.TextEditComponent
             textEditContextMenu.Cut += OnCutPasteSelectAll;
             textEditContextMenu.Paste += OnCutPasteSelectAll;
             textEditContextMenu.SelectAll += OnCutPasteSelectAll;
-            
+
             ContextMenu = new ContextMenu
             {
                 Placement = PlacementMode.MousePoint,
@@ -605,7 +618,8 @@ namespace TextEditComponent.TextEditComponent
                     new MenuItem {Header = "Copy", Uid = "Copy", Command = textEditContextMenu.CopyCommand},
                     new MenuItem {Header = "Cut", Uid = "Cut", Command = textEditContextMenu.CutCommand},
                     new MenuItem {Header = "Paste", Uid = "Paste", Command = textEditContextMenu.PasteCommand},
-                    new MenuItem {Header = "Select all", Uid = "SelectAll", Command = textEditContextMenu.SelectAllCommand}
+                    new MenuItem
+                        {Header = "Select all", Uid = "SelectAll", Command = textEditContextMenu.SelectAllCommand}
                 },
                 Uid = "ContextMenu"
             };
@@ -613,12 +627,12 @@ namespace TextEditComponent.TextEditComponent
 
         private void OnCutPasteSelectAll(object sender, EventArgs e)
         {
-            UpdateOffsetByCaretPosition();
+            UpdateOffset();
             InvalidateVisual();
         }
 
         #endregion
-        
+
         #region Drawing
 
         private void DrawLines(DrawingContext dc)
@@ -626,13 +640,13 @@ namespace TextEditComponent.TextEditComponent
             var lowerBound = Math.Max(0, VerticalOffset / LineHeight - 1);
             var upperBound = Math.Min(TextLines.Count - 1,
                 (ActualHeight + VerticalOffset) / LineHeight + 1);
-            FormattedTextService.Underline(SelectedTextBounds);
+            FormattedTextService.Underline(SelectedTextBounds, (int) lowerBound, (int) upperBound);
             for (var i = (int) lowerBound; i <= (int) upperBound; i++)
             {
                 DrawLine(i, dc);
             }
 
-            FormattedTextService.RemoveDecoration(SelectedTextBounds);
+            FormattedTextService.RemoveDecoration(SelectedTextBounds, (int) lowerBound, (int) upperBound);
         }
 
         private void DrawLine(int index, DrawingContext dc)
@@ -666,11 +680,12 @@ namespace TextEditComponent.TextEditComponent
             var i = 0;
             while (i < TextLines[stringNumber].Length && currentLength < realX)
             {
-                lastCharWidth =
-                    FormattedTextHelper.GetWidth(TextLines[stringNumber][i].ToString(),
+                var newCurrentLength =
+                    FormattedTextHelper.GetWidth(TextLines[stringNumber].Substring(0, i + 1),
                         FormattedTextService.FontStyle,
                         FormattedTextService.FontSize);
-                currentLength += lastCharWidth;
+                lastCharWidth = newCurrentLength - currentLength;
+                currentLength = newCurrentLength;
                 i++;
             }
 

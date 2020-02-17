@@ -4,6 +4,12 @@
     {
         public int Index { get; set; }
 
-        public TextLineEventArgs(int on) => Index = @on;
+        public int Count { get; set; }
+
+        public TextLineEventArgs(int from, int to = 1)
+        {
+            Index = from;
+            Count = to;
+        }
     }
 }

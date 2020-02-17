@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TextEditComponent.TextEditComponent.Text;
 
 namespace TextEditComponent.TextEditComponent
@@ -156,12 +157,16 @@ namespace TextEditComponent.TextEditComponent
 
         public void AddLinesOnCurrentPosition(IList<string> lines)
         {
-            for (var i = 0; i < lines.Count; i++)
-            {
-                AddTextOnCurrentPosition(lines[i]);
-                if (i != lines.Count - 1)
-                    NewLineFromCurrentPosition();
-            }
+            var temp = new List<string>(lines);
+            if (!temp.Any()) return;
+            AddTextOnCurrentPosition(temp.First());
+            if (temp.Count == 1) return;
+            NewLineFromCurrentPosition();
+            AddTextOnCurrentPosition(temp.Last());
+            temp.RemoveAt(0);
+            temp.RemoveAt(temp.Count - 1);
+            TextLines.InsertLines(CurrentString, temp);
+            CurrentPosition.Str += temp.Count;
         }
 
         public void UpdateAll()
