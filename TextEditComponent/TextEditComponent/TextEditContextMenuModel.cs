@@ -38,7 +38,7 @@ namespace TextEditComponent.TextEditComponent
             _сutCommand ??
             (_сutCommand = new RelayCommand(obj =>
             {
-                CopyCommand.Execute(obj);
+                Clipboard.SetDataObject(Owner.TextLines.GetInBounds(Owner.SelectedText), true);
                 Owner.DeleteSelectedText();
 
                 Cut?.Invoke(this, EventArgs.Empty);
